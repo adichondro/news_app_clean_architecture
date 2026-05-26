@@ -1,11 +1,10 @@
 import 'package:dio/dio.dart';
-import 'package:news_app_clean_architecture/core/constant/constants.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/models/article.dart';
 import 'package:retrofit/retrofit.dart';
 
 part 'news_api_service.g.dart';
 
-@RestApi(baseUrl: newsAPIBASEURL)
+@RestApi()
 abstract class NewsApiService {
   factory NewsApiService(Dio dio) = _NewsApiService;
 
