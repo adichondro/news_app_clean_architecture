@@ -1,3 +1,4 @@
+import 'package:news_app_clean_architecture/core/database/app_database.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 
 class ArticleModel extends ArticleEntity {
@@ -21,6 +22,18 @@ class ArticleModel extends ArticleEntity {
       urlToImage: data['urlToImage'] ?? "",
       publishedAt: data['publishedAt'] ?? "",
       content: data['content'] ?? "",
+    );
+  }
+  
+  factory ArticleModel.fromTableData(ArticleTableData data) {
+    return ArticleModel(
+      id: data.id,
+      author: data.author,
+      title: data.title,
+      description: data.description,
+      url: data.url,
+      urlToImage: data.publishedAt,
+      content: data.content,
     );
   }
 }
