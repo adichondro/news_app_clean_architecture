@@ -4,14 +4,26 @@ import 'package:news_app_clean_architecture/features/daily_news/domain/entities/
 
 class ArticleTile extends StatelessWidget {
   final ArticleEntity? article;
-  const ArticleTile({super.key, this.article});
+  final void Function(ArticleEntity article)? onArticleTilePressed;
+
+  const ArticleTile({super.key, this.article, this.onArticleTilePressed});
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      padding: const EdgeInsetsDirectional.only(start: 14, end: 14, bottom: 14),
-      height: MediaQuery.of(context).size.width / 2.2,
-      child: Row(children: [_buildImage(context), _buildTitleAndDescription()]),
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onArticleTilePressed?.call(article!),
+      child: Container(
+        padding: const EdgeInsetsDirectional.only(
+          start: 14,
+          end: 14,
+          bottom: 14,
+        ),
+        height: MediaQuery.of(context).size.width / 2.2,
+        child: Row(
+          children: [_buildImage(context), _buildTitleAndDescription()],
+        ),
+      ),
     );
   }
 

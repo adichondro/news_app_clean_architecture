@@ -55,7 +55,11 @@ class ArticleDetailView extends HookWidget {
         children: [
           Text(
             article!.title!,
-            style: const TextStyle(fontFamily: 'Butler', fontSize: 20),
+            style: const TextStyle(
+              fontFamily: 'Butler',
+              fontSize: 20,
+              fontWeight: FontWeight.w900,
+            ),
           ),
           const SizedBox(height: 14),
 
@@ -72,18 +76,17 @@ class ArticleDetailView extends HookWidget {
   }
 
   Widget _buildArticleImage() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
-      child: Text(
-        '${article!.description ?? ''}\n\n${article!.content ?? ''}',
-        style: const TextStyle(fontSize: 16),
-      ),
+    return Container(
+      width: double.maxFinite,
+      height: 250,
+      margin: const EdgeInsets.only(top: 14),
+      child: Image.network(article!.urlToImage!, fit: BoxFit.cover),
     );
   }
 
   Widget _buildArticleDescription() {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 18),
       child: Text(
         '${article!.description ?? ''}\n\n${article!.content ?? ''}',
         style: const TextStyle(fontSize: 16),
