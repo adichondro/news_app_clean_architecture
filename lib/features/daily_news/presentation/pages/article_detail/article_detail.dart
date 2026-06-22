@@ -1,9 +1,11 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/injection_container.dart';
 
 class ArticleDetailView extends HookWidget {
@@ -14,7 +16,7 @@ class ArticleDetailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) => sl<LocalArticleBloc>(),
+      create: (_) => sl<LocalArticleBloc>()..add(const GetSavedArticles()),
       child: Scaffold(
         appBar: _buildAppBar(),
         body: _buildBody(),
@@ -76,11 +78,32 @@ class ArticleDetailView extends HookWidget {
   }
 
   Widget _buildArticleImage() {
-    return Container(
-      width: double.maxFinite,
-      height: 250,
-      margin: const EdgeInsets.only(top: 14),
-      child: Image.network(article!.urlToImage!, fit: BoxFit.cover),
+    return CachedNetworkImage(
+      imageUrl: article!.urlToImage!,
+      imageBuilder: (context, imageProvider) => Container(
+        width: double.maxFinite,
+        height: 250,
+        margin: const EdgeInsets.only(top: 14),
+        decoration: BoxDecoration(
+          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
+        ),
+      ),
+      placeholder: (context, url) => Container(
+        width: double.maxFinite,
+        height: 250,
+        margin: const EdgeInsets.only(top: 14),
+        color: Colors.grey[200],
+        child: const Center(child: CircularProgressIndicator()),
+      ),
+      errorWidget: (context, url, error) => Container(
+        width: double.maxFinite,
+        height: 250,
+        margin: const EdgeInsets.only(top: 14),
+        color: Colors.grey[200],
+        child: const Center(
+          child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
+        ),
+      ),
     );
   }
 
@@ -95,11 +118,22 @@ class ArticleDetailView extends HookWidget {
   }
 
   Widget _buildFloatingActionButton() {
-    return Builder(
-      builder: (context) => FloatingActionButton(
-        onPressed: () => _onFloatingActionButtonPressed(context),
-        child: const Icon(Icons.bookmark_outlined, color: Colors.white),
-      ),
+    return BlocBuilder<LocalArticleBloc, LocalArticleState>(
+      builder: (context, state) {
+        final savedArticles =
+            state.articles?.where((element) => element.url == article?.url) ??
+            [];
+        final isSaved = savedArticles.isNotEmpty;
+        final savedArticle = isSaved ? savedArticles.first : null;
+        return FloatingActionButton(
+          onPressed: () =>
+              _onFloatingActionButtonPressed(context, isSaved, savedArticle),
+          child: Icon(
+            isSaved ? Icons.bookmark : Icons.bookmark_border,
+            color: Colors.white,
+          ),
+        );
+      },
     );
   }
 
@@ -107,13 +141,29 @@ class ArticleDetailView extends HookWidget {
     Navigator.pop(context);
   }
 
-  void _onFloatingActionButtonPressed(BuildContext context) {
-    BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(article!));
-    ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        backgroundColor: Colors.black,
-        content: Text('Article Saved Successfully.'),
-      ),
-    );
+  void _onFloatingActionButtonPressed(
+    BuildContext context,
+    bool isSaved,
+    ArticleEntity? savedArticle,
+  ) {
+    if (isSaved && savedArticle != null) {
+      BlocProvider.of<LocalArticleBloc>(
+        context,
+      ).add(RemoveArticle(savedArticle));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.black,
+          content: Text('Article Removed Successfully.'),
+        ),
+      );
+    } else {
+      BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(article!));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          backgroundColor: Colors.black,
+          content: Text('Article Saved Successfully.'),
+        ),
+      );
+    }
   }
 }
