@@ -4,9 +4,17 @@ import 'package:news_app_clean_architecture/features/daily_news/domain/entities/
 
 class ArticleTile extends StatelessWidget {
   final ArticleEntity? article;
+  final bool? isRemovable;
   final void Function(ArticleEntity article)? onArticleTilePressed;
+  final void Function(ArticleEntity article)? onArticleRemove;
 
-  const ArticleTile({super.key, this.article, this.onArticleTilePressed});
+  const ArticleTile({
+    super.key,
+    required this.article,
+    this.onArticleTilePressed,
+    this.isRemovable = false,
+    this.onArticleRemove,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +29,11 @@ class ArticleTile extends StatelessWidget {
         ),
         height: MediaQuery.of(context).size.width / 2.2,
         child: Row(
-          children: [_buildImage(context), _buildTitleAndDescription()],
+          children: [
+            _buildImage(context),
+            _buildTitleAndDescription(),
+            _buildRemovableArea(),
+          ],
         ),
       ),
     );
@@ -115,5 +127,22 @@ class ArticleTile extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  Widget _buildRemovableArea() {
+    return isRemovable!
+        ? GestureDetector(
+            onTap: () {
+              onArticleRemove?.call(article!);
+            },
+            child: Container(
+              margin: EdgeInsets.only(left: 4),
+              padding: EdgeInsets.symmetric(horizontal: 4),
+              color: Colors.red,
+              height: double.maxFinite,
+              child: Icon(Icons.delete_outline, color: Colors.white),
+            ),
+          )
+        : const SizedBox();
   }
 }

@@ -54,7 +54,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<void> saveArticle(ArticleEntity article) async {
     final companion = ArticleTableCompanion(
       author: Value(article.author),
-      title: Value(article.author),
+      title: Value(article.title),
       description: Value(article.description),
       url: Value(article.url),
       urlToImage: Value(article.urlToImage),

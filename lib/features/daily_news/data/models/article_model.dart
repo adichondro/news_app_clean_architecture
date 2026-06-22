@@ -32,7 +32,8 @@ class ArticleModel extends ArticleEntity {
       title: data.title,
       description: data.description,
       url: data.url,
-      urlToImage: data.publishedAt,
+      urlToImage: data.urlToImage,
+      publishedAt: data.publishedAt,
       content: data.content,
     );
   }

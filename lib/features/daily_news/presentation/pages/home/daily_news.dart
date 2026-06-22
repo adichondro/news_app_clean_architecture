@@ -12,12 +12,21 @@ class DailyNews extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(appBar: _buildAppbar(), body: _buildBody());
+    return Scaffold(appBar: _buildAppbar(context), body: _buildBody());
   }
 
-  AppBar _buildAppbar() {
+  AppBar _buildAppbar(BuildContext context) {
     return AppBar(
       title: const Text('Daily News', style: TextStyle(color: Colors.black)),
+      actions: [
+        GestureDetector(
+          onTap: () => _onShowSavedArticleViewTapped(context),
+          child: Padding(
+            padding: EdgeInsets.symmetric(horizontal: 14),
+            child: Icon(Icons.bookmark, color: Colors.black),
+          ),
+        ),
+      ],
     );
   }
 
@@ -49,5 +58,9 @@ class DailyNews extends StatelessWidget {
 
   void _onArticleTilePressed(BuildContext context, ArticleEntity article) {
     Navigator.pushNamed(context, AppRoutes.articleDetails, arguments: article);
+  }
+
+  void _onShowSavedArticleViewTapped(BuildContext context) {
+    Navigator.pushNamed(context, AppRoutes.savedArticles);
   }
 }
