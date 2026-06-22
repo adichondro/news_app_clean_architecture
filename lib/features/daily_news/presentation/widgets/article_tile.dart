@@ -40,6 +40,22 @@ class ArticleTile extends StatelessWidget {
   }
 
   Widget _buildImage(BuildContext context) {
+    if (article!.urlToImage == null || article!.urlToImage!.isEmpty) {
+      return Padding(
+        padding: const EdgeInsetsDirectional.only(end: 14),
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(20.0),
+          child: Container(
+            width: MediaQuery.of(context).size.width / 3,
+            height: double.maxFinite,
+            decoration: BoxDecoration(
+              color: Colors.black.withValues(alpha: 0.08),
+            ),
+          ),
+        ),
+      );
+    }
+
     return CachedNetworkImage(
       imageUrl: article!.urlToImage!,
       imageBuilder: (context, imageProvider) => Padding(
@@ -66,7 +82,6 @@ class ArticleTile extends StatelessWidget {
             decoration: BoxDecoration(
               color: Colors.black.withValues(alpha: 0.08),
             ),
-            child: const CircularProgressIndicator(),
           ),
         ),
       ),

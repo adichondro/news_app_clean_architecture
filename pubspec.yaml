@@ -59,6 +59,8 @@ dependencies:
 
   path: ^1.9.1
 
+  skeletonizer: ^2.1.3
+
 
 
 

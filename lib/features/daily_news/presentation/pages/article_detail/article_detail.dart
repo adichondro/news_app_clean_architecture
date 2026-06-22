@@ -93,7 +93,6 @@ class ArticleDetailView extends HookWidget {
         height: 250,
         margin: const EdgeInsets.only(top: 14),
         color: Colors.grey[200],
-        child: const Center(child: CircularProgressIndicator()),
       ),
       errorWidget: (context, url, error) => Container(
         width: double.maxFinite,

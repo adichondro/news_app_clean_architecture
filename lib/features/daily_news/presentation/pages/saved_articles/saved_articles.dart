@@ -9,6 +9,7 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/widgets/article_tile.dart';
 import 'package:news_app_clean_architecture/injection_container.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class SavedArticles extends HookWidget {
   const SavedArticles({super.key});
@@ -41,7 +42,23 @@ class SavedArticles extends HookWidget {
     return BlocBuilder<LocalArticleBloc, LocalArticleState>(
       builder: (context, state) {
         if (state is LocalArticlesLoading) {
-          return const Center(child: CupertinoActivityIndicator());
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.builder(
+              itemBuilder: (context, index) {
+                return const ArticleTile(
+                  article: ArticleEntity(
+                    title:
+                        'This is the placeholder title of the article loading',
+                    description:
+                        'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
+                    publishedAt: 'YYYY-MM-DD',
+                    urlToImage: '',
+                  ),
+                );
+              },
+            ),
+          );
         } else if (state is LocalArticlesDone) {
           return _buildArticlesList(state.articles!);
         } else {

@@ -6,6 +6,8 @@ import 'package:news_app_clean_architecture/features/daily_news/domain/entities/
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/widgets/article_tile.dart';
+import 'package:path/path.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class DailyNews extends StatelessWidget {
   const DailyNews({super.key});
@@ -34,7 +36,22 @@ class DailyNews extends StatelessWidget {
     return BlocBuilder<RemoteArticlesBloc, RemoteArticleState>(
       builder: (_, state) {
         if (state is RemoteArticlesLoading) {
-          return const Center(child: CupertinoActivityIndicator());
+          return Skeletonizer(
+            enabled: true,
+            child: ListView.builder(
+              itemCount: 5,
+              itemBuilder: (context, index) {
+                return const ArticleTile(
+                  article: ArticleEntity(
+                    title: 'This is the placeholder title of the article loading',
+                    description: 'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
+                    publishedAt: 'YYYY-MM-DD',
+                    urlToImage: '',
+                  ),
+                );
+              },
+            ),
+          );
         }
         if (state is RemoteArticlesError) {
           return const Center(child: Icon(Icons.refresh));
