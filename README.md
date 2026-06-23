@@ -76,8 +76,8 @@ graph TD
     %% Define data layer
     subgraph Data ["Data Layer (Infrastructure)"]
         RepoImpl[Repository Implementation] -.->|Implements| RepoInterface
-        RepoImpl -->|Calls| RemoteDS[Remote DataSource (Retrofit/Dio)]
-        RepoImpl -->|Calls| LocalDS[Local DataSource (Drift DAO)]
+        RepoImpl -->|Calls| RemoteDS["Remote DataSource (Retrofit/Dio)"]
+        RepoImpl -->|Calls| LocalDS["Local DataSource (Drift DAO)"]
         RemoteDS -->|Returns JSON mapped to| Model[Models]
         LocalDS -->|Returns SQLite mapped to| Model
         Model -->|Extends| Entity
@@ -233,16 +233,6 @@ To compile the application bundle for production distribution, run the appropria
   ```bash
   flutter build windows --release
   ```
-
----
-
-## Screenshots
-
-| News Feed (Skeleton Loading) | News Feed (Loaded) | Article Details | Bookmarked Articles |
-| :---: | :---: | :---: | :---: |
-| ![Skeleton Loading Placeholder](https://via.placeholder.com/200x400.png?text=Skeleton+Loader) | ![News Feed Placeholder](https://via.placeholder.com/200x400.png?text=Loaded+Daily+News) | ![Article Details Placeholder](https://via.placeholder.com/200x400.png?text=Article+Detail) | ![Bookmarked Articles Placeholder](https://via.placeholder.com/200x400.png?text=Saved+Articles) |
-
-*Note: Replace the placeholders above with actual device screenshots after deploying to a physical simulator or device.*
 
 ---
 
