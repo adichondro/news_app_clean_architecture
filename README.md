@@ -83,9 +83,9 @@ graph TD
         Model -->|Extends| Entity
     end
 
-    classDef presentation fill:#e1f5fe,stroke:#01579b,stroke-width:2px;
-    classDef domain fill:#efebe9,stroke:#3e2723,stroke-width:2px;
-    classDef data fill:#efe8e0,stroke:#e65100,stroke-width:2px;
+    classDef presentation fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#003057;
+    classDef domain fill:#efebe9,stroke:#3e2723,stroke-width:2px,color:#21100b;
+    classDef data fill:#efe8e0,stroke:#e65100,stroke-width:2px,color:#802b00;
     
     class UI,BLoC presentation;
     class UseCase,RepoInterface,Entity domain;
