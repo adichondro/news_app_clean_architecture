@@ -1,8 +1,8 @@
-import 'package:dio/dio.dart';
+import 'package:news_app_clean_architecture/core/error/failure.dart';
 
 abstract class DataState<T> {
   final T? data;
-  final DioException? error;
+  final Failure? error;
 
   const DataState({
     this.data,
@@ -15,5 +15,5 @@ class DataSuccess<T> extends DataState<T> {
 }
 
 class DataFailed<T> extends DataState<T> {
-  const DataFailed(DioException error) : super(error: error);
+  const DataFailed(Failure error) : super(error: error);
 }
