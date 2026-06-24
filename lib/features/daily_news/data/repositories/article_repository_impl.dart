@@ -67,7 +67,6 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
   @override
   Future<void> removeArticle(ArticleEntity article) async {
-
     if (article.id != null) {
       await _articleDao.deleteArticle(article.id!);
     }

@@ -24,7 +24,7 @@ class ArticleModel extends ArticleEntity {
       content: data['content'] ?? "",
     );
   }
-  
+
   factory ArticleModel.fromTableData(ArticleTableData data) {
     return ArticleModel(
       id: data.id,
