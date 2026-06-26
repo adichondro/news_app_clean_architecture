@@ -197,7 +197,7 @@ Before running the project locally, ensure you have:
 4. **Generate Code files (Drift & Retrofit)**
    This project relies on code generation. Run the build runner command to generate the `.g.dart` files for the API service and the SQLite database:
    ```bash
-   flutter pub run build_runner build --delete-conflicting-outputs
+   dart run build_runner build --delete-conflicting-outputs
    ```
 
 5. **Run the Application**
@@ -208,33 +208,6 @@ Before running the project locally, ensure you have:
 
 ---
 
-## Build Instructions
-
-To compile the application bundle for production distribution, run the appropriate command for your target platform:
-
-### Android
-* Build a release APK:
-  ```bash
-  flutter build apk --release
-  ```
-* Build a Google Play App Bundle (AAB):
-  ```bash
-  flutter build appbundle --release
-  ```
-
-### iOS
-* Build the iOS app release archive:
-  ```bash
-  flutter build ipa --release
-  ```
-
-### Windows
-* Build the Windows desktop application package:
-  ```bash
-  flutter build windows --release
-  ```
-
----
 
 ## Future Improvements
 
