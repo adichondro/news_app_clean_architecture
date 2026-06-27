@@ -235,8 +235,8 @@ As an ongoing learning project, the following enhancements are planned to explor
 > **Educational & Learning Project Sandbox**
 >
 > * This project was created primarily as a **personal learning and practice project** to explore modern software development concepts and improve programming skills.
-> * The features (news fetching, article saving, and custom tiles) are implemented as part of a learning process rather than to create a production-ready application.
-> * The project is used to practice software engineering best practices including Clean Architecture, state management, dependency injection, API integration, local database management, and error handling.
+> * The features are implemented as part of a learning process rather than to create a production-ready application.
+> * The project is used to practice software engineering best practices including Clean Architecture, state management, dependency injection, API integration, local database management, error handling, etc.
 > * The codebase will continue to evolve, be refactored, or contain experimental implementations as new concepts are discovered.
 > * It serves as an active portfolio of software exploration and learning progress.
 
