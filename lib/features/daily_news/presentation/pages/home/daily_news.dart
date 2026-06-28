@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/widgets/article_tile.dart';
 import 'package:skeletonizer/skeletonizer.dart';
@@ -30,9 +31,23 @@ class DailyNews extends StatelessWidget {
     );
   }
 
-  BlocBuilder<RemoteArticlesBloc, RemoteArticleState> _buildBody() {
-    return BlocBuilder<RemoteArticlesBloc, RemoteArticleState>(
-      builder: (_, state) {
+  BlocConsumer<RemoteArticlesBloc, RemoteArticleState> _buildBody() {
+    return BlocConsumer<RemoteArticlesBloc, RemoteArticleState>(
+      listener: (context, state) {
+        if (state is RemoteArticlesError) {
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(
+              content: Text(
+                state.error?.message ?? 'An unexpected error occurred.',
+              ),
+              backgroundColor: Colors.red.shade400,
+              behavior: SnackBarBehavior.floating,
+              margin: const EdgeInsets.all(16),
+            ),
+          );
+        }
+      },
+      builder: (context, state) {
         if (state is RemoteArticlesLoading) {
           return Skeletonizer(
             enabled: true,
@@ -41,8 +56,10 @@ class DailyNews extends StatelessWidget {
               itemBuilder: (context, index) {
                 return const ArticleTile(
                   article: ArticleEntity(
-                    title: 'This is the placeholder title of the article loading',
-                    description: 'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
+                    title:
+                        'This is the placeholder title of the article loading',
+                    description:
+                        'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
                     publishedAt: 'YYYY-MM-DD',
                     urlToImage: '',
                   ),
@@ -52,9 +69,46 @@ class DailyNews extends StatelessWidget {
           );
         }
         if (state is RemoteArticlesError) {
-          return const Center(child: Icon(Icons.refresh));
+          return Center(
+            child: Padding(
+              padding: const EdgeInsets.all(24),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Icon(
+                    Icons.wifi_off_rounded,
+                    size: 64,
+                    color: Colors.grey.shade400,
+                  ),
+                  const SizedBox(height: 16),
+                  Text(
+                    state.error?.message ?? 'Failed to load articles',
+                    textAlign: TextAlign.center,
+                    style: TextStyle(fontSize: 16, color: Colors.grey),
+                  ),
+                  const SizedBox(height: 24),
+                  ElevatedButton(
+                    onPressed: () {
+                      context.read<RemoteArticlesBloc>().add(
+                        const GetArticles(),
+                      );
+                    },
+                    child: const Text('Retry'),
+                  ),
+                ],
+              ),
+            ),
+          );
         }
         if (state is RemoteArticlesDone) {
+          if (state.articles == null || state.articles!.isEmpty) {
+            return const Center(
+              child: Text(
+                'No articles found.',
+                style: TextStyle(fontSize: 16, color: Colors.grey),
+              ),
+            );
+          }
           return ListView.builder(
             itemBuilder: (context, index) {
               return ArticleTile(
