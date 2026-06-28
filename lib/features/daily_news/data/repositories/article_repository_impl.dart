@@ -5,6 +5,7 @@ import 'package:drift/drift.dart';
 import 'package:news_app_clean_architecture/core/constant/query_constants.dart';
 import 'package:news_app_clean_architecture/core/database/app_database.dart';
 import 'package:news_app_clean_architecture/core/env/env.dart';
+import 'package:news_app_clean_architecture/core/error/exception_handler.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
 import 'package:news_app_clean_architecture/core/resources/data_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/local/dao/article_dao.dart';
@@ -33,15 +34,13 @@ class ArticleRepositoryImpl implements ArticleRepository {
         return DataSuccess(articleList);
       } else {
         return DataFailed(
-          ServerFailure(
-            httpResponse.response.statusMessage ?? 'Bad Response',
-          ),
+          ServerFailure(httpResponse.response.statusMessage ?? 'Bad Response'),
         );
       }
     } on DioException catch (e) {
-      return DataFailed(
-        ServerFailure(e.message ?? 'An unknown network error occurred'),
-      );
+      return DataFailed(ExceptionHandler.handleDioException(e));
+    } catch (e) {
+      return DataFailed(ServerFailure(e.toString()));
     }
   }
 

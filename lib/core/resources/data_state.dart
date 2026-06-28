@@ -4,10 +4,17 @@ abstract class DataState<T> {
   final T? data;
   final Failure? error;
 
-  const DataState({
-    this.data,
-    this.error,
-  });
+  const DataState({this.data, this.error});
+
+  R fold<R>(R Function(Failure error) onFailure, R Function(T data) onSuccess) {
+    if (this is DataFailed) {
+      return onFailure(error!);
+    } else if (this is DataSuccess) {
+      return onSuccess(data as T);
+    } else {
+      throw Exception('DataState is neither Success nor Failed');
+    }
+  }
 }
 
 class DataSuccess<T> extends DataState<T> {
