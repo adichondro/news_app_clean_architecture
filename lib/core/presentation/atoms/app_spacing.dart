@@ -22,5 +22,4 @@ class AppSpacing {
 
   /// Large section padding
   static const double sectionPadding = 40.0;
-  
-  }
+}
