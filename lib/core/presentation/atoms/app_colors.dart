@@ -21,6 +21,7 @@ class AppColors {
   static const Color surfaceVariant = Color(0xFFE5E1E7);
   static const Color onSurfaceVariant = Color(0xFF45464D);
   static const Color outline = Color(0xFF75777E);
+  static const Color outlineVariant = Color(0xFFC5C6CE);
   // Semantic Colors
   static const Color error = Color(0xFFBA1A1A); // Brick Red
   static const Color onError = Color(0xFFFFFFFF);
