@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
+import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
@@ -16,17 +19,16 @@ class DailyNews extends StatelessWidget {
     return Scaffold(appBar: _buildAppbar(context), body: _buildBody());
   }
 
-  AppBar _buildAppbar(BuildContext context) {
-    return AppBar(
-      title: const Text('Daily News', style: TextStyle(color: Colors.black)),
+  PreferredSizeWidget _buildAppbar(BuildContext context) {
+    return CustomAppBar(
+      title: 'Daily News',
       actions: [
-        GestureDetector(
-          onTap: () => _onShowSavedArticleViewTapped(context),
-          child: Padding(
-            padding: EdgeInsets.symmetric(horizontal: 14),
-            child: Icon(Icons.bookmark, color: Colors.black),
-          ),
+        IconButton(
+          onPressed: () => _onShowSavedArticleViewTapped(context),
+          icon: const Icon(Icons.bookmark),
+          color: AppColors.primary,
         ),
+        const SizedBox(width: AppSpacing.base),
       ],
     );
   }
