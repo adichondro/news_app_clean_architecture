@@ -4,11 +4,12 @@ import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
+import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
-import 'package:news_app_clean_architecture/features/daily_news/presentation/widgets/article_tile.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class DailyNews extends StatelessWidget {
@@ -42,7 +43,7 @@ class DailyNews extends StatelessWidget {
               content: Text(
                 state.error?.message ?? 'An unexpected error occurred.',
               ),
-              backgroundColor: Colors.red.shade400,
+              backgroundColor: AppColors.error,
               behavior: SnackBarBehavior.floating,
               margin: const EdgeInsets.all(16),
             ),
@@ -53,10 +54,13 @@ class DailyNews extends StatelessWidget {
         if (state is RemoteArticlesLoading) {
           return Skeletonizer(
             enabled: true,
-            child: ListView.builder(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(AppSpacing.gutter),
               itemCount: 5,
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: AppSpacing.stackLg),
               itemBuilder: (context, index) {
-                return const ArticleTile(
+                return const ArticleCard(
                   article: ArticleEntity(
                     title:
                         'This is the placeholder title of the article loading',
@@ -71,55 +75,39 @@ class DailyNews extends StatelessWidget {
           );
         }
         if (state is RemoteArticlesError) {
-          return Center(
-            child: Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Icon(
-                    Icons.wifi_off_rounded,
-                    size: 64,
-                    color: Colors.grey.shade400,
-                  ),
-                  const SizedBox(height: 16),
-                  Text(
-                    state.error?.message ?? 'Failed to load articles',
-                    textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 16, color: Colors.grey),
-                  ),
-                  const SizedBox(height: 24),
-                  ElevatedButton(
-                    onPressed: () {
-                      context.read<RemoteArticlesBloc>().add(
-                        const GetArticles(),
-                      );
-                    },
-                    child: const Text('Retry'),
-                  ),
-                ],
-              ),
-            ),
+          return EmptyStateView(
+            icon: Icons.wifi_off_rounded,
+            message: state.error?.message ?? 'Failed to load articles',
+            onActionPressed: () =>
+                context.read<RemoteArticlesBloc>().add(const GetArticles()),
+            actionLabel: 'Retry',
           );
         }
+
         if (state is RemoteArticlesDone) {
           if (state.articles == null || state.articles!.isEmpty) {
-            return const Center(
-              child: Text(
-                'No articles found.',
-                style: TextStyle(fontSize: 16, color: Colors.grey),
-              ),
+            return const EmptyStateView(
+              icon: Icons.article_outlined,
+              message: 'No articles found.',
+              // Tanpa onActionPressed, jadi tidak ada tombol yang muncul
             );
           }
-          return ListView.builder(
+          return ListView.separated(
+            padding: const EdgeInsets.all(AppSpacing.gutter),
+            itemCount: state.articles!.length,
+            separatorBuilder: (context, index) =>
+                const SizedBox(height: AppSpacing.stackLg),
             itemBuilder: (context, index) {
-              return ArticleTile(
+              return ArticleCard(
                 article: state.articles![index],
-                onArticleTilePressed: (article) =>
+                onArticlePressed: (article) =>
                     _onArticleTilePressed(context, article),
+                onSavePressed: (article) {
+                  // TODO: Panggil event untuk save article nanti
+                  debugPrint('Save pressed for article: ${article.title}');
+                },
               );
             },
-            itemCount: state.articles!.length,
           );
         }
         return const SizedBox();
