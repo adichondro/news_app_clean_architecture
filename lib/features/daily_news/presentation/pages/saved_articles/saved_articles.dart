@@ -11,7 +11,6 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/horizontal_article_card.dart';
-import 'package:news_app_clean_architecture/injection_container.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SavedArticles extends HookWidget {
@@ -19,10 +18,7 @@ class SavedArticles extends HookWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (_) => sl<LocalArticleBloc>()..add(const GetSavedArticles()),
-      child: Scaffold(appBar: _buildAppBar(), body: _buildBody()),
-    );
+    return Scaffold(appBar: _buildAppBar(), body: _buildBody());
   }
 
   PreferredSizeWidget _buildAppBar() {

@@ -6,6 +6,9 @@ import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
@@ -98,13 +101,45 @@ class DailyNews extends StatelessWidget {
             separatorBuilder: (context, index) =>
                 const SizedBox(height: AppSpacing.stackLg),
             itemBuilder: (context, index) {
-              return ArticleCard(
-                article: state.articles![index],
-                onArticlePressed: (article) =>
-                    _onArticleTilePressed(context, article),
-                onSavePressed: (article) {
-                  // TODO: Panggil event untuk save article nanti
-                  debugPrint('Save pressed for article: ${article.title}');
+              final article = state.articles![index];
+              return BlocBuilder<LocalArticleBloc, LocalArticleState>(
+                builder: (context, state) {
+                  bool isSaved = false;
+                  if (state is LocalArticlesDone) {
+                    isSaved = state.articles!.any(
+                      (element) => element.url == article.url,
+                    );
+                  }
+                  return ArticleCard(
+                    article: article,
+                    isSaved: isSaved, // 👈 Oper statusnya ke kartu
+                    onArticlePressed: (article) =>
+                        _onArticleTilePressed(context, article),
+                    onSavePressed: (article) {
+                      // 👈 Logika Toggle
+                      if (isSaved) {
+                        context.read<LocalArticleBloc>().add(
+                          RemoveArticle(article),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Article removed!'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      } else {
+                        context.read<LocalArticleBloc>().add(
+                          SaveArticle(article),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text('Article saved!'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    },
+                  );
                 },
               );
             },

@@ -68,6 +68,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<void> removeArticle(ArticleEntity article) async {
     if (article.id != null) {
       await _articleDao.deleteArticle(article.id!);
+    } else if (article.url != null) {
+      await _articleDao.deleteArticleByUrl(article.url!);
     }
   }
 }

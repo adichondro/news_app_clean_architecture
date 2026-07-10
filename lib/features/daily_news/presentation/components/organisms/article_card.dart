@@ -12,12 +12,14 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/com
 
 class ArticleCard extends StatelessWidget {
   final ArticleEntity article;
+  final bool isSaved;
   final ValueChanged<ArticleEntity>? onArticlePressed;
   final ValueChanged<ArticleEntity>? onSavePressed;
 
   const ArticleCard({
     super.key,
     required this.article,
+    this.isSaved = false,
     this.onArticlePressed,
     this.onSavePressed,
   });
@@ -89,8 +91,7 @@ class ArticleCard extends StatelessWidget {
                           ],
                         ),
                         SaveButton(
-                          isSaved:
-                              false, // Untuk saat ini statis, nanti akan disambungkan dengan state dari BLoC
+                          isSaved: isSaved,
                           onSave: () => onSavePressed?.call(article),
                         ),
                       ],

@@ -8,15 +8,26 @@ part 'article_dao.g.dart';
 class ArticleDao extends DatabaseAccessor<AppDatabase> with _$ArticleDaoMixin {
   ArticleDao(super.db);
 
-  // Mengambil semua artikel yang tersimpan di lokal
+  // Get all saved articles from local database
   Future<List<ArticleTableData>> getSavedArticles() =>
       select(articleTable).get();
 
-  // Menyimpan artikel baru
-  Future<void> insertArticle(ArticleTableCompanion article) =>
-      into(articleTable).insertOnConflictUpdate(article);
+  // 1. Insert article (with duplicate prevention)
+  Future<void> insertArticle(ArticleTableCompanion article) async {
+    final existingArticle =
+        await (select(articleTable)
+              ..where((tbl) => tbl.url.equals(article.url.value ?? '')))
+            .getSingleOrNull();
+    if (existingArticle != null) return;
 
-  // Menghapus artikel
+    await into(articleTable).insert(article);
+  }
+
+  // 2. Delete article by ID (used by Saved Articles page)
   Future<void> deleteArticle(int id) =>
       (delete(articleTable)..where((tbl) => tbl.id.equals(id))).go();
+
+  // 3. Delete article by URL (used by Daily News / Home page)
+  Future<void> deleteArticleByUrl(String url) =>
+      (delete(articleTable)..where((tbl) => tbl.url.equals(url))).go();
 }
