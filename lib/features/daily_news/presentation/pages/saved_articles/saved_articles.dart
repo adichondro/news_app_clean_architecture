@@ -2,11 +2,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
+import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
+import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
-import 'package:news_app_clean_architecture/features/daily_news/presentation/widgets/article_tile.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/horizontal_article_card.dart';
 import 'package:news_app_clean_architecture/injection_container.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -22,17 +26,17 @@ class SavedArticles extends HookWidget {
   }
 
   PreferredSizeWidget _buildAppBar() {
-    return AppBar(
+    return CustomAppBar(
+      title: 'Saved Articles',
       leading: Builder(
-        builder: (context) => GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => _onBackButtonTapped(context),
-          child: const Icon(Icons.chevron_left, color: Colors.black),
+        builder: (context) => IconButton(
+          onPressed: () => _onBackButtonTapped(context),
+          icon: Icon(
+            Icons.chevron_left_rounded,
+            color: AppColors.primary,
+            size: 32,
+          ),
         ),
-      ),
-      title: const Text(
-        'Saved Articles',
-        style: TextStyle(color: Colors.black),
       ),
     );
   }
@@ -43,14 +47,16 @@ class SavedArticles extends HookWidget {
         if (state is LocalArticlesLoading) {
           return Skeletonizer(
             enabled: true,
-            child: ListView.builder(
+            child: ListView.separated(
+              padding: const EdgeInsets.all(AppSpacing.containerMargin),
+              itemCount: 5,
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: AppSpacing.stackMd),
               itemBuilder: (context, index) {
-                return const ArticleTile(
+                return const HorizontalArticleCard(
                   article: ArticleEntity(
                     title:
                         'This is the placeholder title of the article loading',
-                    description:
-                        'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
                     publishedAt: 'YYYY-MM-DD',
                     urlToImage: '',
                   ),
@@ -69,20 +75,23 @@ class SavedArticles extends HookWidget {
 
   Widget _buildArticlesList(List<ArticleEntity> articles) {
     if (articles.isEmpty) {
-      return const Center(
-        child: Text('NO SAVED ARTICLES', style: TextStyle(color: Colors.black)),
+      return const EmptyStateView(
+        icon: Icons.bookmark_border_rounded,
+        message: 'No saved articles yet.\nStart reading and save some!',
       );
     }
 
-    return ListView.builder(
+    return ListView.separated(
+      padding: const EdgeInsets.all(AppSpacing.containerMargin),
       itemCount: articles.length,
+      separatorBuilder: (context, index) =>
+          const SizedBox(height: AppSpacing.stackMd),
       itemBuilder: (context, index) {
-        return ArticleTile(
-          article: articles[index],
-          onArticleTilePressed: (article) =>
-              _onArticlePressed(context, article),
-          onArticleRemove: (article) => _onRemoveArticle(context, article),
-          isRemovable: true,
+        final article = articles[index];
+        return HorizontalArticleCard(
+          article: article,
+          onDeletePressed: () => _onRemoveArticle(context, article),
+          onPressed: () => _onArticlePressed(context, article),
         );
       },
     );
@@ -99,9 +108,12 @@ class SavedArticles extends HookWidget {
   void _onRemoveArticle(BuildContext context, ArticleEntity article) {
     BlocProvider.of<LocalArticleBloc>(context).add(RemoveArticle(article));
     ScaffoldMessenger.of(context).showSnackBar(
-      const SnackBar(
-        content: Text('Article successfully removed!'),
-        duration: Duration(seconds: 2),
+      SnackBar(
+        content: const Text('Article successfully removed!'),
+        backgroundColor: AppColors.primary,
+        behavior: SnackBarBehavior.floating,
+        margin: const EdgeInsets.all(AppSpacing.gutter),
+        duration: const Duration(seconds: 2),
       ),
     );
   }
