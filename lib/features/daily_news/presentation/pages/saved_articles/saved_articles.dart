@@ -4,6 +4,7 @@ import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
+import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
@@ -103,14 +104,6 @@ class SavedArticles extends HookWidget {
 
   void _onRemoveArticle(BuildContext context, ArticleEntity article) {
     BlocProvider.of<LocalArticleBloc>(context).add(RemoveArticle(article));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: const Text('Article successfully removed!'),
-        backgroundColor: AppColors.primary,
-        behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(AppSpacing.gutter),
-        duration: const Duration(seconds: 2),
-      ),
-    );
+    CustomSnackbar.show(context, message: 'Article removed!');
   }
 }

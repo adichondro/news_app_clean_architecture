@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
@@ -145,20 +146,10 @@ class ArticleDetailView extends HookWidget {
       BlocProvider.of<LocalArticleBloc>(
         context,
       ).add(RemoveArticle(savedArticle));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.black,
-          content: Text('Article Removed Successfully.'),
-        ),
-      );
+      CustomSnackbar.show(context, message: 'Article removed!');
     } else {
       BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(article!));
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          backgroundColor: Colors.black,
-          content: Text('Article Saved Successfully.'),
-        ),
-      );
+      CustomSnackbar.show(context, message: 'Article saved!');
     }
   }
 }

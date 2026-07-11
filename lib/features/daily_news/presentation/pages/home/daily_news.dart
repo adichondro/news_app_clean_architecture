@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
+import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
@@ -112,31 +113,23 @@ class DailyNews extends StatelessWidget {
                   }
                   return ArticleCard(
                     article: article,
-                    isSaved: isSaved, // 👈 Oper statusnya ke kartu
+                    isSaved: isSaved,
                     onArticlePressed: (article) =>
                         _onArticleTilePressed(context, article),
                     onSavePressed: (article) {
-                      // 👈 Logika Toggle
                       if (isSaved) {
                         context.read<LocalArticleBloc>().add(
                           RemoveArticle(article),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Article removed!'),
-                            behavior: SnackBarBehavior.floating,
-                          ),
+                        CustomSnackbar.show(
+                          context,
+                          message: 'Article removed!',
                         );
                       } else {
                         context.read<LocalArticleBloc>().add(
                           SaveArticle(article),
                         );
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
-                            content: Text('Article saved!'),
-                            behavior: SnackBarBehavior.floating,
-                          ),
-                        );
+                        CustomSnackbar.show(context, message: 'Article saved!');
                       }
                     },
                   );
