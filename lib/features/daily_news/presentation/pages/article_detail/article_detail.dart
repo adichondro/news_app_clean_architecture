@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -7,6 +6,7 @@ import 'package:news_app_clean_architecture/features/daily_news/domain/entities/
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_hero_section.dart';
 
 class ArticleDetailView extends HookWidget {
   final ArticleEntity? article;
@@ -38,67 +38,15 @@ class ArticleDetailView extends HookWidget {
     return SingleChildScrollView(
       child: Column(
         children: [
-          _buildArticleTitleAndDate(),
-          _buildArticleImage(),
+          ArticleHeroSection(
+            imageUrl: article?.urlToImage,
+            category: 'NEWS',
+            title: article?.title ?? 'No Title',
+            authorName: article?.author ?? 'Unknown Author',
+            dateAndReadTime: _formatDate(article?.publishedAt),
+          ),
           _buildArticleDescription(),
         ],
-      ),
-    );
-  }
-
-  Widget _buildArticleTitleAndDate() {
-    return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 22),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Text(
-            article!.title!,
-            style: const TextStyle(
-              fontFamily: 'Butler',
-              fontSize: 20,
-              fontWeight: FontWeight.w900,
-            ),
-          ),
-          const SizedBox(height: 14),
-
-          Row(
-            children: [
-              const Icon(Icons.timer_outlined, size: 16),
-              const SizedBox(width: 4),
-              Text(article!.publishedAt!, style: const TextStyle(fontSize: 12)),
-            ],
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildArticleImage() {
-    return CachedNetworkImage(
-      imageUrl: article!.urlToImage!,
-      imageBuilder: (context, imageProvider) => Container(
-        width: double.maxFinite,
-        height: 250,
-        margin: const EdgeInsets.only(top: 14),
-        decoration: BoxDecoration(
-          image: DecorationImage(image: imageProvider, fit: BoxFit.cover),
-        ),
-      ),
-      placeholder: (context, url) => Container(
-        width: double.maxFinite,
-        height: 250,
-        margin: const EdgeInsets.only(top: 14),
-        color: Colors.grey[200],
-      ),
-      errorWidget: (context, url, error) => Container(
-        width: double.maxFinite,
-        height: 250,
-        margin: const EdgeInsets.only(top: 14),
-        color: Colors.grey[200],
-        child: const Center(
-          child: Icon(Icons.broken_image, size: 50, color: Colors.grey),
-        ),
       ),
     );
   }
@@ -151,5 +99,14 @@ class ArticleDetailView extends HookWidget {
       BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(article!));
       CustomSnackbar.show(context, message: 'Article saved!');
     }
+  }
+
+  //TODO: Buat Ini Menjadi Global
+  // (Helper Method Baru) Untuk merapikan format tanggal agar lebih enak dibaca
+  String _formatDate(String? dateStr) {
+    if (dateStr == null || dateStr.isEmpty) return 'Just now • 5 min read';
+    // Contoh parse sederhana dari ISO8601 (2024-09-12T...) ke (2024-09-12)
+    final date = dateStr.split('T').first;
+    return '$date • 8 min read';
   }
 }
