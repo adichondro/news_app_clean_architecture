@@ -1,5 +1,6 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
+import 'package:news_app_clean_architecture/core/util/date_extension.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 
 class ArticleTile extends StatelessWidget {
@@ -133,7 +134,7 @@ class ArticleTile extends StatelessWidget {
                 const Icon(Icons.timeline_outlined, size: 16),
                 const SizedBox(width: 4),
                 Text(
-                  article!.publishedAt!,
+                  article!.publishedAt.toTimeAgo(),
                   style: const TextStyle(fontSize: 12),
                 ),
               ],

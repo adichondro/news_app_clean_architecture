@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
+import 'package:news_app_clean_architecture/core/util/date_extension.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
@@ -43,7 +44,7 @@ class ArticleDetailView extends HookWidget {
             category: 'NEWS',
             title: article?.title ?? 'No Title',
             authorName: article?.author ?? 'Unknown Author',
-            dateAndReadTime: _formatDate(article?.publishedAt),
+            dateAndReadTime: '${article?.publishedAt.toTimeAgo()} • 8 min read',
           ),
           _buildArticleDescription(),
         ],
@@ -99,14 +100,5 @@ class ArticleDetailView extends HookWidget {
       BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(article!));
       CustomSnackbar.show(context, message: 'Article saved!');
     }
-  }
-
-  //TODO: Buat Ini Menjadi Global
-  // (Helper Method Baru) Untuk merapikan format tanggal agar lebih enak dibaca
-  String _formatDate(String? dateStr) {
-    if (dateStr == null || dateStr.isEmpty) return 'Just now • 5 min read';
-    // Contoh parse sederhana dari ISO8601 (2024-09-12T...) ke (2024-09-12)
-    final date = dateStr.split('T').first;
-    return '$date • 8 min read';
   }
 }

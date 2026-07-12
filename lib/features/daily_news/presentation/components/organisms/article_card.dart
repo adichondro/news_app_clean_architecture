@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_clean_architecture/core/util/date_extension.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_shadow.dart';
@@ -85,7 +86,7 @@ class ArticleCard extends StatelessWidget {
                             ),
                             const SizedBox(width: AppSpacing.stackSm),
                             Text(
-                              '${article.author ?? 'Unknown'} • ${article.publishedAt ?? '2h ago'}',
+                              '${article.author ?? 'Unknown'} • ${article.publishedAt.toTimeAgo()}',
                               style: AppTypography.labelMedium,
                             ),
                           ],
