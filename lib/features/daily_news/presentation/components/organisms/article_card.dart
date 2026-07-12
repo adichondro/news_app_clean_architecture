@@ -73,24 +73,42 @@ class ArticleCard extends StatelessWidget {
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Row(
-                          children: [
-                            CircleAvatar(
-                              radius: 12,
-                              backgroundColor: AppColors.secondaryContainer,
-                              child: const Icon(
-                                Icons.person,
-                                size: 14,
-                                color: AppColors.onSecondaryContainer,
+                        Expanded(
+                          child: Row(
+                            children: [
+                              CircleAvatar(
+                                radius: 12,
+                                backgroundColor: AppColors.secondaryContainer,
+                                child: const Icon(
+                                  Icons.person,
+                                  size: 14,
+                                  color: AppColors.onSecondaryContainer,
+                                ),
                               ),
-                            ),
-                            const SizedBox(width: AppSpacing.stackSm),
-                            Text(
-                              '${article.author ?? 'Unknown'} • ${article.publishedAt.toTimeAgo()}',
-                              style: AppTypography.labelMedium,
-                            ),
-                          ],
+                              const SizedBox(width: AppSpacing.stackSm),
+                              Expanded(
+                                child: Row(
+                                  children: [
+                                    Flexible(
+                                      child: Text(
+                                        article.author ?? 'Unknown',
+                                        style: AppTypography.labelMedium,
+                                        maxLines: 1,
+                                        overflow: TextOverflow.ellipsis,
+                                      ),
+                                    ),
+                                    Text(
+                                      ' • ${article.publishedAt.toTimeAgo()}',
+                                      style: AppTypography.labelMedium,
+                                      maxLines: 1,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
+                        const SizedBox(width: AppSpacing.stackSm),
                         SaveButton(
                           isSaved: isSaved,
                           onSave: () => onSavePressed?.call(article),
