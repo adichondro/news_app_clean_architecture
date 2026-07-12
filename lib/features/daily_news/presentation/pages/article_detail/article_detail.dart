@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
@@ -17,21 +19,30 @@ class ArticleDetailView extends HookWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      backgroundColor: AppColors.background,
+      appBar: _buildAppBar(context),
       body: _buildBody(),
-      floatingActionButton: _buildFloatingActionButton(),
     );
   }
 
-  PreferredSizeWidget _buildAppBar() {
-    return AppBar(
-      leading: Builder(
-        builder: (context) => GestureDetector(
-          behavior: HitTestBehavior.opaque,
-          onTap: () => _onBackButtonPressed(context),
-          child: const Icon(Icons.chevron_left, color: Colors.black),
-        ),
+  PreferredSizeWidget _buildAppBar(BuildContext context) {
+    return CustomAppBar(
+      title: 'Daily News',
+      leading: IconButton(
+        icon: const Icon(Icons.chevron_left, color: AppColors.primary, size: 28),
+        onPressed: () => _onBackButtonPressed(context),
       ),
+      actions: [
+        IconButton(
+          icon: const Icon(Icons.share_outlined, color: AppColors.primary),
+          onPressed: () {
+            // TODO: implement share functionality
+            CustomSnackbar.show(context, message: 'Share coming soon!');
+          },
+        ),
+        _buildBookmarkAction(),
+        const SizedBox(width: 8),
+      ],
     );
   }
 
@@ -62,7 +73,7 @@ class ArticleDetailView extends HookWidget {
     );
   }
 
-  Widget _buildFloatingActionButton() {
+  Widget _buildBookmarkAction() {
     return BlocBuilder<LocalArticleBloc, LocalArticleState>(
       builder: (context, state) {
         final savedArticles =
@@ -70,12 +81,12 @@ class ArticleDetailView extends HookWidget {
             [];
         final isSaved = savedArticles.isNotEmpty;
         final savedArticle = isSaved ? savedArticles.first : null;
-        return FloatingActionButton(
+        return IconButton(
           onPressed: () =>
               _onFloatingActionButtonPressed(context, isSaved, savedArticle),
-          child: Icon(
+          icon: Icon(
             isSaved ? Icons.bookmark : Icons.bookmark_border,
-            color: Colors.white,
+            color: AppColors.primary,
           ),
         );
       },
