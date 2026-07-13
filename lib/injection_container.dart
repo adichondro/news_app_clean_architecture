@@ -5,11 +5,11 @@ import 'package:news_app_clean_architecture/features/daily_news/data/data_source
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/repositories/article_repository_impl.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/repositories/article_repository.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_article.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/save_article.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_article_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/save_article_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 

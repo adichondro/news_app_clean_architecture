@@ -1,8 +1,8 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article.dart';
-import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/save_article.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article_usecase.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/save_article_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 
@@ -40,7 +40,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     SaveArticle event,
     Emitter<LocalArticleState> emit,
   ) async {
-    await _saveArticleUseCase(event.article);
+    await _saveArticleUseCase(params: event.article);
     final articles = await _getSavedArticlesUseCase();
     emit(LocalArticlesDone(articles));
   }
@@ -49,7 +49,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     RemoveArticle event,
     Emitter<LocalArticleState> emit,
   ) async {
-    await _removeArticleUseCase(event.article);
+    await _removeArticleUseCase(params: event.article);
 
     final articles = await _getSavedArticlesUseCase();
     emit(LocalArticlesDone(articles));
