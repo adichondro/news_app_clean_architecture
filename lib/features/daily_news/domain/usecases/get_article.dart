@@ -8,6 +8,7 @@ class GetArticleUseCase
   final ArticleRepository _articleRepository;
 
   GetArticleUseCase(this._articleRepository);
+
   @override
   Future<DataState<List<ArticleEntity>>> call({void params}) {
     return _articleRepository.getNewsArticles();

@@ -72,4 +72,9 @@ class ArticleRepositoryImpl implements ArticleRepository {
       await _articleDao.deleteArticleByUrl(article.url!);
     }
   }
+
+  @override
+  Future<void> clearSavedArticles() async {
+    await _articleDao.clearAllArticles();
+  }
 }

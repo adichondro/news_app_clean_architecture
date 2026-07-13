@@ -5,6 +5,7 @@ import 'package:news_app_clean_architecture/features/daily_news/data/data_source
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/repositories/article_repository_impl.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/repositories/article_repository.dart';
+import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_article.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article.dart';
@@ -47,12 +48,18 @@ Future<void> initializeDependencies() async {
   sl.registerSingleton<GetSavedArticlesUseCase>(GetSavedArticlesUseCase(sl()));
   sl.registerSingleton<SaveArticleUseCase>(SaveArticleUseCase(sl()));
   sl.registerSingleton<RemoveArticleUseCase>(RemoveArticleUseCase(sl()));
+  sl.registerSingleton<ClearArticleUseCase>(ClearArticleUseCase(sl()));
 
   // ==========================================
   // 5. Blocs
   // ==========================================
   sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));
   sl.registerFactory<LocalArticleBloc>(
-    () => LocalArticleBloc(sl(), sl(), sl()),
+    () => LocalArticleBloc(
+      sl(),
+      sl(),
+      sl(),
+      sl(),
+    ),
   );
 }

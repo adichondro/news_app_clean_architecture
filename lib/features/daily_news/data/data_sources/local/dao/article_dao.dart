@@ -30,4 +30,7 @@ class ArticleDao extends DatabaseAccessor<AppDatabase> with _$ArticleDaoMixin {
   // 3. Delete article by URL (used by Daily News / Home page)
   Future<void> deleteArticleByUrl(String url) =>
       (delete(articleTable)..where((tbl) => tbl.url.equals(url))).go();
+
+  // 4. Clear all articles
+  Future<void> clearAllArticles() => delete(articleTable).go();
 }

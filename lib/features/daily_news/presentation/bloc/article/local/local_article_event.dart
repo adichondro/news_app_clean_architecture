@@ -17,3 +17,7 @@ class RemoveArticle extends LocalArticleEvent {
   final ArticleEntity article;
   const RemoveArticle(this.article);
 }
+
+class ClearArticles extends LocalArticleEvent {
+  const ClearArticles();
+}
