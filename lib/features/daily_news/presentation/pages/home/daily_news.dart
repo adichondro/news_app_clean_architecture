@@ -44,7 +44,7 @@ class DailyNews extends StatelessWidget {
         if (state is RemoteArticlesError) {
           CustomSnackbar.show(
             context,
-            state.error?.message ?? 'An unexpected error occurred.',
+            message: state.error?.message ?? 'An unexpected error occurred.',
             isError: true,
           );
         }
