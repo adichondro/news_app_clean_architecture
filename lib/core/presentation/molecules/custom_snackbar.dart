@@ -21,7 +21,7 @@ class CustomSnackbar {
         ),
         backgroundColor: isError ? AppColors.error : AppColors.primary,
         behavior: SnackBarBehavior.floating,
-        margin: const EdgeInsets.all(AppSpacing.gutter),
+        margin: const EdgeInsets.all(AppSpacing.md),
         shape: RoundedRectangleBorder(borderRadius: AppRadius.smallRadius),
         duration: const Duration(seconds: 2),
       ),

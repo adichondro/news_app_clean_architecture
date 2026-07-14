@@ -62,7 +62,7 @@ class ArticleCard extends StatelessWidget {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.all(AppSpacing.gutter),
+                padding: const EdgeInsets.all(AppSpacing.md),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -70,7 +70,7 @@ class ArticleCard extends StatelessWidget {
                       title: article.title,
                       description: article.description,
                     ),
-                    const SizedBox(height: AppSpacing.stackSm),
+                    const SizedBox(height: AppSpacing.xxs),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -88,7 +88,7 @@ class ArticleCard extends StatelessWidget {
                                   ),
                                 ),
                               ),
-                              const SizedBox(width: AppSpacing.stackSm),
+                              const SizedBox(width: AppSpacing.xxs),
                               Expanded(
                                 child: Row(
                                   children: [
@@ -111,7 +111,7 @@ class ArticleCard extends StatelessWidget {
                             ],
                           ),
                         ),
-                        const SizedBox(width: AppSpacing.stackSm),
+                        const SizedBox(width: AppSpacing.xxs),
                         SaveButton(
                           isSaved: isSaved,
                           onSave: () => onSavePressed?.call(article),

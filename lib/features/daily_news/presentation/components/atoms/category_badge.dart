@@ -14,8 +14,8 @@ class CategoryBadge extends StatelessWidget {
     return Skeleton.replace(
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.stackMd,
-          vertical: AppSpacing.stackSm,
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xxs,
         ),
         decoration: ShapeDecoration(
           color: AppColors.secondaryContainer,

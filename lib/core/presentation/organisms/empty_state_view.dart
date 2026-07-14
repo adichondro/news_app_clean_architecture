@@ -21,12 +21,12 @@ class EmptyStateView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.stackLg),
+        padding: const EdgeInsets.all(AppSpacing.xl),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Icon(icon, size: 64, color: AppColors.outline),
-            const SizedBox(height: AppSpacing.stackMd),
+            const SizedBox(height: AppSpacing.sm),
             Text(
               message,
               textAlign: TextAlign.center,
@@ -35,7 +35,7 @@ class EmptyStateView extends StatelessWidget {
               ),
             ),
             if (onActionPressed != null) ...[
-              const SizedBox(height: AppSpacing.stackLg),
+              const SizedBox(height: AppSpacing.xl),
               // TODO: Buat Custom Button untuk button dibawah ini
               ElevatedButton(
                 // (Untuk sekarang kita biarkan ElevatedButton standar,

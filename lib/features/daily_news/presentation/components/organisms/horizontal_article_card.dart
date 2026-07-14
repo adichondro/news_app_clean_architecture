@@ -34,7 +34,7 @@ class HorizontalArticleCard extends StatelessWidget {
           borderRadius: AppRadius.mediumRadius,
           onTap: onPressed,
           child: Padding(
-            padding: const EdgeInsets.all(AppSpacing.gutter),
+            padding: const EdgeInsets.all(AppSpacing.md),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
@@ -47,7 +47,7 @@ class HorizontalArticleCard extends StatelessWidget {
                     borderRadius: AppRadius.smallRadius,
                   ),
                 ),
-                const SizedBox(width: AppSpacing.gutter),
+                const SizedBox(width: AppSpacing.md),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
@@ -60,7 +60,7 @@ class HorizontalArticleCard extends StatelessWidget {
                           letterSpacing: 0.60,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.stackSm),
+                      const SizedBox(height: AppSpacing.xxs),
                       Text(
                         article.title ?? 'No Title',
                         maxLines: 2,
@@ -71,7 +71,7 @@ class HorizontalArticleCard extends StatelessWidget {
                           height: 1.25,
                         ),
                       ),
-                      const SizedBox(height: AppSpacing.stackMd),
+                      const SizedBox(height: AppSpacing.sm),
                       Row(
                         children: [
                           const Icon(
@@ -79,7 +79,7 @@ class HorizontalArticleCard extends StatelessWidget {
                             size: 14,
                             color: AppColors.onSurfaceVariant,
                           ),
-                          const SizedBox(width: AppSpacing.stackSm),
+                          const SizedBox(width: AppSpacing.xxs),
                           Expanded(
                             child: Text(
                               article.publishedAt.toTimeAgo(),
@@ -95,7 +95,7 @@ class HorizontalArticleCard extends StatelessWidget {
                   ),
                 ),
                 if (onDeletePressed != null) ...[
-                  const SizedBox(width: AppSpacing.stackMd),
+                  const SizedBox(width: AppSpacing.sm),
                   IconButton(
                     onPressed: onDeletePressed,
                     icon: Icon(

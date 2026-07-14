@@ -16,8 +16,8 @@ class TopicChip extends StatelessWidget {
       borderRadius: AppRadius.pillRadius,
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.gutter,
-          vertical: AppSpacing.base,
+          horizontal: AppSpacing.md,
+          vertical: AppSpacing.xs,
         ),
         decoration: BoxDecoration(
           color: AppColors.secondaryContainer.withValues(alpha: 0.3),

@@ -33,7 +33,7 @@ class DailyNews extends StatelessWidget {
           icon: const Icon(Icons.bookmark),
           color: AppColors.primary,
         ),
-        const SizedBox(width: AppSpacing.base),
+        const SizedBox(width: AppSpacing.xs),
       ],
     );
   }
@@ -42,15 +42,10 @@ class DailyNews extends StatelessWidget {
     return BlocConsumer<RemoteArticlesBloc, RemoteArticleState>(
       listener: (context, state) {
         if (state is RemoteArticlesError) {
-          ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text(
-                state.error?.message ?? 'An unexpected error occurred.',
-              ),
-              backgroundColor: AppColors.error,
-              behavior: SnackBarBehavior.floating,
-              margin: const EdgeInsets.all(16),
-            ),
+          CustomSnackbar.show(
+            context,
+            state.error?.message ?? 'An unexpected error occurred.',
+            isError: true,
           );
         }
       },
@@ -59,10 +54,10 @@ class DailyNews extends StatelessWidget {
           return Skeletonizer(
             enabled: true,
             child: ListView.separated(
-              padding: const EdgeInsets.all(AppSpacing.gutter),
+              padding: const EdgeInsets.all(AppSpacing.md),
               itemCount: 5,
               separatorBuilder: (context, index) =>
-                  const SizedBox(height: AppSpacing.stackLg),
+                  const SizedBox(height: AppSpacing.xl),
               itemBuilder: (context, index) {
                 return const ArticleCard(
                   article: ArticleEntity(
@@ -97,10 +92,10 @@ class DailyNews extends StatelessWidget {
             );
           }
           return ListView.separated(
-            padding: const EdgeInsets.all(AppSpacing.gutter),
+            padding: const EdgeInsets.all(AppSpacing.md),
             itemCount: state.articles!.length,
             separatorBuilder: (context, index) =>
-                const SizedBox(height: AppSpacing.stackLg),
+                const SizedBox(height: AppSpacing.xl),
             itemBuilder: (context, index) {
               final article = state.articles![index];
               return BlocBuilder<LocalArticleBloc, LocalArticleState>(

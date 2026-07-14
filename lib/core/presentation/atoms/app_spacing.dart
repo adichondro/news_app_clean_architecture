@@ -2,30 +2,30 @@ class AppSpacing {
   //Prevent class Instantiattion
   AppSpacing._();
 
-  /// Base spacing unit (8dp)
-  static const double base = 8.0;
+  /// Extra Extra Small spacing (4dp)
+  static const double xxs = 4.0;
 
-  /// Small spacing
-  static const double stackSm = 4.0;
+  /// Extra Small spacing (8dp)
+  static const double xs = 8.0;
 
-  /// Medium spacing
-  static const double stackMd = 12.0;
+  /// Small spacing (12dp)
+  static const double sm = 12.0;
 
-  /// Large spacing
-  static const double stackLg = 24.0;
+  /// Medium spacing / Gutter (16dp)
+  static const double md = 16.0;
 
-  /// Extra Large spacing
-  static const double stackXl = 32.0;
+  /// Large spacing / Container Margin (20dp)
+  static const double lg = 20.0;
 
-  /// Default horizontal gutter
-  static const double gutter = 16.0;
+  /// Extra Large spacing (24dp)
+  static const double xl = 24.0;
 
-  /// Screen/container margin
-  static const double containerMargin = 20.0;
+  /// XXL spacing (32dp)
+  static const double xxl = 32.0;
 
-  /// Large section padding
-  static const double sectionPadding = 40.0;
+  /// Section padding (40dp)
+  static const double section = 40.0;
 
-  /// Extra Large section padding
-  static const double sectionPaddingXl = 64.0;
+  /// Extra Large section padding (64dp)
+  static const double sectionXl = 64.0;
 }

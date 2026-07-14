@@ -26,14 +26,14 @@ class ArticleInfo extends StatelessWidget {
           overflow: TextOverflow.ellipsis,
           style: AppTypography.headlinesSmall,
         ),
-        const SizedBox(height: AppSpacing.stackSm),
+        const SizedBox(height: AppSpacing.xxs),
         Text(
           description ?? '',
           maxLines: 2,
           overflow: TextOverflow.ellipsis,
           style: AppTypography.bodySmall,
         ),
-        const SizedBox(height: AppSpacing.stackMd),
+        const SizedBox(height: AppSpacing.sm),
         if (publishedAt != null && publishedAt!.isNotEmpty)
           Row(
             mainAxisSize: MainAxisSize.min,
@@ -43,7 +43,7 @@ class ArticleInfo extends StatelessWidget {
                 size: 16,
                 color: AppColors.outline,
               ),
-              const SizedBox(width: AppSpacing.stackSm),
+              const SizedBox(width: AppSpacing.xxs),
               Flexible(
                 child: Text(
                   publishedAt!,

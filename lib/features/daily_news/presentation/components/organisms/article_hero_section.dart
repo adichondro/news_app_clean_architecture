@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/atoms/category_badge.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/molecules/author_meta_info.dart';
@@ -58,22 +59,22 @@ class ArticleHeroSection extends StatelessWidget {
           ),
 
           Positioned(
-            left: 20,
-            right: 20,
-            bottom: 20,
+            left: AppSpacing.lg,
+            right: AppSpacing.lg,
+            bottom: AppSpacing.lg,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
                 CategoryBadge(text: category),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.md),
                 Text(
                   title,
                   style: AppTypography.headlinesLargeMobile.copyWith(
                     color: AppColors.onPrimary,
                   ),
                 ),
-                const SizedBox(height: 16),
+                const SizedBox(height: AppSpacing.md),
                 AuthorMetaInfo(
                   authorName: authorName,
                   dateAndReadTime: dateAndReadTime,
@@ -97,7 +98,7 @@ class ArticleHeroSection extends StatelessWidget {
             size: 50,
             color: AppColors.onPrimaryContainer,
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: AppSpacing.xs),
           Text(
             'No Image Available',
             style: AppTypography.labelMedium.copyWith(

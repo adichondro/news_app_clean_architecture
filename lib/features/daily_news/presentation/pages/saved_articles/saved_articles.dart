@@ -42,7 +42,7 @@ class SavedArticles extends HookWidget {
 
   Widget _buildBody() {
     return Padding(
-      padding: const EdgeInsets.all(AppSpacing.containerMargin),
+      padding: const EdgeInsets.all(AppSpacing.lg),
       child: BlocBuilder<LocalArticleBloc, LocalArticleState>(
         builder: (context, state) {
           final articles = state.articles ?? [];
@@ -73,7 +73,7 @@ class SavedArticles extends HookWidget {
                     ),
                 ],
               ),
-              const SizedBox(height: AppSpacing.stackLg),
+              const SizedBox(height: AppSpacing.xl),
               Expanded(child: _buildStateView(state)),
             ],
           );
@@ -89,7 +89,7 @@ class SavedArticles extends HookWidget {
         child: ListView.separated(
           itemCount: 5,
           separatorBuilder: (context, index) =>
-              const SizedBox(height: AppSpacing.stackMd),
+              const SizedBox(height: AppSpacing.sm),
           itemBuilder: (context, index) {
             return const HorizontalArticleCard(
               article: ArticleEntity(
@@ -121,7 +121,7 @@ class SavedArticles extends HookWidget {
     return ListView.separated(
       itemCount: articles.length,
       separatorBuilder: (context, index) =>
-          const SizedBox(height: AppSpacing.stackMd),
+          const SizedBox(height: AppSpacing.sm),
       itemBuilder: (context, index) {
         final article = articles[index];
         return HorizontalArticleCard(

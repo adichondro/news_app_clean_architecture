@@ -20,8 +20,8 @@ class ClearAllSavedButton extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
         child: Container(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.stackMd,
-            vertical: AppSpacing.stackSm,
+            horizontal: AppSpacing.sm,
+            vertical: AppSpacing.xxs,
           ),
           child: Row(
             mainAxisSize: MainAxisSize.min, 
@@ -31,7 +31,7 @@ class ClearAllSavedButton extends StatelessWidget {
                 size: 20,
                 color: AppColors.error,
               ),
-              const SizedBox(width: AppSpacing.stackSm),
+              const SizedBox(width: AppSpacing.xxs),
               Text(
                 'Clear All',
                 style: AppTypography.bodySmall.copyWith(

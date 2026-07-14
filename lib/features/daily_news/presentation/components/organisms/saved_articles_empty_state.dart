@@ -17,7 +17,7 @@ class SavedArticlesEmptyState extends StatelessWidget {
       child: SingleChildScrollView(
         child: Padding(
           padding: const EdgeInsets.symmetric(
-            horizontal: AppSpacing.containerMargin,
+            horizontal: AppSpacing.lg,
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -26,25 +26,25 @@ class SavedArticlesEmptyState extends StatelessWidget {
               SvgPicture.asset(
                 'assets/illustrations/saved_articles_illustration.svg',
               ),
-              const SizedBox(height: AppSpacing.stackLg),
+              const SizedBox(height: AppSpacing.xl),
               Text(
                 'No Saved Articles',
                 textAlign: TextAlign.center,
                 style: AppTypography.headlinesMedium,
               ),
-              const SizedBox(height: AppSpacing.stackSm),
+              const SizedBox(height: AppSpacing.xxs),
               Text(
                 'Articles you save will appear here to read later. Find interesting news and save it using the bookmark icon.',
                 textAlign: TextAlign.center,
                 style: AppTypography.bodyMedium,
               ),
-              const SizedBox(height: AppSpacing.stackLg),
+              const SizedBox(height: AppSpacing.xl),
               AppPrimaryButton(
                 text: 'Explore News',
                 icon: Icons.explore_outlined,
                 onPressed: onExploreTapped,
               ),
-              const SizedBox(height: AppSpacing.sectionPaddingXl),
+              const SizedBox(height: AppSpacing.sectionXl),
               Text(
                 'Popular Topics for You'.toUpperCase(),
                 style: AppTypography.labelMedium.copyWith(
@@ -52,11 +52,11 @@ class SavedArticlesEmptyState extends StatelessWidget {
                   letterSpacing: 1.2,
                 ),
               ),
-              const SizedBox(height: AppSpacing.stackLg),
+              const SizedBox(height: AppSpacing.xl),
               Wrap(
                 alignment: WrapAlignment.center,
-                spacing: AppSpacing.gutter,
-                runSpacing: AppSpacing.stackSm,
+                spacing: AppSpacing.md,
+                runSpacing: AppSpacing.xxs,
                 children: [
                   TopicChip(label: 'Politics'),
                   TopicChip(label: 'Technology'),

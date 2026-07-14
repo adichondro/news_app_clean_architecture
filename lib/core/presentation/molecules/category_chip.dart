@@ -14,8 +14,8 @@ class CategoryChip extends StatelessWidget {
     return Skeleton.replace(
       child: Container(
         padding: const EdgeInsets.symmetric(
-          horizontal: AppSpacing.stackMd,
-          vertical: AppSpacing.stackSm,
+          horizontal: AppSpacing.sm,
+          vertical: AppSpacing.xxs,
         ),
         decoration: BoxDecoration(
           color: AppColors.primary.withValues(alpha: 0.9),

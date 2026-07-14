@@ -39,7 +39,7 @@ class AuthorMetaInfo extends StatelessWidget {
             size: 20,
           ),
         ),
-        const SizedBox(width: AppSpacing.gutter),
+        const SizedBox(width: AppSpacing.md),
         Expanded(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

@@ -20,8 +20,8 @@ class AppPrimaryButton extends StatelessWidget {
       backgroundColor: AppColors.secondary,
       foregroundColor: AppColors.onSecondary,
       padding: const EdgeInsets.symmetric(
-        horizontal: AppSpacing.stackXl,
-        vertical: AppSpacing.gutter,
+        horizontal: AppSpacing.xxl,
+        vertical: AppSpacing.md,
       ),
       shape: const StadiumBorder(),
     );
