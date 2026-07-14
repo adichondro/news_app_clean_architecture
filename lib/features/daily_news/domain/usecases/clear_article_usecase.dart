@@ -7,7 +7,7 @@ class ClearArticleUseCase implements UseCase<void, void> {
   ClearArticleUseCase(this._articleRepository);
 
   @override
-  Future<void> call({void params}) async {
-    return await _articleRepository.clearSavedArticles();
+  Future<void> call({void params}) {
+    return _articleRepository.clearSavedArticles();
   }
 }
