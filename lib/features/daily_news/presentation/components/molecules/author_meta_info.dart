@@ -39,24 +39,30 @@ class AuthorMetaInfo extends StatelessWidget {
           ),
         ),
         const SizedBox(width: AppSpacing.gutter),
-        Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              authorName,
-              style: AppTypography.labelLarge.copyWith(
-                color: AppColors.onPrimary.withValues(alpha: 0.90),
-                fontWeight: FontWeight.w700,
+        Expanded(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Text(
+                authorName,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.labelLarge.copyWith(
+                  color: AppColors.onPrimary.withValues(alpha: 0.90),
+                  fontWeight: FontWeight.w700,
+                ),
               ),
-            ),
-            Text(
-              dateAndReadTime,
-              style: AppTypography.labelMedium.copyWith(
-                color: AppColors.onPrimary.withValues(alpha: 0.80),
+              Text(
+                dateAndReadTime,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+                style: AppTypography.labelMedium.copyWith(
+                  color: AppColors.onPrimary.withValues(alpha: 0.80),
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ],
     );
