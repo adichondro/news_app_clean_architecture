@@ -10,6 +10,7 @@ import 'package:news_app_clean_architecture/core/presentation/molecules/save_but
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/atoms/article_thumbnail.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/molecules/article_info.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ArticleCard extends StatelessWidget {
   final ArticleEntity article;
@@ -76,13 +77,15 @@ class ArticleCard extends StatelessWidget {
                         Expanded(
                           child: Row(
                             children: [
-                              CircleAvatar(
-                                radius: 12,
-                                backgroundColor: AppColors.secondaryContainer,
-                                child: const Icon(
-                                  Icons.person,
-                                  size: 14,
-                                  color: AppColors.onSecondaryContainer,
+                              Skeleton.replace(
+                                child: CircleAvatar(
+                                  radius: 12,
+                                  backgroundColor: AppColors.secondaryContainer,
+                                  child: const Icon(
+                                    Icons.person,
+                                    size: 14,
+                                    color: AppColors.onSecondaryContainer,
+                                  ),
                                 ),
                               ),
                               const SizedBox(width: AppSpacing.stackSm),

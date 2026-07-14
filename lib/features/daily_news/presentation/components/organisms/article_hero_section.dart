@@ -4,6 +4,7 @@ import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.d
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/atoms/category_badge.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/molecules/author_meta_info.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ArticleHeroSection extends StatelessWidget {
   final String? imageUrl;
@@ -32,12 +33,10 @@ class ArticleHeroSection extends StatelessWidget {
             CachedNetworkImage(
               imageUrl: imageUrl!,
               fit: BoxFit.cover,
-              placeholder: (context, url) => Container(
-                color: AppColors.primaryContainer,
-                child: const Center(
-                  child: CircularProgressIndicator(
-                    color: AppColors.secondaryContainer,
-                  ),
+              placeholder: (context, url) => Skeletonizer(
+                enabled: true,
+                child: Container(
+                  color: AppColors.primaryContainer,
                 ),
               ),
               errorWidget: (context, url, error) => _buildFallbackImage(),

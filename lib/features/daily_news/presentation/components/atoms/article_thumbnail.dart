@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
+import 'package:skeletonizer/skeletonizer.dart';
 
 class ArticleThumbnail extends StatelessWidget {
   final String? imageUrl;
@@ -45,8 +46,10 @@ class ArticleThumbnail extends StatelessWidget {
     return CachedNetworkImage(
       imageUrl: imageUrl!,
       fit: BoxFit.cover,
-      placeholder: (context, url) =>
-          Center(child: CircularProgressIndicator.adaptive()),
+      placeholder: (context, url) => Skeletonizer(
+        enabled: true,
+        child: Container(color: AppColors.surfaceVariant),
+      ),
       errorWidget: (context, url, error) => const Center(
         child: Icon(Icons.broken_image, color: AppColors.outline),
       ),
