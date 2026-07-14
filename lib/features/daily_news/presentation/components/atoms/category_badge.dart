@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -15,7 +16,7 @@ class CategoryBadge extends StatelessWidget {
         decoration: ShapeDecoration(
           color: AppColors.secondaryContainer,
           shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(9999),
+            borderRadius: AppRadius.pillRadius,
           ),
         ),
         child: Text(

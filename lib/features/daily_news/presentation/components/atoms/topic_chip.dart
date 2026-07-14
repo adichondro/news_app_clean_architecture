@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 
@@ -12,7 +13,7 @@ class TopicChip extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
-      borderRadius: BorderRadius.circular(9999),
+      borderRadius: AppRadius.pillRadius,
       child: Container(
         padding: const EdgeInsets.symmetric(
           horizontal: AppSpacing.gutter,
@@ -20,7 +21,7 @@ class TopicChip extends StatelessWidget {
         ),
         decoration: BoxDecoration(
           color: AppColors.secondaryContainer.withValues(alpha: 0.3),
-          borderRadius: BorderRadius.circular(9999),
+          borderRadius: AppRadius.pillRadius,
         ),
         child: Text(
           label,

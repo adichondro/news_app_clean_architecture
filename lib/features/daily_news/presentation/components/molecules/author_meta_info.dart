@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 
@@ -29,7 +30,7 @@ class AuthorMetaInfo extends StatelessWidget {
                 width: 1,
                 color: AppColors.onPrimary.withValues(alpha: 0.20),
               ),
-              borderRadius: BorderRadius.circular(9999),
+              borderRadius: AppRadius.pillRadius,
             ),
           ),
           child: const Icon(

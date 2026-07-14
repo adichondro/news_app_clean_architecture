@@ -13,8 +13,12 @@ class AppRadius {
   /// Large Components (Modals, Bottom Sheets) - 24px
   static const double large = 24.0;
 
+  /// Fully rounded (Pill shape) - 9999px
+  static const double pill = 9999.0;
+
   // Pre-configured BorderRadius objects for convenience
   static BorderRadius get smallRadius => BorderRadius.circular(small);
   static BorderRadius get mediumRadius => BorderRadius.circular(medium);
   static BorderRadius get largeRadius => BorderRadius.circular(large);
+  static BorderRadius get pillRadius => BorderRadius.circular(pill);
 }
