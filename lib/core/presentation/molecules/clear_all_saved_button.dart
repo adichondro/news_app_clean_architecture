@@ -13,7 +13,6 @@ class ClearAllSavedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    // Kita memakai InkWell agar ada efek ripple/sentuhan layaknya aplikasi modern
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -25,7 +24,7 @@ class ClearAllSavedButton extends StatelessWidget {
             vertical: AppSpacing.stackSm,
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min, // Agar row tidak mengambil sisa layar
+            mainAxisSize: MainAxisSize.min, 
             children: [
               const Icon(
                 Icons.delete_sweep_rounded,

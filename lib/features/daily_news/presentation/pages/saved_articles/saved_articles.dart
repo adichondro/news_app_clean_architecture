@@ -8,12 +8,12 @@ import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
-import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/horizontal_article_card.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/saved_articles_empty_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class SavedArticles extends HookWidget {
@@ -26,7 +26,7 @@ class SavedArticles extends HookWidget {
 
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-      title: 'Saved Articles',
+      title: 'Daily News',
       leading: Builder(
         builder: (context) => IconButton(
           onPressed: () => _onBackButtonTapped(context),
@@ -48,6 +48,7 @@ class SavedArticles extends HookWidget {
           final articles = state.articles ?? [];
           final articleCount = articles.length;
           return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -101,6 +102,13 @@ class SavedArticles extends HookWidget {
         ),
       );
     } else if (state is LocalArticlesDone) {
+      if (state.articles!.isEmpty) {
+        return SavedArticlesEmptyState(
+          onExploreTapped: () {
+           //TODO: Handle explore tapped
+          },
+        );
+      }
       return _buildArticlesList(state.articles!);
     } else {
       //TODO: Handle error state
@@ -109,12 +117,6 @@ class SavedArticles extends HookWidget {
   }
 
   Widget _buildArticlesList(List<ArticleEntity> articles) {
-    if (articles.isEmpty) {
-      return const EmptyStateView(
-        icon: Icons.bookmark_border_rounded,
-        message: 'No saved articles yet.\nStart reading and save some!',
-      );
-    }
 
     return ListView.separated(
       itemCount: articles.length,

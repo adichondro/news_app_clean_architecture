@@ -14,6 +14,9 @@ class AppSpacing {
   /// Large spacing
   static const double stackLg = 24.0;
 
+  /// Extra Large spacing
+  static const double stackXl = 32.0;
+
   /// Default horizontal gutter
   static const double gutter = 16.0;
 
@@ -22,4 +25,7 @@ class AppSpacing {
 
   /// Large section padding
   static const double sectionPadding = 40.0;
+
+  /// Extra Large section padding
+  static const double sectionPaddingXl = 64.0;
 }
