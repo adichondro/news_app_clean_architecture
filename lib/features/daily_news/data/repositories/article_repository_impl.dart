@@ -45,9 +45,14 @@ class ArticleRepositoryImpl implements ArticleRepository {
   }
 
   @override
-  Future<List<ArticleEntity>> getSavedArticles() async {
-    final localData = await _articleDao.getSavedArticles();
-    return localData.map((data) => ArticleModel.fromTableData(data)).toList();
+  Future<DataState<List<ArticleEntity>>> getSavedArticles() async {
+    try {
+      final localData = await _articleDao.getSavedArticles();
+      final articles = localData.map((data) => ArticleModel.fromTableData(data)).toList();
+      return DataSuccess(articles);
+    } catch (e) {
+      return DataFailed(CacheFailure('Failed to load local database: ${e.toString()}'));
+    }
   }
 
   @override

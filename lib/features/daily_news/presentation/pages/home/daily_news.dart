@@ -39,113 +39,127 @@ class DailyNews extends StatelessWidget {
     );
   }
 
-  BlocConsumer<RemoteArticlesBloc, RemoteArticleState> _buildBody() {
-    return BlocConsumer<RemoteArticlesBloc, RemoteArticleState>(
+  Widget _buildBody() {
+    return BlocListener<LocalArticleBloc, LocalArticleState>(
       listener: (context, state) {
-        if (state is RemoteArticlesError) {
+        if (state is LocalArticlesError) {
           CustomSnackbar.show(
             context,
-            message: state.error?.message ?? 'An unexpected error occurred.',
+            message: state.error.message,
             isError: true,
           );
         }
       },
-      builder: (context, state) {
-        if (state is RemoteArticlesLoading) {
-          return Skeletonizer(
-            enabled: true,
-            child: ListView.separated(
-              padding: const EdgeInsets.all(AppSpacing.md),
-              itemCount: 5,
-              separatorBuilder: (context, index) =>
-                  const SizedBox(height: AppSpacing.xl),
-              itemBuilder: (context, index) {
-                return const ArticleCard(
-                  article: ArticleEntity(
-                    title:
-                        'This is the placeholder title of the article loading',
-                    description:
-                        'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
-                    publishedAt: 'YYYY-MM-DD',
-                    urlToImage: '',
-                  ),
-                );
-              },
-            ),
-          );
-        }
+      child: BlocConsumer<RemoteArticlesBloc, RemoteArticleState>(
+        listener: (context, state) {
+          if (state is RemoteArticlesError) {
+            CustomSnackbar.show(
+              context,
+              message: state.error?.message ?? 'An unexpected error occurred.',
+              isError: true,
+            );
+          }
+        },
+        builder: (context, state) {
+          if (state is RemoteArticlesLoading) {
+            return Skeletonizer(
+              enabled: true,
+              child: ListView.separated(
+                padding: const EdgeInsets.all(AppSpacing.md),
+                itemCount: 5,
+                separatorBuilder: (context, index) =>
+                    const SizedBox(height: AppSpacing.xl),
+                itemBuilder: (context, index) {
+                  return const ArticleCard(
+                    article: ArticleEntity(
+                      title:
+                          'This is the placeholder title of the article loading',
+                      description:
+                          'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
+                      publishedAt: 'YYYY-MM-DD',
+                      urlToImage: '',
+                    ),
+                  );
+                },
+              ),
+            );
+          }
 
-        if (state is RemoteArticlesError) {
-          return EmptyStateView(
-            illustration: SvgPicture.asset(
-              'assets/illustrations/connection_error_illustration.svg',
-            ),
-            title: 'Connection Error',
-            message: 'Failed to load articles. Please check your connection.',
-            onActionPressed: () =>
-                context.read<RemoteArticlesBloc>().add(const GetArticles()),
-            actionLabel: 'Try Again',
-          );
-        }
-
-        if (state is RemoteArticlesDone) {
-          if (state.articles == null || state.articles!.isEmpty) {
+          if (state is RemoteArticlesError) {
             return EmptyStateView(
               illustration: SvgPicture.asset(
-                'assets/illustrations/no_articles_illustration.svg',
+                'assets/illustrations/connection_error_illustration.svg',
               ),
-              title: 'No Articles Found',
-              message:
-                  'No articles are currently available. Please check back later for updates.',
+              title: 'Connection Error',
+              message: 'Failed to load articles. Please check your connection.',
               onActionPressed: () =>
                   context.read<RemoteArticlesBloc>().add(const GetArticles()),
               actionLabel: 'Try Again',
             );
           }
-          return ListView.separated(
-            padding: const EdgeInsets.all(AppSpacing.md),
-            itemCount: state.articles!.length,
-            separatorBuilder: (context, index) =>
-                const SizedBox(height: AppSpacing.xl),
-            itemBuilder: (context, index) {
-              final article = state.articles![index];
-              return BlocBuilder<LocalArticleBloc, LocalArticleState>(
-                builder: (context, state) {
-                  bool isSaved = false;
-                  if (state is LocalArticlesDone) {
-                    isSaved = state.articles!.any(
-                      (element) => element.url == article.url,
-                    );
-                  }
-                  return ArticleCard(
-                    article: article,
-                    isSaved: isSaved,
-                    onArticlePressed: (article) =>
-                        _onArticleTilePressed(context, article),
-                    onSavePressed: (article) {
-                      if (isSaved) {
-                        context.read<LocalArticleBloc>().add(
-                          RemoveArticle(article),
-                        );
-                        CustomSnackbar.show(
-                          context,
-                          message: 'Article removed!',
-                        );
-                      } else {
-                        context.read<LocalArticleBloc>().add(
-                          SaveArticle(article),
-                        );
-                        CustomSnackbar.show(context, message: 'Article saved!');
-                      }
-                    },
-                  );
-                },
+
+          if (state is RemoteArticlesDone) {
+            if (state.articles == null || state.articles!.isEmpty) {
+              return EmptyStateView(
+                illustration: SvgPicture.asset(
+                  'assets/illustrations/no_articles_illustration.svg',
+                ),
+                title: 'No Articles Found',
+                message:
+                    'No articles are currently available. Please check back later for updates.',
+                onActionPressed: () =>
+                    context.read<RemoteArticlesBloc>().add(const GetArticles()),
+                actionLabel: 'Try Again',
               );
-            },
-          );
-        }
-        return const SizedBox();
-      },
+            }
+            return ListView.separated(
+              padding: const EdgeInsets.all(AppSpacing.md),
+              itemCount: state.articles!.length,
+              separatorBuilder: (context, index) =>
+                  const SizedBox(height: AppSpacing.xl),
+              itemBuilder: (context, index) {
+                final article = state.articles![index];
+                return BlocBuilder<LocalArticleBloc, LocalArticleState>(
+                  builder: (context, state) {
+                    bool isSaved = false;
+                    if (state is LocalArticlesDone) {
+                      isSaved = state.articles!.any(
+                        (element) => element.url == article.url,
+                      );
+                    }
+                    return ArticleCard(
+                      article: article,
+                      isSaved: isSaved,
+                      onArticlePressed: (article) =>
+                          _onArticleTilePressed(context, article),
+                      onSavePressed: (article) {
+                        if (isSaved) {
+                          context.read<LocalArticleBloc>().add(
+                            RemoveArticle(article),
+                          );
+                          CustomSnackbar.show(
+                            context,
+                            message: 'Article removed!',
+                          );
+                        } else {
+                          context.read<LocalArticleBloc>().add(
+                            SaveArticle(article),
+                          );
+                          CustomSnackbar.show(
+                            context,
+                            message: 'Article saved!',
+                          );
+                        }
+                      },
+                    );
+                  },
+                );
+              },
+            );
+          }
+          return const SizedBox();
+        },
+      ),
     );
   }
 

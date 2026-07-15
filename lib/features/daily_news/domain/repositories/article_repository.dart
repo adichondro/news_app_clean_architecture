@@ -4,7 +4,7 @@ import 'package:news_app_clean_architecture/features/daily_news/domain/entities/
 abstract class ArticleRepository {
   Future<DataState<List<ArticleEntity>>> getNewsArticles();
 
-  Future<List<ArticleEntity>> getSavedArticles();
+  Future<DataState<List<ArticleEntity>>> getSavedArticles(); 
 
   Future<void> saveArticle(ArticleEntity article);
   

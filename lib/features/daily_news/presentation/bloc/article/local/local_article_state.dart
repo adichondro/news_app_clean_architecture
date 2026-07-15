@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:news_app_clean_architecture/core/error/failure.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 
 abstract class LocalArticleState extends Equatable {
@@ -17,4 +18,9 @@ class LocalArticlesLoading extends LocalArticleState {
 class LocalArticlesDone extends LocalArticleState {
   const LocalArticlesDone(List<ArticleEntity> article)
     : super(articles: article);
+}
+
+class LocalArticlesError extends LocalArticleState {
+  final Failure error;
+  const LocalArticlesError(this.error);
 }
