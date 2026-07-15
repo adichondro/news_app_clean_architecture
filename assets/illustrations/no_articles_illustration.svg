@@ -1,0 +1,33 @@
+<svg width="256" height="256" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+<defs>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%" filterUnits="objectBoundingBox">
+        <feDropShadow dx="0" dy="2" stdDeviation="4" flood-color="#000000" flood-opacity="0.08"/>
+    </filter>
+</defs>
+<circle opacity="0.2" cx="128" cy="128" r="128" fill="#DEE0FF"/>
+<circle opacity="0.6" cx="50" cy="70" r="7" stroke="#8596FF" stroke-width="2" fill="none"/>
+<rect opacity="0.4" x="200" y="75" width="10" height="10" rx="3" fill="#4355B9"/>
+<circle opacity="0.5" cx="70" cy="200" r="6" fill="#BAC6E8"/>
+<rect opacity="0.5" x="185" y="195" width="12" height="12" rx="4" stroke="#BAC6E8" stroke-width="2" fill="none"/>
+<path opacity="0.3" d="M 40 140 H 48 M 44 136 V 144" stroke="#4355B9" stroke-width="2" stroke-linecap="round"/>
+<path opacity="0.4" d="M 210 130 L 216 136 M 216 130 L 210 136" stroke="#4355B9" stroke-width="2" stroke-linecap="round"/>
+<g transform="rotate(8 128 128)">
+    <rect x="94" y="65" width="76" height="116" rx="8" fill="#BAC6E8" opacity="0.3"/>
+    <rect x="94.5" y="65.5" width="75" height="115" rx="7.5" stroke="#BAC6E8" opacity="0.5"/>
+</g>
+<g transform="rotate(-6 128 128)">
+    <rect x="76" y="60" width="80" height="122" rx="8" fill="#FDF8FD" filter="url(#shadow)"/>
+    <rect x="76.5" y="60.5" width="79" height="121" rx="7.5" stroke="#C5C6CE"/>
+    <rect x="88" y="74" width="56" height="32" rx="6" fill="#BAC6E8" opacity="0.3"/>
+    <rect x="88" y="118" width="56" height="6" rx="3" fill="#BAC6E8" opacity="0.4"/>
+    <rect x="88" y="132" width="40" height="6" rx="3" fill="#BAC6E8" opacity="0.4"/>
+    <rect x="88" y="146" width="48" height="6" rx="3" fill="#BAC6E8" opacity="0.4"/>
+</g>
+<g filter="url(#shadow)">
+    <circle cx="156" cy="154" r="24" fill="#FDF8FD"/>
+    <circle cx="156" cy="154" r="21" fill="#DEE0FF" opacity="0.6"/> 
+    <circle cx="156" cy="154" r="24" stroke="#4355B9" stroke-width="5"/>
+    <path d="M 173 171 L 194 192" stroke="#4355B9" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 147 145 L 165 163 M 165 145 L 147 163" stroke="#4355B9" stroke-width="4" stroke-linecap="round"/>
+</g>
+</svg>

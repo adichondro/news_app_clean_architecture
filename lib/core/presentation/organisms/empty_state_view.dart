@@ -1,32 +1,45 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/app_primary_button.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 
 class EmptyStateView extends StatelessWidget {
-  final IconData icon;
+  final Widget illustration;
+  final String title;
   final String message;
   final VoidCallback? onActionPressed;
-  final String actionLabel;
+  final String? actionLabel;
+  final IconData? actionIcon;
 
   const EmptyStateView({
     super.key,
-    required this.icon,
+    required this.illustration,
+    required this.title,
     required this.message,
     this.onActionPressed,
-    this.actionLabel = 'Retry',
+    this.actionLabel,
+    this.actionIcon = Icons.refresh,
   });
 
   @override
   Widget build(BuildContext context) {
     return Center(
       child: Padding(
-        padding: const EdgeInsets.all(AppSpacing.xl),
+        padding: const EdgeInsets.symmetric(horizontal: AppSpacing.lg),
         child: Column(
+          mainAxisSize: MainAxisSize.min,
           mainAxisAlignment: MainAxisAlignment.center,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            Icon(icon, size: 64, color: AppColors.outline),
-            const SizedBox(height: AppSpacing.sm),
+            illustration,
+            const SizedBox(height: AppSpacing.xl),
+            Text(
+              title,
+              textAlign: TextAlign.center,
+              style: AppTypography.headlinesMedium,
+            ),
+            const SizedBox(height: AppSpacing.xxs),
             Text(
               message,
               textAlign: TextAlign.center,
@@ -34,14 +47,12 @@ class EmptyStateView extends StatelessWidget {
                 color: AppColors.onSurfaceVariant,
               ),
             ),
-            if (onActionPressed != null) ...[
+            if (onActionPressed != null && actionLabel != null && actionIcon != null) ...[
               const SizedBox(height: AppSpacing.xl),
-              // TODO: Buat Custom Button untuk button dibawah ini
-              ElevatedButton(
-                // (Untuk sekarang kita biarkan ElevatedButton standar,
-                // nantinya bisa diganti dengan CustomButton Atom jika Anda punya)
-                onPressed: onActionPressed,
-                child: Text(actionLabel),
+              AppPrimaryButton(
+                text: actionLabel!,
+                icon: actionIcon!,
+                onPressed: onActionPressed!,
               ),
             ],
           ],

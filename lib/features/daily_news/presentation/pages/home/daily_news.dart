@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
@@ -73,22 +74,32 @@ class DailyNews extends StatelessWidget {
             ),
           );
         }
+
         if (state is RemoteArticlesError) {
           return EmptyStateView(
-            icon: Icons.wifi_off_rounded,
-            message: state.error?.message ?? 'Failed to load articles',
+            illustration: SvgPicture.asset(
+              'assets/illustrations/connection_error_illustration.svg',
+            ),
+            title: 'Connection Error',
+            message: 'Failed to load articles. Please check your connection.',
             onActionPressed: () =>
                 context.read<RemoteArticlesBloc>().add(const GetArticles()),
-            actionLabel: 'Retry',
+            actionLabel: 'Try Again',
           );
         }
 
         if (state is RemoteArticlesDone) {
           if (state.articles == null || state.articles!.isEmpty) {
-            return const EmptyStateView(
-              icon: Icons.article_outlined,
-              message: 'No articles found.',
-              // Tanpa onActionPressed, jadi tidak ada tombol yang muncul
+            return EmptyStateView(
+              illustration: SvgPicture.asset(
+                'assets/illustrations/no_articles_illustration.svg',
+              ),
+              title: 'No Articles Found',
+              message:
+                  'No articles are currently available. Please check back later for updates.',
+              onActionPressed: () =>
+                  context.read<RemoteArticlesBloc>().add(const GetArticles()),
+              actionLabel: 'Try Again',
             );
           }
           return ListView.separated(
