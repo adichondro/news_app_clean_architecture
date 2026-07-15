@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/clear_all_saved_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_hooks/flutter_hooks.dart';
@@ -8,6 +9,7 @@ import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
+import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
@@ -74,7 +76,7 @@ class SavedArticles extends HookWidget {
                 ],
               ),
               const SizedBox(height: AppSpacing.xl),
-              Expanded(child: _buildStateView(state)),
+              Expanded(child: _buildStateView(context, state)),
             ],
           );
         },
@@ -82,7 +84,7 @@ class SavedArticles extends HookWidget {
     );
   }
 
-  Widget _buildStateView(LocalArticleState state) {
+  Widget _buildStateView(BuildContext context, LocalArticleState state) {
     if (state is LocalArticlesLoading) {
       return Skeletonizer(
         enabled: true,
@@ -105,19 +107,28 @@ class SavedArticles extends HookWidget {
       if (state.articles!.isEmpty) {
         return SavedArticlesEmptyState(
           onExploreTapped: () {
-           //TODO: Handle explore tapped
+            //TODO: Handle explore tapped
           },
         );
       }
       return _buildArticlesList(state.articles!);
     } else {
-      //TODO: Handle error state
-      return Container();
+      return EmptyStateView(
+        illustration: SvgPicture.asset(
+          'assets/illustrations/error_saved_articles_illustration.svg',
+        ),
+        title: 'Oops! Something went wrong',
+        message: 'Failed to load your saved articles. Please try again.',
+        actionLabel: 'Refresh',
+        actionIcon: Icons.refresh,
+        onActionPressed: () {
+          context.read<LocalArticleBloc>().add(const GetSavedArticles());
+        },
+      );
     }
   }
 
   Widget _buildArticlesList(List<ArticleEntity> articles) {
-
     return ListView.separated(
       itemCount: articles.length,
       separatorBuilder: (context, index) =>
