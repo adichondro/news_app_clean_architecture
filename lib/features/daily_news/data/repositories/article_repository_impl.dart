@@ -45,9 +45,14 @@ class ArticleRepositoryImpl implements ArticleRepository {
   }
 
   @override
-  Future<List<ArticleEntity>> getSavedArticles() async {
-    final localData = await _articleDao.getSavedArticles();
-    return localData.map((data) => ArticleModel.fromTableData(data)).toList();
+  Future<DataState<List<ArticleEntity>>> getSavedArticles() async {
+    try {
+      final localData = await _articleDao.getSavedArticles();
+      final articles = localData.map((data) => ArticleModel.fromTableData(data)).toList();
+      return DataSuccess(articles);
+    } catch (e) {
+      return DataFailed(CacheFailure('Failed to load local database: ${e.toString()}'));
+    }
   }
 
   @override
@@ -68,6 +73,13 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<void> removeArticle(ArticleEntity article) async {
     if (article.id != null) {
       await _articleDao.deleteArticle(article.id!);
+    } else if (article.url != null) {
+      await _articleDao.deleteArticleByUrl(article.url!);
     }
+  }
+
+  @override
+  Future<void> clearSavedArticles() async {
+    await _articleDao.clearAllArticles();
   }
 }

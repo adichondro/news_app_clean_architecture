@@ -61,6 +61,8 @@ dependencies:
 
   skeletonizer: ^2.1.3
 
+  flutter_svg: ^2.3.0
+
 
 
 
@@ -97,6 +99,7 @@ flutter:
   assets:
 
     - .env
+    - assets/illustrations/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -142,3 +145,18 @@ fonts:
 
         - asset: assets/fonts/muli/Muli-Bold.ttf
           weight: 700
+
+    - family: WorkSans 
+      fonts:
+        - asset: assets/fonts/worksans/WorkSans-VariableFont_wght.ttf 
+        
+        - asset: assets/fonts/worksans/WorkSans-Italic-VariableFont_wght.ttf
+          style: italic
+
+
+    - family: Inter 
+      fonts:
+        - asset: assets/fonts/inter/Inter-VariableFont_wght.ttf 
+        
+        - asset: assets/fonts/inter/Inter-Italic-VariableFont_wght.ttf
+          style: italic
