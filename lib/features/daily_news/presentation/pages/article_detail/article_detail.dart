@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_clean_architecture/core/util/string_extension.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -55,9 +56,9 @@ class ArticleDetailView extends HookWidget {
           ArticleHeroSection(
             imageUrl: article?.urlToImage,
             category: 'NEWS',
-            title: article?.title ?? 'No Title',
-            authorName: article?.author ?? 'Unknown Author',
-            dateAndReadTime: '${article?.publishedAt.toTimeAgo()} • 8 min read',
+            title: (article?.title).valueOr('No Title'),
+            authorName: (article?.author).valueOr('Unknown Author'),
+            dateAndReadTime: '${(article?.publishedAt).toTimeAgo()} • 8 min read',
           ),
           _buildArticleDescription(),
         ],
@@ -72,7 +73,7 @@ class ArticleDetailView extends HookWidget {
         vertical: AppSpacing.lg,
       ),
       child: Text(
-        '${article!.description ?? ''}\n\n${article!.content ?? ''}',
+        '${article?.description.valueOr('')}\n\n${article?.content.valueOr('')}'.trim(),
         style: AppTypography.bodyMedium,
       ),
     );

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/util/date_extension.dart';
+import 'package:news_app_clean_architecture/core/util/string_extension.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
@@ -62,7 +63,7 @@ class HorizontalArticleCard extends StatelessWidget {
                       ),
                       const SizedBox(height: AppSpacing.xxs),
                       Text(
-                        article.title ?? 'No Title',
+                        article.title.valueOr('No Title'),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: AppTypography.headlinesSmall.copyWith(

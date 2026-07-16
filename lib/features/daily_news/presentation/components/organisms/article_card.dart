@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/util/date_extension.dart';
+import 'package:news_app_clean_architecture/core/util/string_extension.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_shadow.dart';
@@ -94,7 +95,7 @@ class ArticleCard extends StatelessWidget {
                                   children: [
                                     Flexible(
                                       child: Text(
-                                        article.author ?? 'Unknown',
+                                        article.author.valueOr('Unknown Author'),
                                         style: AppTypography.labelMedium,
                                         maxLines: 1,
                                         overflow: TextOverflow.ellipsis,
