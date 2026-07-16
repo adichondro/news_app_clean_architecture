@@ -45,10 +45,12 @@ Through the lifecycle of this project, several key software engineering concepts
 
 ## Features
 
+* **Atomic Design System**: A scalable UI architecture organizing components into Atoms, Molecules, and Organisms for maximum reusability and maintainability.
 * **Top Headlines Feed**: Fetches real-time, curated daily news articles from the NewsAPI general category in the US.
+* **Empty States & UX Handling**: Features premium SVG illustrations and custom empty states for error handling, no-data scenarios, and connection issues.
 * **Premium Skeleton Shimmers**: Employs `skeletonizer` to display an organic, matching layout outline while the remote request resolves, avoiding jarring loading spinners.
 * **Offline Bookmarking / Caching**: Saves full articles locally to an SQLite database. Saved articles can be read offline even without network connectivity.
-* **Swipe-to-Remove / Delete Actions**: Easily manage bookmarked articles with a simple red action strip to delete saved content.
+* **Bookmark Management & Bulk Delete**: Easily manage saved articles and clear all bookmarked content with a single button.
 * **Cached Network Images**: Utilizes `cached_network_image` to cache remote article images on disk, reducing network bandwidth and ensuring images render instantly on repeat visits.
 * **Safe Secrets Management**: Utilizes dotenv configuration (`.env`) to load NewsAPI credentials securely without hardcoding them in the source code.
 
@@ -107,10 +109,10 @@ The data layer implements the interfaces defined in the domain layer. It interac
 * **Repositories (Implementation)**: Coordinates data fetching from remote sources, handles error catching, and returns unified `DataState` responses.
 
 ### 3. Presentation Layer (The UI)
-This layer is responsible for rendering views and handling user interactions.
+This layer is responsible for rendering views and handling user interactions. It implements the **Atomic Design Methodology** to ensure high reusability:
 * **BLoC**: Receives user actions (Events), processes logic via Use Cases, and emits corresponding UI states (e.g., `RemoteArticlesLoading`, `RemoteArticlesDone`).
-* **Pages & Hooks**: High-level screens built using `HookWidget` for optimized state creation.
-* **Widgets**: Smaller, reusable UI building blocks like list tiles (`ArticleTile`) and app bars.
+* **Atoms, Molecules, & Organisms**: Reusable UI building blocks (e.g., buttons as Atoms, article info sections as Molecules, full article cards as Organisms).
+* **Pages & Hooks**: High-level screens built using `HookWidget` for optimized state creation, assembling Organisms into complete views.
 
 ---
 
@@ -130,6 +132,7 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 | **skeletonizer** | Loading UI | Automatically creates skeleton load placeholders using existing widget structures. |
 | **cached_network_image** | Image Loading | Downloads, caches, and renders web images with progress indicators and error fallbacks. |
 | **flutter_dotenv** | Configuration | Loads runtime environment configurations safely from `.env` files. |
+| **flutter_svg** | Vector Graphics | Renders scalable SVG illustrations for rich empty states and UX components. |
 | **build_runner** | Code Generation | Generates code for Retrofit API services and Drift database classes. |
 
 ---
@@ -138,6 +141,9 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 
 ```text
 lib/
+├── assets/
+│   ├── fonts/                 # Custom typography (Inter, WorkSans, Muli)
+│   └── illustrations/         # SVG graphics for empty states
 ├── config/
 │   ├── routes/                # Navigation and routing setup (AppRoutes)
 │   └── theme/                 # Global application styling (ThemeData, AppBarTheme)
@@ -146,6 +152,7 @@ lib/
 │   ├── database/              # Drift database initialization and sqlite setup
 │   ├── env/                   # Environment variable mappings
 │   ├── network/               # Custom Dio configurations, interceptors, and clients
+│   ├── presentation/          # Core reusable UI elements (Atoms, Molecules, Organisms)
 │   ├── resources/             # Sealed states (DataState, DataSuccess, DataFailed)
 │   └── usecases/              # Base template abstraction for UseCases
 ├── features/
@@ -157,11 +164,11 @@ lib/
 │       ├── domain/
 │       │   ├── entities/      # Pure business objects (ArticleEntity)
 │       │   ├── repositories/  # Abstract repository contracts (ArticleRepository)
-│       │   └── usecases/      # Use case classes (GetArticle, SaveArticle, etc.)
+│       │   └── usecases/      # Use cases (*_usecase.dart)
 │       └── presentation/
 │           ├── bloc/          # Remote (API) and Local (DB) state handlers
-│           ├── pages/         # Screens (DailyNews Home, DetailView, SavedArticles)
-│           └── widgets/       # Reusable components (ArticleTile)
+│           ├── components/    # Feature-specific UI (Atoms, Molecules, Organisms)
+│           └── pages/         # Screens (DailyNews Home, DetailView, SavedArticles)
 ├── injection_container.dart   # Service locator (GetIt) registrations
 └── main.dart                  # Application entry point & configuration setups
 ```
