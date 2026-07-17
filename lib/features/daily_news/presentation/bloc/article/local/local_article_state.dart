@@ -7,6 +7,11 @@ abstract class LocalArticleState extends Equatable {
 
   const LocalArticleState({this.articles});
 
+  bool isArticleSaved(ArticleEntity article) {
+    if (articles == null || articles!.isEmpty) return false;
+    return articles!.any((element) => element.url == article.url);
+  }
+
   @override
   List<Object?> get props => [articles];
 }

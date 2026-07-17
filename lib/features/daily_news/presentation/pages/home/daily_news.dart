@@ -123,9 +123,7 @@ class DailyNews extends StatelessWidget {
                   builder: (context, state) {
                     bool isSaved = false;
                     if (state is LocalArticlesDone) {
-                      isSaved = state.articles!.any(
-                        (element) => element.url == article.url,
-                      );
+                      isSaved = state.isArticleSaved(article);
                     }
                     return ArticleCard(
                       article: article,
