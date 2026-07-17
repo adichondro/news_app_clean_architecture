@@ -1,8 +1,8 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
-import 'package:news_app_clean_architecture/core/presentation/atoms/app_spacing.dart';
-import 'package:news_app_clean_architecture/core/presentation/atoms/app_typography.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/atoms/category_badge.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/molecules/author_meta_info.dart';
 import 'package:skeletonizer/skeletonizer.dart';

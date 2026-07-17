@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/presentation/atoms/app_colors.dart';
-import 'package:news_app_clean_architecture/core/presentation/atoms/app_radius.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 
 class SaveButton extends StatelessWidget {
   final bool isSaved;
