@@ -145,15 +145,20 @@ lib/
 │   ├── fonts/                 # Custom typography (Inter, WorkSans, Muli)
 │   └── illustrations/         # SVG graphics for empty states
 ├── config/
-│   ├── routes/                # Navigation and routing setup (AppRoutes)
-│   └── theme/                 # Global application styling (ThemeData, AppBarTheme)
+│   └── routes/                # Navigation and routing setup (AppRoutes)
 ├── core/
 │   ├── constant/              # Global API and query constant values
 │   ├── database/              # Drift database initialization and sqlite setup
 │   ├── env/                   # Environment variable mappings
 │   ├── network/               # Custom Dio configurations, interceptors, and clients
-│   ├── presentation/          # Core reusable UI elements (Atoms, Molecules, Organisms)
+│   ├── presentation/          # Core UI Atoms, Molecules, Organisms (Strictly UI Widgets)
+│   │   ├── atoms/
+│   │   ├── molecules/
+│   │   └── organisms/
 │   ├── resources/             # Sealed states (DataState, DataSuccess, DataFailed)
+│   ├── theme/                 # Global app styling and tokens
+│   │   ├── app_theme.dart     # ThemeData configs
+│   │   └── tokens/            # Design Tokens (app_colors, app_spacing, app_typography, etc.)
 │   └── usecases/              # Base template abstraction for UseCases
 ├── features/
 │   └── daily_news/            # Main feature domain
