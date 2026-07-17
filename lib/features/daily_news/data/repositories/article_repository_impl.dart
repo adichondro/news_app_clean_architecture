@@ -21,7 +21,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
   ArticleRepositoryImpl(this._newsApiService, this._articleDao);
 
   @override
-  Future<DataState<List<ArticleModel>>> getNewsArticles() async {
+  Future<DataState<List<ArticleEntity>>> getNewsArticles() async {
     try {
       final httpResponse = await _newsApiService.getNewsArticles(
         apiKey: Env.apiKey,
@@ -31,7 +31,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         final articleList = httpResponse.data.articles ?? [];
-        return DataSuccess(articleList);
+        final List<ArticleEntity> articleEntities = articleList.map((model) => model as ArticleEntity).toList();
+        return DataSuccess(articleEntities);
       } else {
         return DataFailed(
           ServerFailure(httpResponse.response.statusMessage ?? 'Bad Response'),
@@ -48,7 +49,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<DataState<List<ArticleEntity>>> getSavedArticles() async {
     try {
       final localData = await _articleDao.getSavedArticles();
-      final articles = localData.map((data) => ArticleModel.fromTableData(data)).toList();
+      final List<ArticleEntity> articles = localData.map((data) => ArticleModel.fromTableData(data) as ArticleEntity).toList();
       return DataSuccess(articles);
     } catch (e) {
       return DataFailed(CacheFailure('Failed to load local database: ${e.toString()}'));
