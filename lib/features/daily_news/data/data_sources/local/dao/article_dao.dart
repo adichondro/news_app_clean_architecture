@@ -10,8 +10,10 @@ class ArticleDao extends DatabaseAccessor<AppDatabase> with _$ArticleDaoMixin {
   ArticleDao(super.db);
 
   // Get all saved articles from local database
-  Future<List<ArticleTableData>> getSavedArticles() =>
-      select(articleTable).get();
+  Future<List<ArticleModel>> getSavedArticles() async {
+    final result = await select(articleTable).get();
+    return result.map((data) => ArticleModel.fromTableData(data)).toList();
+  }
 
   // 1. Insert article (with duplicate prevention)
   Future<void> insertArticle(ArticleModel article) async {
@@ -20,7 +22,7 @@ class ArticleDao extends DatabaseAccessor<AppDatabase> with _$ArticleDaoMixin {
     )..where((tbl) => tbl.url.equals(article.url ?? ''))).getSingleOrNull();
 
     if (existingArticle != null) return;
-    
+
     final companion = ArticleTableCompanion(
       author: Value(article.author),
       title: Value(article.title),
@@ -28,7 +30,7 @@ class ArticleDao extends DatabaseAccessor<AppDatabase> with _$ArticleDaoMixin {
       url: Value(article.url),
       urlToImage: Value(article.urlToImage),
       publishedAt: Value(article.publishedAt),
-      content: Value(article.content)
+      content: Value(article.content),
     );
 
     await into(articleTable).insert(companion);

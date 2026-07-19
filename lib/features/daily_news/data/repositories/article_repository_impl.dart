@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:news_app_clean_architecture/core/constant/query_constants.dart';
 import 'package:news_app_clean_architecture/core/env/env.dart';
@@ -21,23 +19,16 @@ class ArticleRepositoryImpl implements ArticleRepository {
   @override
   Future<DataState<List<ArticleEntity>>> getNewsArticles() async {
     try {
-      final httpResponse = await _newsApiService.getNewsArticles(
+      final responseModel = await _newsApiService.getNewsArticles(
         apiKey: Env.apiKey,
         country: QueryConstants.country,
         category: QueryConstants.category,
       );
-
-      if (httpResponse.response.statusCode == HttpStatus.ok) {
-        final articleList = httpResponse.data.articles ?? [];
-        final List<ArticleEntity> articleEntities = articleList
-            .map((model) => model as ArticleEntity)
-            .toList();
-        return DataSuccess(articleEntities);
-      } else {
-        return DataFailed(
-          ServerFailure(httpResponse.response.statusMessage ?? 'Bad Response'),
-        );
-      }
+      final articleList = responseModel.articles ?? [];
+      final List<ArticleEntity> articleEntities = articleList
+          .map((model) => model as ArticleEntity)
+          .toList();
+      return DataSuccess(articleEntities);
     } on DioException catch (e) {
       return DataFailed(ExceptionHandler.handleDioException(e));
     } catch (e) {
@@ -48,11 +39,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
   @override
   Future<DataState<List<ArticleEntity>>> getSavedArticles() async {
     try {
-      final localData = await _articleDao.getSavedArticles();
-      final List<ArticleEntity> articles = localData
-          .map((data) => ArticleModel.fromTableData(data) as ArticleEntity)
-          .toList();
-      return DataSuccess(articles);
+      final List<ArticleModel> localData = await _articleDao.getSavedArticles();
+      return DataSuccess(localData);
     } catch (e) {
       return DataFailed(
         CacheFailure('Failed to load local database: ${e.toString()}'),
