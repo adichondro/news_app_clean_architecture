@@ -1,9 +1,7 @@
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:drift/drift.dart';
 import 'package:news_app_clean_architecture/core/constant/query_constants.dart';
-import 'package:news_app_clean_architecture/core/database/app_database.dart';
 import 'package:news_app_clean_architecture/core/env/env.dart';
 import 'package:news_app_clean_architecture/core/error/exception_handler.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
@@ -31,7 +29,9 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
       if (httpResponse.response.statusCode == HttpStatus.ok) {
         final articleList = httpResponse.data.articles ?? [];
-        final List<ArticleEntity> articleEntities = articleList.map((model) => model as ArticleEntity).toList();
+        final List<ArticleEntity> articleEntities = articleList
+            .map((model) => model as ArticleEntity)
+            .toList();
         return DataSuccess(articleEntities);
       } else {
         return DataFailed(
@@ -49,25 +49,30 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<DataState<List<ArticleEntity>>> getSavedArticles() async {
     try {
       final localData = await _articleDao.getSavedArticles();
-      final List<ArticleEntity> articles = localData.map((data) => ArticleModel.fromTableData(data) as ArticleEntity).toList();
+      final List<ArticleEntity> articles = localData
+          .map((data) => ArticleModel.fromTableData(data) as ArticleEntity)
+          .toList();
       return DataSuccess(articles);
     } catch (e) {
-      return DataFailed(CacheFailure('Failed to load local database: ${e.toString()}'));
+      return DataFailed(
+        CacheFailure('Failed to load local database: ${e.toString()}'),
+      );
     }
   }
 
   @override
   Future<void> saveArticle(ArticleEntity article) async {
-    final companion = ArticleTableCompanion(
-      author: Value(article.author),
-      title: Value(article.title),
-      description: Value(article.description),
-      url: Value(article.url),
-      urlToImage: Value(article.urlToImage),
-      publishedAt: Value(article.publishedAt),
-      content: Value(article.content),
+    final articleModel = ArticleModel(
+      id: article.id,
+      author: article.author,
+      title: article.title,
+      description: article.description,
+      url: article.url,
+      urlToImage: article.urlToImage,
+      publishedAt: article.publishedAt,
+      content: article.content,
     );
-    await _articleDao.insertArticle(companion);
+    await _articleDao.insertArticle(articleModel);
   }
 
   @override
