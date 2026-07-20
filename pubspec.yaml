@@ -127,24 +127,6 @@ flutter:
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package
 fonts:
-    - family: Muli
-      fonts:
-        - asset: assets/fonts/muli/Muli-Light.ttf
-          weight: 300
-
-        - asset: assets/fonts/muli/Muli-LightItalic.ttf
-          weight: 300
-          style: italic
-
-        - asset: assets/fonts/muli/Muli-Regular.ttf
-          weight: 400
-
-        - asset: assets/fonts/muli/Muli-Italic.ttf
-          weight: 400
-          style: italic
-
-        - asset: assets/fonts/muli/Muli-Bold.ttf
-          weight: 700
 
     - family: WorkSans 
       fonts:

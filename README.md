@@ -142,7 +142,7 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 ```text
 lib/
 ├── assets/
-│   ├── fonts/                 # Custom typography (Inter, WorkSans, Muli)
+│   ├── fonts/                 # Custom typography (Inter, WorkSans)
 │   └── illustrations/         # SVG graphics for empty states
 ├── config/
 │   └── routes/                # Navigation and routing setup (AppRoutes)
