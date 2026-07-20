@@ -22,7 +22,7 @@ class _NewsApiService implements NewsApiService {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<NewsResponseModel> getNewsArticles({
+  Future<ArticleResponseModel> getNewsArticles({
     String? apiKey,
     String? country,
     String? category,
@@ -36,7 +36,7 @@ class _NewsApiService implements NewsApiService {
     queryParameters.removeWhere((k, v) => v == null);
     final _headers = <String, dynamic>{};
     const Map<String, dynamic>? _data = null;
-    final _options = _setStreamType<NewsResponseModel>(
+    final _options = _setStreamType<ArticleResponseModel>(
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
@@ -47,9 +47,9 @@ class _NewsApiService implements NewsApiService {
           .copyWith(baseUrl: _combineBaseUrls(_dio.options.baseUrl, baseUrl)),
     );
     final _result = await _dio.fetch<Map<String, dynamic>>(_options);
-    late NewsResponseModel _value;
+    late ArticleResponseModel _value;
     try {
-      _value = NewsResponseModel.fromJson(_result.data!);
+      _value = ArticleResponseModel.fromJson(_result.data!);
     } on Object catch (e, s) {
       errorLogger?.logError(e, s, _options, response: _result);
       rethrow;

@@ -1,19 +1,19 @@
 import 'package:news_app_clean_architecture/features/daily_news/data/models/article_model.dart';
 
 
-class NewsResponseModel {
+class ArticleResponseModel {
   final String? status;
   final int? totalResults;
   final List<ArticleModel>? articles;
-  const NewsResponseModel({
+  const ArticleResponseModel({
     this.status,
     this.totalResults,
     this.articles,
   });
 
 
-  factory NewsResponseModel.fromJson(Map<String, dynamic> json) {
-    return NewsResponseModel(
+  factory ArticleResponseModel.fromJson(Map<String, dynamic> json) {
+    return ArticleResponseModel(
       status: json['status'] as String?,
       totalResults: json['totalResults'] as int?,
       articles: json['articles'] != null
