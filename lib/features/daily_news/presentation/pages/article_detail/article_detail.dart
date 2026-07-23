@@ -3,7 +3,6 @@ import 'package:news_app_clean_architecture/core/util/string_extension.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
@@ -14,7 +13,7 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_hero_section.dart';
 
-class ArticleDetailView extends HookWidget {
+class ArticleDetailView extends StatelessWidget {
   final ArticleEntity? article;
 
   const ArticleDetailView({super.key, this.article});

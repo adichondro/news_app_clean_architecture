@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/clear_all_saved_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_hooks/flutter_hooks.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
@@ -18,7 +17,7 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/com
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/saved_articles_empty_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class SavedArticles extends HookWidget {
+class SavedArticles extends StatelessWidget {
   const SavedArticles({super.key});
 
   @override

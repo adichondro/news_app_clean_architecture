@@ -18,7 +18,7 @@ class RemoteArticlesLoading extends RemoteArticleState {
 }
 
 class RemoteArticlesDone extends RemoteArticleState {
-  const RemoteArticlesDone(List<ArticleEntity> article) : super(articles: article);
+  const RemoteArticlesDone(List<ArticleEntity> articles) : super(articles: articles);
 
 }
 

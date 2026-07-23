@@ -119,12 +119,12 @@ class DailyNews extends StatelessWidget {
                   const SizedBox(height: AppSpacing.xl),
               itemBuilder: (context, index) {
                 final article = state.articles![index];
-                return BlocBuilder<LocalArticleBloc, LocalArticleState>(
-                  builder: (context, state) {
-                    bool isSaved = false;
-                    if (state is LocalArticlesDone) {
-                      isSaved = state.isArticleSaved(article);
-                    }
+                return BlocSelector<LocalArticleBloc, LocalArticleState, bool>(
+                  selector: (localState) {
+                    return localState is LocalArticlesDone &&
+                        localState.isArticleSaved(article);
+                  },
+                  builder: (context, isSaved) {
                     return ArticleCard(
                       article: article,
                       isSaved: isSaved,
