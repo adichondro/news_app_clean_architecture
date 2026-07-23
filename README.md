@@ -82,7 +82,7 @@ graph TD
         RepoImpl -->|Calls| LocalDS["Local DataSource (Drift DAO)"]
         RemoteDS -->|Returns JSON mapped to| Model["Models (DTO)"]
         LocalDS -->|Returns SQLite mapped to| Model
-        Model -.->|Mapped via toEntity()| Entity
+        Model -.->|"Mapped via toEntity()"| Entity
     end
 
     classDef presentation fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#003057;
