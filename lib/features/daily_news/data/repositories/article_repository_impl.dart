@@ -25,9 +25,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
         category: QueryConstants.category,
       );
       final articleList = responseModel.articles ?? [];
-      final List<ArticleEntity> articleEntities = articleList
-          .map((model) => model as ArticleEntity)
-          .toList();
+      final List<ArticleEntity> articleEntities =
+          articleList.map((model) => model.toEntity()).toList();
       return DataSuccess(articleEntities);
     } on DioException catch (e) {
       return DataFailed(ExceptionHandler.handleDioException(e));
@@ -40,7 +39,9 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<DataState<List<ArticleEntity>>> getSavedArticles() async {
     try {
       final List<ArticleModel> localData = await _articleDao.getSavedArticles();
-      return DataSuccess(localData);
+      final List<ArticleEntity> articleEntities =
+          localData.map((model) => model.toEntity()).toList();
+      return DataSuccess(articleEntities);
     } catch (e) {
       return DataFailed(
         CacheFailure('Failed to load local database: ${e.toString()}'),
@@ -50,16 +51,7 @@ class ArticleRepositoryImpl implements ArticleRepository {
 
   @override
   Future<void> saveArticle(ArticleEntity article) async {
-    final articleModel = ArticleModel(
-      id: article.id,
-      author: article.author,
-      title: article.title,
-      description: article.description,
-      url: article.url,
-      urlToImage: article.urlToImage,
-      publishedAt: article.publishedAt,
-      content: article.content,
-    );
+    final articleModel = ArticleModel.fromEntity(article);
     await _articleDao.insertArticle(articleModel);
   }
 

@@ -82,14 +82,9 @@ class ArticleDetailView extends HookWidget {
   Widget _buildBookmarkAction() {
     return BlocBuilder<LocalArticleBloc, LocalArticleState>(
       builder: (context, state) {
-        final savedArticles =
-            state.articles?.where((element) => element.url == article?.url) ??
-            [];
-        final isSaved = savedArticles.isNotEmpty;
-        final savedArticle = isSaved ? savedArticles.first : null;
+        final isSaved = article != null && state.isArticleSaved(article!);
         return IconButton(
-          onPressed: () =>
-              _onFloatingActionButtonPressed(context, isSaved, savedArticle),
+          onPressed: () => _onBookmarkPressed(context, isSaved),
           icon: Icon(
             isSaved ? Icons.bookmark : Icons.bookmark_border,
             color: AppColors.primary,
@@ -103,18 +98,13 @@ class ArticleDetailView extends HookWidget {
     Navigator.pop(context);
   }
 
-  void _onFloatingActionButtonPressed(
-    BuildContext context,
-    bool isSaved,
-    ArticleEntity? savedArticle,
-  ) {
-    if (isSaved && savedArticle != null) {
-      BlocProvider.of<LocalArticleBloc>(
-        context,
-      ).add(RemoveArticle(savedArticle));
+  void _onBookmarkPressed(BuildContext context, bool isSaved) {
+    if (article == null) return;
+    if (isSaved) {
+      context.read<LocalArticleBloc>().add(RemoveArticle(article!));
       CustomSnackbar.show(context, message: 'Article removed!');
     } else {
-      BlocProvider.of<LocalArticleBloc>(context).add(SaveArticle(article!));
+      context.read<LocalArticleBloc>().add(SaveArticle(article!));
       CustomSnackbar.show(context, message: 'Article saved!');
     }
   }
