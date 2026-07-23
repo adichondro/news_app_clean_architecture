@@ -80,9 +80,9 @@ graph TD
         RepoImpl[Repository Implementation] -.->|Implements| RepoInterface
         RepoImpl -->|Calls| RemoteDS["Remote DataSource (Retrofit/Dio)"]
         RepoImpl -->|Calls| LocalDS["Local DataSource (Drift DAO)"]
-        RemoteDS -->|Returns JSON mapped to| Model[Models]
+        RemoteDS -->|Returns JSON mapped to| Model["Models (DTO)"]
         LocalDS -->|Returns SQLite mapped to| Model
-        Model -->|Extends| Entity
+        Model -.->|Mapped via toEntity()| Entity
     end
 
     classDef presentation fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#003057;
@@ -102,17 +102,17 @@ The domain layer contains the core business rules of the application. It is comp
 
 ### 2. Data Layer (The Infrastructure)
 The data layer implements the interfaces defined in the domain layer. It interacts directly with the API and database.
-* **Models**: Entities with serialization and deserialization functions (e.g., `ArticleModel.fromJson`, `ArticleModel.fromTableData`).
+* **Models**: Standalone Data Transfer Objects (DTOs) handling JSON parsing (`ArticleModel.fromJson`), SQLite database rows (`ArticleModel.fromTableData`), and domain entity mappers (`toEntity()`, `fromEntity()`).
 * **Data Sources**: Handles low-level network and database calls:
   * *Remote*: `NewsApiService` (generated using `retrofit` and powered by `dio`).
   * *Local*: `ArticleDao` and `AppDatabase` (powered by `drift` SQLite engine).
-* **Repositories (Implementation)**: Coordinates data fetching from remote sources, handles error catching, and returns unified `DataState` responses.
+* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, handles error catching, and returns unified `DataState` responses.
 
 ### 3. Presentation Layer (The UI)
 This layer is responsible for rendering views and handling user interactions. It implements the **Atomic Design Methodology** to ensure high reusability:
 * **BLoC**: Receives user actions (Events), processes logic via Use Cases, and emits corresponding UI states (e.g., `RemoteArticlesLoading`, `RemoteArticlesDone`).
 * **Atoms, Molecules, & Organisms**: Reusable UI building blocks (e.g., buttons as Atoms, article info sections as Molecules, full article cards as Organisms).
-* **Pages & Hooks**: High-level screens built using `HookWidget` for optimized state creation, assembling Organisms into complete views.
+* **Pages**: High-level screens built as clean `StatelessWidget`s that assemble Organisms into complete views and subscribe to BLoC states.
 
 ---
 
@@ -140,10 +140,10 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 ## Project Structure
 
 ```text
+assets/
+├── fonts/                     # Custom typography (Inter, WorkSans)
+└── illustrations/             # SVG graphics for empty states
 lib/
-├── assets/
-│   ├── fonts/                 # Custom typography (Inter, WorkSans)
-│   └── illustrations/         # SVG graphics for empty states
 ├── config/
 │   └── routes/                # Navigation and routing setup (AppRoutes)
 ├── core/
