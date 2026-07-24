@@ -13,10 +13,10 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_hero_section.dart';
 
-class ArticleDetailView extends StatelessWidget {
+class ArticleDetailPage extends StatelessWidget {
   final ArticleEntity? article;
 
-  const ArticleDetailView({super.key, this.article});
+  const ArticleDetailPage({super.key, this.article});
 
   @override
   Widget build(BuildContext context) {

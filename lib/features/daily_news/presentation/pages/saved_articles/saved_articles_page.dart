@@ -17,8 +17,8 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/com
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/saved_articles_empty_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class SavedArticles extends StatelessWidget {
-  const SavedArticles({super.key});
+class SavedArticlesPage extends StatelessWidget {
+  const SavedArticlesPage({super.key});
 
   @override
   Widget build(BuildContext context) {

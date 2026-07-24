@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
-import 'package:news_app_clean_architecture/features/daily_news/presentation/components/atoms/category_badge.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/category_chip.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/molecules/author_meta_info.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
@@ -66,7 +66,7 @@ class ArticleHeroSection extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisSize: MainAxisSize.min,
               children: [
-                CategoryBadge(text: category),
+                CategoryChip(label: category),
                 const SizedBox(height: AppSpacing.md),
                 Text(
                   title,

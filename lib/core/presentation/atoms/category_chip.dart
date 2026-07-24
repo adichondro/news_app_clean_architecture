@@ -5,10 +5,19 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
+/// Atom component untuk label kategori berita (misal: TECHNOLOGY, POLITICS).
 class CategoryChip extends StatelessWidget {
   final String label;
+  final Color? backgroundColor;
+  final Color? textColor;
 
-  const CategoryChip({super.key, required this.label});
+  const CategoryChip({
+    super.key,
+    required this.label,
+    this.backgroundColor,
+    this.textColor,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Skeleton.replace(
@@ -18,13 +27,13 @@ class CategoryChip extends StatelessWidget {
           vertical: AppSpacing.xxs,
         ),
         decoration: BoxDecoration(
-          color: AppColors.primary.withValues(alpha: 0.9),
+          color: backgroundColor ?? AppColors.primary.withValues(alpha: 0.9),
           borderRadius: AppRadius.pillRadius,
         ),
         child: Text(
           label.toUpperCase(),
           style: AppTypography.labelMedium.copyWith(
-            color: AppColors.onPrimary,
+            color: textColor ?? AppColors.onPrimary,
             fontSize: 10,
             fontWeight: FontWeight.w700,
           ),

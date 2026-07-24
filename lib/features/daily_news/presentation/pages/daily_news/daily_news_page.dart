@@ -17,8 +17,8 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_card.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class DailyNews extends StatelessWidget {
-  const DailyNews({super.key});
+class DailyNewsPage extends StatelessWidget {
+  const DailyNewsPage({super.key});
 
   @override
   Widget build(BuildContext context) {
