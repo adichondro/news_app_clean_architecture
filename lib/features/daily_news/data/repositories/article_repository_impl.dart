@@ -50,22 +50,43 @@ class ArticleRepositoryImpl implements ArticleRepository {
   }
 
   @override
-  Future<void> saveArticle(ArticleEntity article) async {
-    final articleModel = ArticleModel.fromEntity(article);
-    await _articleDao.insertArticle(articleModel);
-  }
-
-  @override
-  Future<void> removeArticle(ArticleEntity article) async {
-    if (article.id != null) {
-      await _articleDao.deleteArticle(article.id!);
-    } else if (article.url != null) {
-      await _articleDao.deleteArticleByUrl(article.url!);
+  Future<DataState<void>> saveArticle(ArticleEntity article) async {
+    try {
+      final articleModel = ArticleModel.fromEntity(article);
+      await _articleDao.insertArticle(articleModel);
+      return const DataSuccess(null);
+    } catch (e) {
+      return DataFailed(
+        CacheFailure('Failed to save article to local storage: ${e.toString()}'),
+      );
     }
   }
 
   @override
-  Future<void> clearSavedArticles() async {
-    await _articleDao.clearAllArticles();
+  Future<DataState<void>> removeArticle(ArticleEntity article) async {
+    try {
+      if (article.id != null) {
+        await _articleDao.deleteArticle(article.id!);
+      } else if (article.url != null) {
+        await _articleDao.deleteArticleByUrl(article.url!);
+      }
+      return const DataSuccess(null);
+    } catch (e) {
+      return DataFailed(
+        CacheFailure('Failed to remove article from local storage: ${e.toString()}'),
+      );
+    }
+  }
+
+  @override
+  Future<DataState<void>> clearSavedArticles() async {
+    try {
+      await _articleDao.clearAllArticles();
+      return const DataSuccess(null);
+    } catch (e) {
+      return DataFailed(
+        CacheFailure('Failed to clear saved articles: ${e.toString()}'),
+      );
+    }
   }
 }

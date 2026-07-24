@@ -48,6 +48,11 @@ class DailyNews extends StatelessWidget {
             message: state.error.message,
             isError: true,
           );
+        } else if (state is LocalArticlesDone && state.message != null) {
+          CustomSnackbar.show(
+            context,
+            message: state.message!,
+          );
         }
       },
       child: BlocConsumer<RemoteArticlesBloc, RemoteArticleState>(
@@ -121,8 +126,7 @@ class DailyNews extends StatelessWidget {
                 final article = state.articles![index];
                 return BlocSelector<LocalArticleBloc, LocalArticleState, bool>(
                   selector: (localState) {
-                    return localState is LocalArticlesDone &&
-                        localState.isArticleSaved(article);
+                    return localState.isArticleSaved(article);
                   },
                   builder: (context, isSaved) {
                     return ArticleCard(
@@ -135,17 +139,9 @@ class DailyNews extends StatelessWidget {
                           context.read<LocalArticleBloc>().add(
                             RemoveArticle(article),
                           );
-                          CustomSnackbar.show(
-                            context,
-                            message: 'Article removed!',
-                          );
                         } else {
                           context.read<LocalArticleBloc>().add(
                             SaveArticle(article),
-                          );
-                          CustomSnackbar.show(
-                            context,
-                            message: 'Article saved!',
                           );
                         }
                       },

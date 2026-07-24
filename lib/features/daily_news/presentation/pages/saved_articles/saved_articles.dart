@@ -44,7 +44,21 @@ class SavedArticles extends StatelessWidget {
   Widget _buildBody() {
     return Padding(
       padding: const EdgeInsets.all(AppSpacing.lg),
-      child: BlocBuilder<LocalArticleBloc, LocalArticleState>(
+      child: BlocConsumer<LocalArticleBloc, LocalArticleState>(
+        listener: (context, state) {
+          if (state is LocalArticlesError) {
+            CustomSnackbar.show(
+              context,
+              message: state.error.message,
+              isError: true,
+            );
+          } else if (state is LocalArticlesDone && state.message != null) {
+            CustomSnackbar.show(
+              context,
+              message: state.message!,
+            );
+          }
+        },
         builder: (context, state) {
           final articles = state.articles ?? [];
           final articleCount = articles.length;
@@ -153,11 +167,9 @@ class SavedArticles extends StatelessWidget {
 
   void _onRemoveArticle(BuildContext context, ArticleEntity article) {
     BlocProvider.of<LocalArticleBloc>(context).add(RemoveArticle(article));
-    CustomSnackbar.show(context, message: 'Article removed!');
   }
 
   void _onClearAllPressed(BuildContext context) {
     BlocProvider.of<LocalArticleBloc>(context).add(ClearArticles());
-    CustomSnackbar.show(context, message: 'All articles cleared!');
   }
 }

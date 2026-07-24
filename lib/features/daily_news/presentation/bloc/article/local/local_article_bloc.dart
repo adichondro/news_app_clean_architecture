@@ -29,7 +29,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
   ) async {
     final dataState = await _getSavedArticlesUseCase();
     dataState.fold(
-      (failure) => emit(LocalArticlesError(failure)),
+      (failure) => emit(LocalArticlesError(failure, articles: state.articles)),
       (articles) => emit(LocalArticlesDone(articles)),
     );
   }
@@ -38,11 +38,17 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     SaveArticle event,
     Emitter<LocalArticleState> emit,
   ) async {
-    await _saveArticleUseCase(params: event.article);
-    final dataState = await _getSavedArticlesUseCase();
-    dataState.fold(
-      (failure) => emit(LocalArticlesError(failure)),
-      (articles) => emit(LocalArticlesDone(articles)),
+    final currentArticles = state.articles;
+    final saveState = await _saveArticleUseCase(params: event.article);
+    await saveState.fold(
+      (failure) async => emit(LocalArticlesError(failure, articles: currentArticles)),
+      (_) async {
+        final dataState = await _getSavedArticlesUseCase();
+        dataState.fold(
+          (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
+          (articles) => emit(LocalArticlesDone(articles, message: 'Article saved!')),
+        );
+      },
     );
   }
 
@@ -50,11 +56,17 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     RemoveArticle event,
     Emitter<LocalArticleState> emit,
   ) async {
-    await _removeArticleUseCase(params: event.article);
-    final dataState = await _getSavedArticlesUseCase();
-    dataState.fold(
-      (failure) => emit(LocalArticlesError(failure)),
-      (articles) => emit(LocalArticlesDone(articles)),
+    final currentArticles = state.articles;
+    final removeState = await _removeArticleUseCase(params: event.article);
+    await removeState.fold(
+      (failure) async => emit(LocalArticlesError(failure, articles: currentArticles)),
+      (_) async {
+        final dataState = await _getSavedArticlesUseCase();
+        dataState.fold(
+          (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
+          (articles) => emit(LocalArticlesDone(articles, message: 'Article removed!')),
+        );
+      },
     );
   }
 
@@ -62,7 +74,11 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     ClearArticles event,
     Emitter<LocalArticleState> emit,
   ) async {
-    await _clearArticleUseCase.call();
-    emit(const LocalArticlesDone([]));
+    final currentArticles = state.articles;
+    final clearState = await _clearArticleUseCase.call();
+    clearState.fold(
+      (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
+      (_) => emit(const LocalArticlesDone([], message: 'All articles cleared!')),
+    );
   }
 }

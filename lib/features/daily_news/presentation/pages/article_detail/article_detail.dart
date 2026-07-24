@@ -49,18 +49,34 @@ class ArticleDetailView extends StatelessWidget {
   }
 
   Widget _buildBody() {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          ArticleHeroSection(
-            imageUrl: article?.urlToImage,
-            category: 'NEWS',
-            title: (article?.title).valueOr('No Title'),
-            authorName: (article?.author).valueOr('Unknown Author'),
-            dateAndReadTime: '${(article?.publishedAt).toTimeAgo()} • 8 min read',
-          ),
-          _buildArticleDescription(),
-        ],
+    return BlocListener<LocalArticleBloc, LocalArticleState>(
+      listener: (context, state) {
+        if (state is LocalArticlesError) {
+          CustomSnackbar.show(
+            context,
+            message: state.error.message,
+            isError: true,
+          );
+        } else if (state is LocalArticlesDone && state.message != null) {
+          CustomSnackbar.show(
+            context,
+            message: state.message!,
+          );
+        }
+      },
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ArticleHeroSection(
+              imageUrl: article?.urlToImage,
+              category: 'NEWS',
+              title: (article?.title).valueOr('No Title'),
+              authorName: (article?.author).valueOr('Unknown Author'),
+              dateAndReadTime: '${(article?.publishedAt).toTimeAgo()} • 8 min read',
+            ),
+            _buildArticleDescription(),
+          ],
+        ),
       ),
     );
   }
@@ -101,10 +117,8 @@ class ArticleDetailView extends StatelessWidget {
     if (article == null) return;
     if (isSaved) {
       context.read<LocalArticleBloc>().add(RemoveArticle(article!));
-      CustomSnackbar.show(context, message: 'Article removed!');
     } else {
       context.read<LocalArticleBloc>().add(SaveArticle(article!));
-      CustomSnackbar.show(context, message: 'Article saved!');
     }
   }
 }

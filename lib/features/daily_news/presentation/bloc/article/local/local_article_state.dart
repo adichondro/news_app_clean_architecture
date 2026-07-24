@@ -21,11 +21,18 @@ class LocalArticlesLoading extends LocalArticleState {
 }
 
 class LocalArticlesDone extends LocalArticleState {
-  const LocalArticlesDone(List<ArticleEntity> article)
-    : super(articles: article);
+  final String? message;
+  const LocalArticlesDone(List<ArticleEntity> articles, {this.message})
+      : super(articles: articles);
+
+  @override
+  List<Object?> get props => [articles, message];
 }
 
 class LocalArticlesError extends LocalArticleState {
   final Failure error;
-  const LocalArticlesError(this.error);
+  const LocalArticlesError(this.error, {super.articles});
+
+  @override
+  List<Object?> get props => [error, articles];
 }
