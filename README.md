@@ -97,8 +97,8 @@ graph TD
 ### 1. Domain Layer (The Core)
 The domain layer contains the core business rules of the application. It is completely independent of any external library, framework, or database.
 * **Entities**: Plain Dart objects containing business data (e.g., `ArticleEntity` extending `Equatable`).
-* **Repositories (Interfaces)**: Defines the contracts for data operations. It does not know *how* data is fetched, only *what* operations are available.
-* **Use Cases**: Individual, single-responsibility units of work (e.g., `GetArticleUseCase`, `SaveArticleUseCase`) executing business tasks.
+* **Repositories (Interfaces)**: Defines the contracts for data operations. Returns type-safe `DataState<T>` wrappers (including `DataState<void>` for mutation methods) to ensure failure feedback is explicitly defined.
+* **Use Cases**: Individual, single-responsibility units of work (e.g., `GetArticleUseCase`, `SaveArticleUseCase`, `RemoveArticleUseCase`, `ClearArticleUseCase`) executing business tasks.
 
 ### 2. Data Layer (The Infrastructure)
 The data layer implements the interfaces defined in the domain layer. It interacts directly with the API and database.
@@ -106,7 +106,7 @@ The data layer implements the interfaces defined in the domain layer. It interac
 * **Data Sources**: Handles low-level network and database calls:
   * *Remote*: `NewsApiService` (generated using `retrofit` and powered by `dio`).
   * *Local*: `ArticleDao` and `AppDatabase` (powered by `drift` SQLite engine).
-* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, handles error catching, and returns unified `DataState` responses.
+* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, handles error catching, and returns unified `DataSuccess` or `DataFailed(CacheFailure)` responses.
 
 ### 3. Presentation Layer (The UI)
 This layer is responsible for rendering views and handling user interactions. It implements the **Atomic Design Methodology** to ensure high reusability:
@@ -173,7 +173,10 @@ lib/
 │       └── presentation/
 │           ├── bloc/          # Remote (API) and Local (DB) state handlers
 │           ├── components/    # Feature-specific UI (Atoms, Molecules, Organisms)
-│           └── pages/         # Screens (DailyNews Home, DetailView, SavedArticles)
+│           └── pages/         # Standardized Screen Pages
+│               ├── article_detail/   # ArticleDetailPage
+│               ├── daily_news/       # DailyNewsPage
+│               └── saved_articles/   # SavedArticlesPage
 ├── injection_container.dart   # Service locator (GetIt) registrations
 └── main.dart                  # Application entry point & configuration setups
 ```
