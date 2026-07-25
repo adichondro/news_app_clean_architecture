@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
@@ -21,16 +22,15 @@ class SavedArticlesEmptyState extends StatelessWidget {
               illustration: SvgPicture.asset(
                 'assets/illustrations/saved_articles_illustration.svg',
               ),
-              title: 'No Saved Articles',
-              message:
-                  'Articles you save will appear here to read later. Find interesting news and save it using the bookmark icon.',
-              actionLabel: 'Explore News',
+              title: AppStrings.noSavedArticlesTitle,
+              message: AppStrings.noSavedArticlesMessage,
+              actionLabel: AppStrings.exploreNews,
               actionIcon: Icons.explore_outlined,
               onActionPressed: onExploreTapped,
             ),
             const SizedBox(height: AppSpacing.sectionXl),
             Text(
-              'Popular Topics for You'.toUpperCase(),
+              AppStrings.popularTopicsTitle.toUpperCase(),
               style: AppTypography.labelMedium.copyWith(
                 color: AppColors.outline,
                 letterSpacing: 1.2,
@@ -43,12 +43,12 @@ class SavedArticlesEmptyState extends StatelessWidget {
                 alignment: WrapAlignment.center,
                 spacing: AppSpacing.md,
                 runSpacing: AppSpacing.xxs,
-                children: [
-                  const TopicChip(label: 'Politics'),
-                  const TopicChip(label: 'Technology'),
-                  const TopicChip(label: 'Science'),
-                  const TopicChip(label: 'Health'),
-                  const TopicChip(label: 'Business'),
+                children: const [
+                  TopicChip(label: AppStrings.topicPolitics),
+                  TopicChip(label: AppStrings.topicTechnology),
+                  TopicChip(label: AppStrings.topicScience),
+                  TopicChip(label: AppStrings.topicHealth),
+                  TopicChip(label: AppStrings.topicBusiness),
                 ],
               ),
             ),

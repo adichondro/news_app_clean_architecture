@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
@@ -27,7 +28,7 @@ class DailyNewsPage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppbar(BuildContext context) {
     return CustomAppBar(
-      title: 'Daily News',
+      title: AppStrings.appTitle,
       actions: [
         IconButton(
           onPressed: () => _onShowSavedArticleViewTapped(context),
@@ -60,7 +61,7 @@ class DailyNewsPage extends StatelessWidget {
           if (state is RemoteArticlesError) {
             CustomSnackbar.show(
               context,
-              message: state.error?.message ?? 'An unexpected error occurred.',
+              message: state.error?.message ?? AppStrings.unexpectedError,
               isError: true,
             );
           }
@@ -77,10 +78,8 @@ class DailyNewsPage extends StatelessWidget {
                 itemBuilder: (context, index) {
                   return const ArticleCard(
                     article: ArticleEntity(
-                      title:
-                          'This is the placeholder title of the article loading',
-                      description:
-                          'This is a placeholder description for loading articles so that the skeleton layout is formed proportionally.',
+                      title: AppStrings.placeholderTitle,
+                      description: AppStrings.placeholderDescription,
                       publishedAt: 'YYYY-MM-DD',
                       urlToImage: '',
                     ),
@@ -95,11 +94,11 @@ class DailyNewsPage extends StatelessWidget {
               illustration: SvgPicture.asset(
                 'assets/illustrations/connection_error_illustration.svg',
               ),
-              title: 'Connection Error',
-              message: 'Failed to load articles. Please check your connection.',
+              title: AppStrings.connectionErrorTitle,
+              message: AppStrings.connectionErrorMessage,
               onActionPressed: () =>
                   context.read<RemoteArticlesBloc>().add(const GetArticles()),
-              actionLabel: 'Try Again',
+              actionLabel: AppStrings.tryAgain,
             );
           }
 
@@ -109,12 +108,11 @@ class DailyNewsPage extends StatelessWidget {
                 illustration: SvgPicture.asset(
                   'assets/illustrations/no_articles_illustration.svg',
                 ),
-                title: 'No Articles Found',
-                message:
-                    'No articles are currently available. Please check back later for updates.',
+                title: AppStrings.noArticlesFoundTitle,
+                message: AppStrings.noArticlesFoundMessage,
                 onActionPressed: () =>
                     context.read<RemoteArticlesBloc>().add(const GetArticles()),
-                actionLabel: 'Try Again',
+                actionLabel: AppStrings.tryAgain,
               );
             }
             return ListView.separated(

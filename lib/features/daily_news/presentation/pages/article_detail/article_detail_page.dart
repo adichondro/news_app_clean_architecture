@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/util/string_extension.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
@@ -29,7 +30,7 @@ class ArticleDetailPage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
     return CustomAppBar(
-      title: 'Daily News',
+      title: AppStrings.appTitle,
       leading: IconButton(
         icon: const Icon(Icons.chevron_left, color: AppColors.primary, size: 28),
         onPressed: () => _onBackButtonPressed(context),
@@ -39,7 +40,7 @@ class ArticleDetailPage extends StatelessWidget {
           icon: const Icon(Icons.share_outlined, color: AppColors.primary),
           onPressed: () {
             // TODO: implement share functionality
-            CustomSnackbar.show(context, message: 'Share coming soon!');
+            CustomSnackbar.show(context, message: AppStrings.shareComingSoon);
           },
         ),
         _buildBookmarkAction(),
@@ -69,9 +70,9 @@ class ArticleDetailPage extends StatelessWidget {
           children: [
             ArticleHeroSection(
               imageUrl: article?.urlToImage,
-              category: 'NEWS',
-              title: (article?.title).valueOr('No Title'),
-              authorName: (article?.author).valueOr('Unknown Author'),
+              category: AppStrings.newsCategoryDefault,
+              title: (article?.title).valueOr(AppStrings.noTitle),
+              authorName: (article?.author).valueOr(AppStrings.unknownAuthor),
               dateAndReadTime: '${(article?.publishedAt).toTimeAgo()} • 8 min read',
             ),
             _buildArticleDescription(),

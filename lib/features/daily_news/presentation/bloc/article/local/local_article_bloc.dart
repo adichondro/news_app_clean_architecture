@@ -1,4 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article_usecase.dart';
@@ -46,7 +47,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
         final dataState = await _getSavedArticlesUseCase();
         dataState.fold(
           (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
-          (articles) => emit(LocalArticlesDone(articles, message: 'Article saved!')),
+          (articles) => emit(LocalArticlesDone(articles, message: AppStrings.articleSaved)),
         );
       },
     );
@@ -64,7 +65,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
         final dataState = await _getSavedArticlesUseCase();
         dataState.fold(
           (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
-          (articles) => emit(LocalArticlesDone(articles, message: 'Article removed!')),
+          (articles) => emit(LocalArticlesDone(articles, message: AppStrings.articleRemoved)),
         );
       },
     );
@@ -78,7 +79,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     final clearState = await _clearArticleUseCase.call();
     clearState.fold(
       (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
-      (_) => emit(const LocalArticlesDone([], message: 'All articles cleared!')),
+      (_) => emit(const LocalArticlesDone([], message: AppStrings.allArticlesCleared)),
     );
   }
 }

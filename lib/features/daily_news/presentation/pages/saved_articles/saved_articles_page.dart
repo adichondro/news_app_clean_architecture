@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/clear_all_saved_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
@@ -27,7 +28,7 @@ class SavedArticlesPage extends StatelessWidget {
 
   PreferredSizeWidget _buildAppBar() {
     return CustomAppBar(
-      title: 'Daily News',
+      title: AppStrings.appTitle,
       leading: Builder(
         builder: (context) => IconButton(
           onPressed: () => _onBackButtonTapped(context),
@@ -73,11 +74,11 @@ class SavedArticlesPage extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Saved Articles',
+                        AppStrings.savedArticlesTitle,
                         style: AppTypography.headlinesLargeMobile,
                       ),
                       Text(
-                        '$articleCount articles bookmarked for later',
+                        '$articleCount ${AppStrings.articlesBookmarkedSuffix}',
                         style: AppTypography.bodySmall,
                       ),
                     ],
@@ -108,7 +109,7 @@ class SavedArticlesPage extends StatelessWidget {
           itemBuilder: (context, index) {
             return const HorizontalArticleCard(
               article: ArticleEntity(
-                title: 'This is the placeholder title of the article loading',
+                title: AppStrings.placeholderTitle,
                 publishedAt: 'YYYY-MM-DD',
                 urlToImage: '',
               ),
@@ -130,9 +131,9 @@ class SavedArticlesPage extends StatelessWidget {
         illustration: SvgPicture.asset(
           'assets/illustrations/error_saved_articles_illustration.svg',
         ),
-        title: 'Oops! Something went wrong',
-        message: 'Failed to load your saved articles. Please try again.',
-        actionLabel: 'Refresh',
+        title: AppStrings.oopsErrorTitle,
+        message: AppStrings.failedToLoadSavedArticles,
+        actionLabel: AppStrings.refresh,
         actionIcon: Icons.refresh,
         onActionPressed: () {
           context.read<LocalArticleBloc>().add(const GetSavedArticles());

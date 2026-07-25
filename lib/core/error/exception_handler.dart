@@ -2,6 +2,7 @@ import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:dio/dio.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
 
 class ExceptionHandler {
@@ -19,7 +20,7 @@ class ExceptionHandler {
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
         return const NetworkFailure(
-          'Connection timed out. Please check your internet connection and try again.',
+          AppStrings.connectionTimeout,
         );
 
       case DioExceptionType.badResponse:
@@ -27,30 +28,30 @@ class ExceptionHandler {
 
       case DioExceptionType.badCertificate:
         return const ServerFailure(
-          'Secure connection failed: Invalid SSL certificate.',
+          AppStrings.invalidSslCertificate,
         );
 
       case DioExceptionType.cancel:
-        return const ServerFailure('The request was cancelled.');
+        return const ServerFailure(AppStrings.requestCancelled);
 
       case DioExceptionType.connectionError:
       case DioExceptionType.unknown:
         if (error.error is SocketException) {
-          return const NetworkFailure('No internet connection.');
+          return const NetworkFailure(AppStrings.noInternetConnection);
         }
 
-        return const ServerFailure('An unexpected error occurred.');
+        return const ServerFailure(AppStrings.unexpectedError);
     }
   }
 
   static Failure _handleBadResponse(Response? response) {
     if (response == null) {
-      return const ServerFailure('No response received from the server.');
+      return const ServerFailure(AppStrings.noServerResponse);
     }
 
     final statusCode = response.statusCode;
 
-    String message = 'A server error occurred.';
+    String message = AppStrings.serverErrorDefault;
 
     if (response.data is Map<String, dynamic>) {
       message = response.data['message'] ?? message;
@@ -65,18 +66,18 @@ class ExceptionHandler {
       case 401:
       case 403:
         return const UnauthorizedFailure(
-          'Access denied or session expired. Please sign in again.',
+          AppStrings.sessionExpired,
         );
 
       case 404:
-        return const NotFoundFailure('The requested resource was not found.');
+        return const NotFoundFailure(AppStrings.resourceNotFound);
 
       case 422:
         return ValidationFailure('Validation failed: $message');
 
       case 429:
         return const TooManyRequestsFailure(
-          'Too many requests. Please try again later.',
+          AppStrings.tooManyRequests,
         );
 
       case 500:
@@ -84,17 +85,17 @@ class ExceptionHandler {
 
       case 502:
         return const ServerFailure(
-          'Bad Gateway: The server received an invalid response.',
+          AppStrings.badGateway,
         );
 
       case 503:
         return const ServerFailure(
-          'Service Unavailable: The server is temporarily unavailable.',
+          AppStrings.serviceUnavailable,
         );
 
       case 504:
         return const ServerFailure(
-          'Gateway Timeout: The server did not respond in time.',
+          AppStrings.gatewayTimeout,
         );
 
       default:

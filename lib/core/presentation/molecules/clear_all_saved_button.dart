@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
@@ -33,7 +34,7 @@ class ClearAllSavedButton extends StatelessWidget {
               ),
               const SizedBox(width: AppSpacing.xxs),
               Text(
-                'Clear All',
+                AppStrings.clearAll,
                 style: AppTypography.bodySmall.copyWith(
                   color: AppColors.error,
                   fontWeight: FontWeight.w600,
