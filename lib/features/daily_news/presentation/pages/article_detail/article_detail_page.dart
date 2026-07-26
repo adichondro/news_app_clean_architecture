@@ -58,10 +58,10 @@ class ArticleDetailPage extends StatelessWidget {
             message: state.error.message,
             isError: true,
           );
-        } else if (state is LocalArticlesDone && state.message != null) {
+        } else if (state is LocalArticlesDone && state.messageType != null) {
           CustomSnackbar.show(
             context,
-            message: state.message!,
+            message: state.messageType!.toText(),
           );
         }
       },

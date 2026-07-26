@@ -1,10 +1,10 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/clear_article_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/get_saved_articles_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/remove_article_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/save_article_usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
+import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_message_type.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 
 class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
@@ -12,6 +12,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
   final SaveArticleUseCase _saveArticleUseCase;
   final RemoveArticleUseCase _removeArticleUseCase;
   final ClearArticleUseCase _clearArticleUseCase;
+
   LocalArticleBloc(
     this._getSavedArticlesUseCase,
     this._saveArticleUseCase,
@@ -47,7 +48,10 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
         final dataState = await _getSavedArticlesUseCase();
         dataState.fold(
           (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
-          (articles) => emit(LocalArticlesDone(articles, message: AppStrings.articleSaved)),
+          (articles) => emit(LocalArticlesDone(
+            articles,
+            messageType: LocalArticleMessageType.saved,
+          )),
         );
       },
     );
@@ -65,7 +69,10 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
         final dataState = await _getSavedArticlesUseCase();
         dataState.fold(
           (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
-          (articles) => emit(LocalArticlesDone(articles, message: AppStrings.articleRemoved)),
+          (articles) => emit(LocalArticlesDone(
+            articles,
+            messageType: LocalArticleMessageType.removed,
+          )),
         );
       },
     );
@@ -79,7 +86,10 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     final clearState = await _clearArticleUseCase.call();
     clearState.fold(
       (failure) => emit(LocalArticlesError(failure, articles: currentArticles)),
-      (_) => emit(const LocalArticlesDone([], message: AppStrings.allArticlesCleared)),
+      (_) => emit(const LocalArticlesDone(
+        [],
+        messageType: LocalArticleMessageType.cleared,
+      )),
     );
   }
 }
