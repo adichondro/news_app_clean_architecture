@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
+import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
 import 'package:news_app_clean_architecture/core/util/string_extension.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
@@ -55,7 +56,7 @@ class ArticleDetailPage extends StatelessWidget {
         if (state is LocalArticlesError) {
           CustomSnackbar.show(
             context,
-            message: state.error.message,
+            message: state.error.toUserMessage(),
             isError: true,
           );
         } else if (state is LocalArticlesDone && state.messageType != null) {

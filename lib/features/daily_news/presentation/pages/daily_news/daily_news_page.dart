@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
+import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
@@ -46,7 +47,7 @@ class DailyNewsPage extends StatelessWidget {
         if (state is LocalArticlesError) {
           CustomSnackbar.show(
             context,
-            message: state.error.message,
+            message: state.error.toUserMessage(),
             isError: true,
           );
         } else if (state is LocalArticlesDone && state.messageType != null) {
@@ -61,7 +62,7 @@ class DailyNewsPage extends StatelessWidget {
           if (state is RemoteArticlesError) {
             CustomSnackbar.show(
               context,
-              message: state.error?.message ?? AppStrings.unexpectedError,
+              message: state.error?.toUserMessage() ?? AppStrings.unexpectedError,
               isError: true,
             );
           }

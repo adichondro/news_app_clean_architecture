@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
+import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/clear_all_saved_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
@@ -50,7 +51,7 @@ class SavedArticlesPage extends StatelessWidget {
           if (state is LocalArticlesError) {
             CustomSnackbar.show(
               context,
-              message: state.error.message,
+              message: state.error.toUserMessage(),
               isError: true,
             );
           } else if (state is LocalArticlesDone && state.messageType != null) {

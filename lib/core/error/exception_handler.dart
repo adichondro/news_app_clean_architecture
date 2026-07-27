@@ -2,7 +2,6 @@ import 'dart:developer' as developer;
 import 'dart:io';
 
 import 'package:dio/dio.dart';
-import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
 
 class ExceptionHandler {
@@ -19,87 +18,71 @@ class ExceptionHandler {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.sendTimeout:
       case DioExceptionType.receiveTimeout:
-        return const NetworkFailure(
-          AppStrings.connectionTimeout,
-        );
+        return const NetworkFailure();
 
       case DioExceptionType.badResponse:
         return _handleBadResponse(error.response);
 
       case DioExceptionType.badCertificate:
-        return const ServerFailure(
-          AppStrings.invalidSslCertificate,
-        );
+        return const ServerFailure('Invalid SSL certificate.');
 
       case DioExceptionType.cancel:
-        return const ServerFailure(AppStrings.requestCancelled);
+        return const ServerFailure('Request was cancelled.');
 
       case DioExceptionType.connectionError:
       case DioExceptionType.unknown:
         if (error.error is SocketException) {
-          return const NetworkFailure(AppStrings.noInternetConnection);
+          return const NetworkFailure();
         }
-
-        return const ServerFailure(AppStrings.unexpectedError);
+        return const UnknownFailure();
     }
   }
 
   static Failure _handleBadResponse(Response? response) {
     if (response == null) {
-      return const ServerFailure(AppStrings.noServerResponse);
+      return const ServerFailure();
     }
 
     final statusCode = response.statusCode;
 
-    String message = AppStrings.serverErrorDefault;
-
+    String? serverMessage;
     if (response.data is Map<String, dynamic>) {
-      message = response.data['message'] ?? message;
-    } else if (response.data is String) {
-      message = response.data;
+      serverMessage = response.data['message'];
+    } else if (response.data is String && (response.data as String).isNotEmpty) {
+      serverMessage = response.data;
     }
 
     switch (statusCode) {
       case 400:
-        return ServerFailure('Bad Request: $message');
+        return ServerFailure(serverMessage ?? 'Bad Request');
 
       case 401:
       case 403:
-        return const UnauthorizedFailure(
-          AppStrings.sessionExpired,
-        );
+        return const UnauthorizedFailure();
 
       case 404:
-        return const NotFoundFailure(AppStrings.resourceNotFound);
+        return const NotFoundFailure();
 
       case 422:
-        return ValidationFailure('Validation failed: $message');
+        return ValidationFailure(serverMessage ?? 'Validation failed');
 
       case 429:
-        return const TooManyRequestsFailure(
-          AppStrings.tooManyRequests,
-        );
+        return const TooManyRequestsFailure();
 
       case 500:
-        return ServerFailure('Internal Server Error: $message');
+        return InternalServerErrorFailure(serverMessage);
 
       case 502:
-        return const ServerFailure(
-          AppStrings.badGateway,
-        );
+        return const ServerFailure();
 
       case 503:
-        return const ServerFailure(
-          AppStrings.serviceUnavailable,
-        );
+        return const ServiceUnavailableFailure();
 
       case 504:
-        return const ServerFailure(
-          AppStrings.gatewayTimeout,
-        );
+        return const GatewayTimeoutFailure();
 
       default:
-        return ServerFailure('Something went wrong (Error Code: $statusCode).');
+        return UnknownFailure('Error Code: $statusCode');
     }
   }
 }
