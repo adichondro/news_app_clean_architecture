@@ -1,6 +1,5 @@
 import 'package:dio/dio.dart';
 import 'package:news_app_clean_architecture/core/constant/query_constants.dart';
-import 'package:news_app_clean_architecture/core/env/env.dart';
 import 'package:news_app_clean_architecture/core/error/exception_handler.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
 import 'package:news_app_clean_architecture/core/resources/data_state.dart';
@@ -20,7 +19,6 @@ class ArticleRepositoryImpl implements ArticleRepository {
   Future<DataState<List<ArticleEntity>>> getNewsArticles() async {
     try {
       final responseModel = await _newsApiService.getNewsArticles(
-        apiKey: Env.apiKey,
         country: QueryConstants.country,
         category: QueryConstants.category,
       );

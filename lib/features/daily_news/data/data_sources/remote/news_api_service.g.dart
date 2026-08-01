@@ -23,13 +23,11 @@ class _NewsApiService implements NewsApiService {
 
   @override
   Future<ArticleResponseModel> getNewsArticles({
-    String? apiKey,
     String? country,
     String? category,
   }) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{
-      r'apiKey': apiKey,
       r'country': country,
       r'category': category,
     };

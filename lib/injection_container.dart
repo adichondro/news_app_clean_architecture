@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
 import 'package:news_app_clean_architecture/core/database/app_database.dart';
+import 'package:news_app_clean_architecture/core/network/dio/news_dio_client.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/local/dao/article_dao.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/remote/news_api_service.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/repositories/article_repository_impl.dart';
@@ -20,7 +21,7 @@ Future<void> initializeDependencies() async {
   // 1. Core & External
   // ==========================================
   // Dio
-  sl.registerSingleton<Dio>(Dio());
+  sl.registerSingleton<Dio>(NewsDioClient.create());
 
   // Database (Drift)
   sl.registerSingleton<AppDatabase>(AppDatabase());
