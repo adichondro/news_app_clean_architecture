@@ -50,23 +50,25 @@ class AppStrings {
   static const String connectionTimeout =
       'Connection timed out. Please check your internet connection and try again.';
   static const String invalidSslCertificate =
-      'Secure connection failed: Invalid SSL certificate.';
+      'Secure connection failed. Please check your network connection or try again later.';
   static const String requestCancelled = 'The request was cancelled.';
-  static const String noInternetConnection = 'No internet connection.';
+  static const String noInternetConnection = 'No internet connection available.';
   static const String noServerResponse =
-      'No response received from the server.';
-  static const String serverErrorDefault = 'A server error occurred.';
+      'No response received from the server. Please try again later.';
+  static const String serverErrorDefault =
+      'A server error occurred. Please try again later.';
   static const String sessionExpired =
       'Access denied or session expired. Please sign in again.';
-  static const String resourceNotFound = 'The requested resource was not found.';
+  static const String resourceNotFound =
+      'The requested content could not be found.';
   static const String tooManyRequests =
-      'Too many requests. Please try again later.';
+      'Too many requests. Please try again in a few moments.';
   static const String badGateway =
-      'Bad Gateway: The server received an invalid response.';
+      'Server is temporarily unavailable. Please try again later.';
   static const String serviceUnavailable =
-      'Service Unavailable: The server is temporarily unavailable.';
+      'Server is undergoing maintenance. Please try again later.';
   static const String gatewayTimeout =
-      'Gateway Timeout: The server did not respond in time.';
+      'Server took too long to respond. Please try again later.';
 
   // Skeleton Placeholders
   static const String placeholderTitle =

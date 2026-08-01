@@ -12,13 +12,16 @@ extension FailureExtension on Failure {
     // Dart 3 Pattern Matching for clean, exhaustive type checks
     return switch (this) {
       NetworkFailure() => AppStrings.connectionTimeout,
-      UnauthorizedFailure() => AppStrings.sessionExpired,
+      UnauthorizedFailure() || ForbiddenFailure() => AppStrings.sessionExpired,
+      BadCertificateFailure() => AppStrings.invalidSslCertificate,
+      RequestCancelledFailure() => AppStrings.requestCancelled,
       NotFoundFailure() => AppStrings.resourceNotFound,
       TooManyRequestsFailure() => AppStrings.tooManyRequests,
       ServiceUnavailableFailure() => AppStrings.serviceUnavailable,
       GatewayTimeoutFailure() => AppStrings.gatewayTimeout,
       ServerFailure() => AppStrings.serverErrorDefault,
       CacheFailure() => AppStrings.failedToLoadSavedArticles,
+      FormatFailure() => AppStrings.unexpectedError,
       _ => AppStrings.unexpectedError,
     };
   }

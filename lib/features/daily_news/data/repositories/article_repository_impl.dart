@@ -1,4 +1,3 @@
-import 'package:dio/dio.dart';
 import 'package:news_app_clean_architecture/core/constant/query_constants.dart';
 import 'package:news_app_clean_architecture/core/error/exception_handler.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
@@ -26,10 +25,8 @@ class ArticleRepositoryImpl implements ArticleRepository {
       final List<ArticleEntity> articleEntities =
           articleList.map((model) => model.toEntity()).toList();
       return DataSuccess(articleEntities);
-    } on DioException catch (e) {
-      return DataFailed(ExceptionHandler.handleDioException(e));
     } catch (e) {
-      return DataFailed(ServerFailure(e.toString()));
+      return DataFailed(ExceptionHandler.handleException(e));
     }
   }
 

@@ -24,6 +24,10 @@ class UnauthorizedFailure extends Failure {
   const UnauthorizedFailure([super.message]);
 }
 
+class ForbiddenFailure extends Failure {
+  const ForbiddenFailure([super.message]);
+}
+
 class NotFoundFailure extends Failure {
   const NotFoundFailure([super.message]);
 }
@@ -46,6 +50,18 @@ class GatewayTimeoutFailure extends Failure {
 
 class InternalServerErrorFailure extends Failure {
   const InternalServerErrorFailure([super.message]);
+}
+
+class BadCertificateFailure extends Failure {
+  const BadCertificateFailure([super.message]);
+}
+
+class RequestCancelledFailure extends Failure {
+  const RequestCancelledFailure([super.message]);
+}
+
+class FormatFailure extends Failure {
+  const FormatFailure([super.message]);
 }
 
 class UnknownFailure extends Failure {
