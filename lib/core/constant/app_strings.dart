@@ -1,3 +1,4 @@
+/// Centralized repository of application-wide user-facing string constants.
 class AppStrings {
   const AppStrings._();
 
@@ -14,7 +15,7 @@ class AppStrings {
   static const String tryAgain = 'Try Again';
   static const String clearAll = 'Clear All';
 
-  // Bloc Notifications
+  // BLoC Notifications
   static const String articleSaved = 'Article saved!';
   static const String articleRemoved = 'Article removed!';
   static const String allArticlesCleared = 'All articles cleared!';

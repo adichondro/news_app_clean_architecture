@@ -3,6 +3,7 @@ import 'package:news_app_clean_architecture/core/usecases/usecase.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/repositories/article_repository.dart';
 
+/// UseCase responsible for fetching top news articles from the remote API service.
 class GetArticleUseCase
     implements UseCase<DataState<List<ArticleEntity>>, void> {
   final ArticleRepository _articleRepository;

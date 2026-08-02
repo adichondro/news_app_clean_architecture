@@ -4,7 +4,6 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 
-/// Atom component untuk topik interaktif (pill chip) yang dapat di-tap.
 class TopicChip extends StatelessWidget {
   final String label;
   final VoidCallback? onTap;

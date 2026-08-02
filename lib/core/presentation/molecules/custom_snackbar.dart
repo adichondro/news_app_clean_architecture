@@ -4,6 +4,8 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 
 class CustomSnackbar {
+  const CustomSnackbar._();
+
   static void show(
     BuildContext context, {
     required String message,

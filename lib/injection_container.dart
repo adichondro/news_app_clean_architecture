@@ -14,46 +14,31 @@ import 'package:news_app_clean_architecture/features/daily_news/domain/usecases/
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_bloc.dart';
 
+/// Global service locator instance managed by [GetIt].
 final sl = GetIt.instance;
 
+/// Registers all application dependencies including network clients, database DAOs, 
+/// repositories, use cases, and BLoC factories into the service locator.
 Future<void> initializeDependencies() async {
-  // ==========================================
-  // 1. Core & External
-  // ==========================================
-  // Dio
+  // 1. Core & External Infrastructure
   sl.registerSingleton<Dio>(NewsDioClient.create());
-
-  // Database (Drift)
   sl.registerSingleton<AppDatabase>(AppDatabase());
 
-  // ==========================================
-  // 2. Data Sources
-  // ==========================================
-  // Remote
+  // 2. Data Sources (Remote API & Local DAO)
   sl.registerSingleton<NewsApiService>(NewsApiService(sl()));
-
-  // Local (DAO membutuhkan AppDatabase)
   sl.registerSingleton<ArticleDao>(ArticleDao(sl()));
 
-  // ==========================================
-  // 3. Repository
-  // ==========================================
-  // Sekarang ArticleRepositoryImpl membutuhkan DUA parameter:
-  // sl() pertama untuk NewsApiService, sl() kedua untuk ArticleDao
+  // 3. Repositories
   sl.registerSingleton<ArticleRepository>(ArticleRepositoryImpl(sl(), sl()));
 
-  // ==========================================
-  // 4. UseCases
-  // ==========================================
+  // 4. Use Cases
   sl.registerSingleton<GetArticleUseCase>(GetArticleUseCase(sl()));
   sl.registerSingleton<GetSavedArticlesUseCase>(GetSavedArticlesUseCase(sl()));
   sl.registerSingleton<SaveArticleUseCase>(SaveArticleUseCase(sl()));
   sl.registerSingleton<RemoveArticleUseCase>(RemoveArticleUseCase(sl()));
   sl.registerSingleton<ClearArticleUseCase>(ClearArticleUseCase(sl()));
 
-  // ==========================================
-  // 5. Blocs
-  // ==========================================
+  // 5. BLoCs (Registered as factories to provide fresh instances per request)
   sl.registerFactory<RemoteArticlesBloc>(() => RemoteArticlesBloc(sl()));
   sl.registerFactory<LocalArticleBloc>(
     () => LocalArticleBloc(
@@ -64,3 +49,4 @@ Future<void> initializeDependencies() async {
     ),
   );
 }
+

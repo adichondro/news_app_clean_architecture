@@ -1,16 +1,16 @@
 import 'package:news_app_clean_architecture/features/daily_news/data/models/article_model.dart';
 
-
+/// Wrapper DTO model representing top-level REST API response for news queries.
 class ArticleResponseModel {
   final String? status;
   final int? totalResults;
   final List<ArticleModel>? articles;
+
   const ArticleResponseModel({
     this.status,
     this.totalResults,
     this.articles,
   });
-
 
   factory ArticleResponseModel.fromJson(Map<String, dynamic> json) {
     return ArticleResponseModel(

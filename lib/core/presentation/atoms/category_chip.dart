@@ -5,7 +5,6 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-/// Atom component untuk label kategori berita (misal: TECHNOLOGY, POLITICS).
 class CategoryChip extends StatelessWidget {
   final String label;
   final Color? backgroundColor;

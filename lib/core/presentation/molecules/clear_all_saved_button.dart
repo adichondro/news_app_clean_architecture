@@ -25,7 +25,7 @@ class ClearAllSavedButton extends StatelessWidget {
             vertical: AppSpacing.xxs,
           ),
           child: Row(
-            mainAxisSize: MainAxisSize.min, 
+            mainAxisSize: MainAxisSize.min,
             children: [
               const Icon(
                 Icons.delete_sweep_rounded,

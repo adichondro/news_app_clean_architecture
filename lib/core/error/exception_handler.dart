@@ -5,8 +5,12 @@ import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
 
+/// Centralized exception utility for mapping data layer exceptions to domain [Failure]s.
+///
+/// Serves as the primary entry point for converting network, parsing, and database errors 
+/// into strongly-typed [Failure] objects for repositories and BLoCs.
 class ExceptionHandler {
-  /// Generic entry point for all exceptions across the data layer.
+  /// Handles and converts any data layer [error] into a domain [Failure].
   static Failure handleException(Object error) {
     if (error is DioException) {
       return handleDioException(error);
@@ -18,8 +22,11 @@ class ExceptionHandler {
     return UnknownFailure(error.toString());
   }
 
+  /// Processes network and HTTP client exceptions originating from [Dio].
+  ///
+  /// Evaluates connection timeouts, bad responses, certificates, and cancellations.
+  /// Emits structured logs via [developer.log] when executed under [kDebugMode].
   static Failure handleDioException(DioException error) {
-    // Log error details for developer debugging during debug sessions
     if (kDebugMode) {
       developer.log(
         'API Request Failed',
@@ -53,6 +60,7 @@ class ExceptionHandler {
     }
   }
 
+  /// Maps HTTP status codes from a server response to corresponding [Failure] instances.
   static Failure _handleBadResponse(Response? response) {
     if (response == null) {
       return const ServerFailure();
@@ -97,8 +105,9 @@ class ExceptionHandler {
     }
   }
 
-  /// Extracts error message dynamically across standard REST API formats:
-  /// {'message': '...'}, {'error': '...'}, {'detail': '...'}, or {'errors': ['...']}
+  /// Dynamically parses server error messages from standard REST response payloads.
+  ///
+  /// Inspects common JSON keys ('message', 'error', 'detail', 'errors') in order of precedence.
   static String? _extractServerMessage(dynamic data) {
     if (data is Map<String, dynamic>) {
       if (data['message'] is String && (data['message'] as String).isNotEmpty) {
@@ -119,3 +128,9 @@ class ExceptionHandler {
     return null;
   }
 }
+
+
+
+
+
+

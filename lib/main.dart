@@ -10,18 +10,26 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:news_app_clean_architecture/injection_container.dart';
 
+/// Entry point for the Daily News application.
+///
+/// Initializes Flutter bindings, environment configuration, and service locator dependencies.
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Load environment configuration from .env file
   await dotenv.load(fileName: ".env");
+
+  // Register service locator singletons and factories
   await initializeDependencies();
+
   runApp(const MyApp());
 }
 
+/// Root widget of the application configuring global BLoC providers and MaterialApp.
 class MyApp extends StatelessWidget {
+  /// Creates the root [MyApp] widget instance.
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
@@ -42,3 +50,4 @@ class MyApp extends StatelessWidget {
     );
   }
 }
+

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 
+/// Constructs and returns the application's global Material 3 [ThemeData].
 ThemeData theme() {
   return ThemeData(
     useMaterial3: true,
@@ -28,6 +29,7 @@ ThemeData theme() {
   );
 }
 
+/// Constructs the global [AppBarTheme] configuration.
 AppBarTheme appBarTheme() {
   return const AppBarTheme(
     backgroundColor: AppColors.surface,
@@ -38,3 +40,4 @@ AppBarTheme appBarTheme() {
     titleTextStyle: AppTypography.headlinesMedium,
   );
 }
+

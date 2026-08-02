@@ -1,5 +1,6 @@
 import 'package:drift/drift.dart';
 
+/// Drift database table schema for persisting saved news articles in SQLite.
 class ArticleTable extends Table {
   IntColumn get id => integer().autoIncrement()();
   TextColumn get author => text().nullable()();
@@ -10,3 +11,4 @@ class ArticleTable extends Table {
   TextColumn get publishedAt => text().nullable()();
   TextColumn get content => text().nullable()();
 }
+

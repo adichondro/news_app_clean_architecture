@@ -5,7 +5,13 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 class SaveButton extends StatelessWidget {
   final bool isSaved;
   final VoidCallback? onSave;
-  const SaveButton({super.key, required this.isSaved, this.onSave});
+
+  const SaveButton({
+    super.key,
+    required this.isSaved,
+    this.onSave,
+  });
+
   @override
   Widget build(BuildContext context) {
     return Material(

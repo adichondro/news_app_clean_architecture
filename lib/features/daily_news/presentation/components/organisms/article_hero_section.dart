@@ -13,6 +13,7 @@ class ArticleHeroSection extends StatelessWidget {
   final String title;
   final String authorName;
   final String dateAndReadTime;
+
   const ArticleHeroSection({
     super.key,
     this.imageUrl,

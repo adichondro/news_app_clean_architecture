@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
-import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
-import 'package:news_app_clean_architecture/core/presentation/molecules/clear_all_saved_button.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/config/routes/app_routes.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
+import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
+import 'package:news_app_clean_architecture/core/presentation/molecules/clear_all_saved_button.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
+import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
+import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_bloc.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_event.dart';
@@ -122,7 +122,7 @@ class SavedArticlesPage extends StatelessWidget {
       if (state.articles!.isEmpty) {
         return SavedArticlesEmptyState(
           onExploreTapped: () {
-            //TODO: Handle explore tapped
+            Navigator.pop(context);
           },
         );
       }

@@ -7,12 +7,14 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_message_type.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/local/local_article_state.dart';
 
+/// BLoC managing state for local bookmarked article operations (save, remove, fetch, clear).
 class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
   final GetSavedArticlesUseCase _getSavedArticlesUseCase;
   final SaveArticleUseCase _saveArticleUseCase;
   final RemoveArticleUseCase _removeArticleUseCase;
   final ClearArticleUseCase _clearArticleUseCase;
 
+  /// Creates a [LocalArticleBloc] with required use case dependencies.
   LocalArticleBloc(
     this._getSavedArticlesUseCase,
     this._saveArticleUseCase,
@@ -25,6 +27,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     on<ClearArticles>(onClearArticles);
   }
 
+  /// Handles fetching bookmarked articles from local database.
   Future<void> onGetSavedArticles(
     GetSavedArticles event,
     Emitter<LocalArticleState> emit,
@@ -36,12 +39,15 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     );
   }
 
+  /// Handles saving an article to local database and refreshing state.
   Future<void> onSaveArticle(
     SaveArticle event,
     Emitter<LocalArticleState> emit,
   ) async {
     final currentArticles = state.articles;
     final saveState = await _saveArticleUseCase(params: event.article);
+    
+    // Refresh saved articles list upon successful insertion
     await saveState.fold(
       (failure) async => emit(LocalArticlesError(failure, articles: currentArticles)),
       (_) async {
@@ -57,12 +63,15 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     );
   }
 
+  /// Handles removing an article from local database and refreshing state.
   Future<void> onRemoveArticle(
     RemoveArticle event,
     Emitter<LocalArticleState> emit,
   ) async {
     final currentArticles = state.articles;
     final removeState = await _removeArticleUseCase(params: event.article);
+    
+    // Refresh saved articles list upon successful removal
     await removeState.fold(
       (failure) async => emit(LocalArticlesError(failure, articles: currentArticles)),
       (_) async {
@@ -78,6 +87,7 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     );
   }
 
+  /// Handles clearing all bookmarked articles from local database.
   Future<void> onClearArticles(
     ClearArticles event,
     Emitter<LocalArticleState> emit,
@@ -93,3 +103,4 @@ class LocalArticleBloc extends Bloc<LocalArticleEvent, LocalArticleState> {
     );
   }
 }
+

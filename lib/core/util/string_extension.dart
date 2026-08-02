@@ -1,10 +1,12 @@
+/// Extension utility providing helper methods for nullable string evaluation.
 extension StringExtension on String? {
-  /// Returns true if the string is null or contains only whitespace.
+  /// Evaluates whether the string is null, empty, or contains only whitespace characters.
   bool get isNullOrEmpty => this == null || this!.trim().isEmpty;
 
-  /// Provides a fallback value if the string is null or empty.
+  /// Returns [fallback] string if the target string is null or empty.
   String valueOr(String fallback) {
     if (isNullOrEmpty) return fallback;
     return this!;
   }
 }
+

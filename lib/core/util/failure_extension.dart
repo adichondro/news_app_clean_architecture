@@ -1,15 +1,16 @@
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/error/failure.dart';
 
+/// Extension utility converting technical [Failure] instances into user-friendly UI display strings.
 extension FailureExtension on Failure {
-  /// Maps a technical [Failure] into a user-friendly UI display string.
+  /// Maps a technical [Failure] instance into a user-friendly UI message.
   String toUserMessage() {
-    // If a specific server message was provided, prefer displaying it
+    // Prefer server-provided custom error message if available
     if (message != null && message!.trim().isNotEmpty) {
       return message!;
     }
 
-    // Dart 3 Pattern Matching for clean, exhaustive type checks
+    // Match concrete Failure types to localized AppStrings UI messages
     return switch (this) {
       NetworkFailure() => AppStrings.connectionTimeout,
       UnauthorizedFailure() || ForbiddenFailure() => AppStrings.sessionExpired,
@@ -26,3 +27,4 @@ extension FailureExtension on Failure {
     };
   }
 }
+

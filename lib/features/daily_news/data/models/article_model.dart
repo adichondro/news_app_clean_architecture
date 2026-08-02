@@ -1,6 +1,7 @@
 import 'package:news_app_clean_architecture/core/database/app_database.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 
+/// Data Transfer Object (DTO) for news articles supporting JSON serialization and SQLite mapping.
 class ArticleModel {
   final int? id;
   final String? author;
