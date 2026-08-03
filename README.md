@@ -40,6 +40,7 @@ Through the lifecycle of this project, several key software engineering concepts
 4. **Declarative State Flows**: Implementing the BLoC library to convert UI events (e.g., fetching news, toggling bookmarks) into predictable states.
 5. **Modern API Consumption**: Utilizing Retrofit and Dio with custom interceptors to handle HTTP headers, base URLs, and query parameters cleanly.
 6. **Graceful Loading & Image States**: Employing skeleton layouts (Skeletonizer) for placeholder loading, and cached network images with error fallback widgets to ensure a premium user experience.
+7. **Robust Error Handling**: Utilizing strongly-typed `Failure` subclasses and a centralized `ExceptionHandler` to catch exceptions and present user-friendly error messages via `FailureExtension` and `AppStrings`.
 
 ---
 
@@ -58,31 +59,32 @@ Through the lifecycle of this project, several key software engineering concepts
 
 ## Architecture
 
-This project is structured around the principles of **Clean Architecture** (proposed by Uncle Bob). It strictly divides the codebase into three main layers: **Domain**, **Data**, and **Presentation**.
+This project is structured around the principles of **Clean Architecture** (proposed by Uncle Bob). It strictly divides the codebase into three main layers: **Domain**, **Data**, and **Presentation**, complemented by a robust **Core Infrastructure** layer.
 
 ```mermaid
 graph TD
-    %% Define presentation layer
+    %% Presentation Layer
     subgraph Presentation ["Presentation Layer (UI & State)"]
-        UI[Pages & Widgets] -->|Triggers Events| BLoC[Remote / Local BLoC]
-        BLoC -->|Emits States| UI
+        UI["Pages & Widgets\n(DailyNewsPage, SavedArticlesPage)"] -->|Triggers Events| BLoC["BLoC\n(RemoteArticlesBloc, LocalArticleBloc)"]
+        BLoC -->|Emits States\n(Loading, Done, Error)| UI
     end
 
-    %% Define domain layer
+    %% Domain Layer
     subgraph Domain ["Domain Layer (Business Logic)"]
-        BLoC -->|Invokes| UseCase[Use Cases]
-        UseCase -->|Calls| RepoInterface[Repository Interface]
-        RepoInterface -->|Returns| Entity[Entities]
+        BLoC -->|Invokes| UseCase["Use Cases\n(GetArticleUseCase, SaveArticleUseCase, etc.)"]
+        UseCase -->|Calls| RepoInterface["Repository Interface\n(ArticleRepository)"]
+        RepoInterface -->|Returns| DataState["DataState<T>"]
+        DataState -->|Holds Payload| Entity["Entities\n(ArticleEntity)"]
     end
 
-    %% Define data layer
-    subgraph Data ["Data Layer (Infrastructure)"]
-        RepoImpl[Repository Implementation] -.->|Implements| RepoInterface
-        RepoImpl -->|Calls| RemoteDS["Remote DataSource (Retrofit/Dio)"]
-        RepoImpl -->|Calls| LocalDS["Local DataSource (Drift DAO)"]
-        RemoteDS -->|Returns JSON mapped to| Model["Models (DTO)"]
-        LocalDS -->|Returns SQLite mapped to| Model
-        Model -.->|"Mapped via toEntity()"| Entity
+    %% Data Layer
+    subgraph Data ["Data Layer (Infrastructure & Data Sources)"]
+        RepoImpl["Repository Implementation\n(ArticleRepositoryImpl)"] -.->|Implements| RepoInterface
+        RepoImpl -->|Calls| RemoteDS["Remote DataSource\n(NewsApiService / Dio)"]
+        RepoImpl -->|Calls| LocalDS["Local DataSource\n(ArticleDao / Drift SQLite)"]
+        RemoteDS -->|Returns API Response| Model["Models / DTOs\n(ArticleModel, ArticleResponseModel)"]
+        LocalDS -->|Returns DB Rows| Model
+        Model <==>|"toEntity() / fromEntity()"| Entity
     end
 
     classDef presentation fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#003057;
@@ -90,29 +92,35 @@ graph TD
     classDef data fill:#efe8e0,stroke:#e65100,stroke-width:2px,color:#802b00;
     
     class UI,BLoC presentation;
-    class UseCase,RepoInterface,Entity domain;
+    class UseCase,RepoInterface,DataState,Entity domain;
     class RepoImpl,RemoteDS,LocalDS,Model data;
 ```
 
 ### 1. Domain Layer (The Core)
 The domain layer contains the core business rules of the application. It is completely independent of any external library, framework, or database.
 * **Entities**: Plain Dart objects containing business data (e.g., `ArticleEntity` extending `Equatable`).
-* **Repositories (Interfaces)**: Defines the contracts for data operations. Returns type-safe `DataState<T>` wrappers (including `DataState<void>` for mutation methods) to ensure failure feedback is explicitly defined.
-* **Use Cases**: Individual, single-responsibility units of work (e.g., `GetArticleUseCase`, `SaveArticleUseCase`, `RemoveArticleUseCase`, `ClearArticleUseCase`) executing business tasks.
+* **Repositories (Interfaces)**: Defines contracts for data operations. Returns type-safe `DataState<T>` wrappers (including `DataState<void>` for mutation methods) to ensure failure feedback is explicitly defined.
+* **Use Cases**: Individual, single-responsibility units of work (e.g., `GetArticleUseCase`, `GetSavedArticlesUseCase`, `SaveArticleUseCase`, `RemoveArticleUseCase`, `ClearArticleUseCase`) extending `UseCase<T, Params>`.
 
 ### 2. Data Layer (The Infrastructure)
 The data layer implements the interfaces defined in the domain layer. It interacts directly with the API and database.
-* **Models**: Standalone Data Transfer Objects (DTOs) handling JSON parsing (`ArticleModel.fromJson`), SQLite database rows (`ArticleModel.fromTableData`), and domain entity mappers (`toEntity()`, `fromEntity()`).
+* **Models**: Data Transfer Objects (DTOs) handling JSON parsing (`ArticleModel.fromJson`, `ArticleResponseModel.fromJson`), SQLite database rows (`ArticleModel.fromTableData`), and domain entity mappers (`toEntity()`, `fromEntity()`).
 * **Data Sources**: Handles low-level network and database calls:
-  * *Remote*: `NewsApiService` (generated using `retrofit` and powered by `dio`).
-  * *Local*: `ArticleDao` and `AppDatabase` (powered by `drift` SQLite engine).
-* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, handles error catching, and returns unified `DataSuccess` or `DataFailed(CacheFailure)` responses.
+  * *Remote*: `NewsApiService` (generated using `retrofit` and powered by `dio` with custom `ApiKeyInterceptor`).
+  * *Local*: `ArticleDao` (Data Access Object) and `ArticleTable` (Drift SQLite schema definition).
+* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, delegates exception catching to `ExceptionHandler`, and returns unified `DataSuccess` or `DataFailed(Failure)` responses.
 
 ### 3. Presentation Layer (The UI)
 This layer is responsible for rendering views and handling user interactions. It implements the **Atomic Design Methodology** to ensure high reusability:
-* **BLoC**: Receives user actions (Events), processes logic via Use Cases, and emits corresponding UI states (e.g., `RemoteArticlesLoading`, `RemoteArticlesDone`).
-* **Atoms, Molecules, & Organisms**: Reusable UI building blocks (e.g., buttons as Atoms, article info sections as Molecules, full article cards as Organisms).
-* **Pages**: High-level screens built as clean `StatelessWidget`s that assemble Organisms into complete views and subscribe to BLoC states.
+* **BLoC**: Receives user actions (Events), processes logic via Use Cases, and emits corresponding UI states (e.g., `RemoteArticlesLoading`, `RemoteArticlesDone`, `LocalArticlesDone`).
+* **Atoms, Molecules, & Organisms**: Reusable UI building blocks (e.g., buttons and chips as Atoms, article info sections as Molecules, full article cards and custom app bars as Organisms).
+* **Pages**: High-level screens built as clean `StatelessWidget`s (`DailyNewsPage`, `ArticleDetailPage`, `SavedArticlesPage`).
+
+### 4. Core Infrastructure & Functional Error Handling
+* **Strongly-Typed Failures**: Base `Failure` class with 15 concrete subclasses (`ServerFailure`, `NetworkFailure`, `UnauthorizedFailure`, `ForbiddenFailure`, `NotFoundFailure`, `ValidationFailure`, `TooManyRequestsFailure`, `ServiceUnavailableFailure`, `GatewayTimeoutFailure`, `InternalServerErrorFailure`, `BadCertificateFailure`, `RequestCancelledFailure`, `FormatFailure`, `CacheFailure`, `UnknownFailure`).
+* **Centralized Exception Handler**: `ExceptionHandler` converts network timeouts, HTTP status errors, format errors, and database exceptions into strongly-typed `Failure` instances with debug logging (`developer.log`).
+* **UI Message Extension**: `FailureExtension.toUserMessage()` maps technical `Failure` objects to user-friendly UI string constants defined in `AppStrings`.
+* **Functional Folding**: `DataState.fold<R>(onFailure, onSuccess)` enables clean pattern matching on operational results across Use Cases and BLoCs.
 
 ---
 
@@ -124,6 +132,7 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 | :--- | :--- | :--- |
 | **Flutter SDK** | Framework | Mobile, Desktop, and Web UI development engine. |
 | **flutter_bloc** | State Management | Implements the BLoC pattern to separate presentation from business logic. |
+| **equatable** | Value Equality | Enables value-based object comparison for domain entities, states, and failures. |
 | **get_it** | Dependency Injection | Service locator for clean DI across data, domain, and UI layers. |
 | **drift** | Local Database | Reactive, type-safe SQLite database wrapper for Dart/Flutter. |
 | **dio** | HTTP Client | Powerful network client supporting interceptors, global configuration, and error catching. |
@@ -131,9 +140,10 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 | **flutter_hooks** | Hook Widgets | Manages widget lifecycles reactively without boilerplate `StatefulWidget` subclasses. |
 | **skeletonizer** | Loading UI | Automatically creates skeleton load placeholders using existing widget structures. |
 | **cached_network_image** | Image Loading | Downloads, caches, and renders web images with progress indicators and error fallbacks. |
+| **path_provider** / **path** | Storage Path | Provides cross-platform filesystem paths for SQLite database storage. |
 | **flutter_dotenv** | Configuration | Loads runtime environment configurations safely from `.env` files. |
 | **flutter_svg** | Vector Graphics | Renders scalable SVG illustrations for rich empty states and UX components. |
-| **build_runner** | Code Generation | Generates code for Retrofit API services and Drift database classes. |
+| **build_runner** | Code Generation | CLI tool orchestrating code generation for Retrofit API services and Drift database. |
 
 ---
 
@@ -141,38 +151,51 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 
 ```text
 assets/
-├── fonts/                     # Custom typography (Inter, WorkSans)
-└── illustrations/             # SVG graphics for empty states
+├── fonts/                     # Custom typography
+│   ├── inter/                 # Inter font files (Inter-VariableFont_opsz,wght.ttf, etc.)
+│   └── worksans/              # WorkSans font files (WorkSans-VariableFont_wght.ttf, etc.)
+└── illustrations/             # SVG graphics for empty and error states
 lib/
 ├── config/
 │   └── routes/                # Navigation and routing setup (AppRoutes)
 ├── core/
-│   ├── constant/              # Global API and query constant values
-│   ├── database/              # Drift database initialization and sqlite setup
-│   ├── env/                   # Environment variable mappings
+│   ├── constant/              # API endpoints, query params, and AppStrings UI messages
+│   │   ├── api_constants.dart
+│   │   ├── app_strings.dart
+│   │   └── query_constants.dart
+│   ├── database/              # Drift database initialization (AppDatabase)
+│   ├── env/                   # Environment variable mappings (Env)
+│   ├── error/                 # Strongly-typed Failure hierarchy & ExceptionHandler
+│   │   ├── exception_handler.dart
+│   │   └── failure.dart
 │   ├── network/               # Custom Dio configurations, interceptors, and clients
-│   ├── presentation/          # Core UI Atoms, Molecules, Organisms (Strictly UI Widgets)
-│   │   ├── atoms/
-│   │   ├── molecules/
-│   │   └── organisms/
+│   │   ├── dio/               # NewsDioClient
+│   │   └── interceptors/      # ApiKeyInterceptor
+│   ├── presentation/          # Shared UI Atoms, Molecules, Organisms
+│   │   ├── atoms/             # AppPrimaryButton, CategoryChip
+│   │   ├── molecules/         # ClearAllSavedButton, CustomSnackbar, SaveButton
+│   │   └── organisms/         # CustomAppBar, EmptyStateView
 │   ├── resources/             # Sealed states (DataState, DataSuccess, DataFailed)
 │   ├── theme/                 # Global app styling and tokens
 │   │   ├── app_theme.dart     # ThemeData configs
-│   │   └── tokens/            # Design Tokens (app_colors, app_spacing, app_typography, etc.)
-│   └── usecases/              # Base template abstraction for UseCases
+│   │   └── tokens/            # Design Tokens (app_colors, app_radius, app_shadow, app_spacing, app_typography)
+│   ├── usecases/              # Base UseCase<Type, Params> template
+│   └── util/                  # Helper extensions (date_extension, failure_extension, string_extension)
 ├── features/
 │   └── daily_news/            # Main feature domain
 │       ├── data/
-│       │   ├── data_sources/  # Remote (Retrofit) and Local (Drift SQLite DAO) sources
-│       │   ├── models/        # JSON parsing and table data model translations
-│       │   └── repositories/  # Repository implementations coordinating APIs & DBs
+│       │   ├── data_sources/
+│       │   │   ├── local/     # ArticleDao & ArticleTable (Drift SQLite DAO & Schema)
+│       │   │   └── remote/    # NewsApiService (Retrofit)
+│       │   ├── models/        # ArticleModel & ArticleResponseModel
+│       │   └── repositories/  # ArticleRepositoryImpl
 │       ├── domain/
 │       │   ├── entities/      # Pure business objects (ArticleEntity)
 │       │   ├── repositories/  # Abstract repository contracts (ArticleRepository)
-│       │   └── usecases/      # Use cases (*_usecase.dart)
+│       │   └── usecases/      # Use cases (GetArticleUseCase, SaveArticleUseCase, etc.)
 │       └── presentation/
-│           ├── bloc/          # Remote (API) and Local (DB) state handlers
-│           ├── components/    # Feature-specific UI (Atoms, Molecules, Organisms)
+│           ├── bloc/          # Remote (API) and Local (DB) BLoCs & message types
+│           ├── components/    # Feature-specific UI components (Atoms, Molecules, Organisms)
 │           └── pages/         # Standardized Screen Pages
 │               ├── article_detail/   # ArticleDetailPage
 │               ├── daily_news/       # DailyNewsPage
@@ -223,7 +246,6 @@ Before running the project locally, ensure you have:
 
 ---
 
-
 ## Future Improvements
 
 As an ongoing learning project, the following enhancements are planned to explore further advanced concepts:
@@ -241,6 +263,7 @@ As an ongoing learning project, the following enhancements are planned to explor
 - **Decoupled Architecture Prevents Spaghetti Code**: Although separating folders into data, domain, and presentation requires writing more initial files (like UseCases and models), it pays off immediately when debugging or changing UI layout, as it reduces cross-class side effects.
 - **Drift makes SQL Easy**: Generating schema helpers automatically ensures that SQL syntax errors are caught at compile time rather than crashing the database engine at runtime.
 - **State Management Simplifies UI**: By using Blocs, views remain simple and declarative. They just build the interface based on the state emitted, which drastically reduces the complexity of handling user gestures and loading screens.
+- **Centralized Exception Handling Streamlines UX**: Mapping external exceptions (Dio, Socket, SQL) to strongly-typed domain `Failure` objects ensures that user interfaces can react cleanly with meaningful messages rather than unhandled exception crashes.
 
 ---
 
