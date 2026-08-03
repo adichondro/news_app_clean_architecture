@@ -65,26 +65,26 @@ This project is structured around the principles of **Clean Architecture** (prop
 graph TD
     %% Presentation Layer
     subgraph Presentation ["Presentation Layer (UI & State)"]
-        UI["Pages & Widgets\n(DailyNewsPage, SavedArticlesPage)"] -->|Triggers Events| BLoC["BLoC\n(RemoteArticlesBloc, LocalArticleBloc)"]
-        BLoC -->|Emits States\n(Loading, Done, Error)| UI
+        UI["Pages & Widgets<br/>(DailyNewsPage, SavedArticlesPage)"] -->|Triggers Events| BLoC["BLoC<br/>(RemoteArticlesBloc, LocalArticleBloc)"]
+        BLoC -->|Emits UI States| UI
     end
 
     %% Domain Layer
     subgraph Domain ["Domain Layer (Business Logic)"]
-        BLoC -->|Invokes| UseCase["Use Cases\n(GetArticleUseCase, SaveArticleUseCase, etc.)"]
-        UseCase -->|Calls| RepoInterface["Repository Interface\n(ArticleRepository)"]
-        RepoInterface -->|Returns| DataState["DataState<T>"]
-        DataState -->|Holds Payload| Entity["Entities\n(ArticleEntity)"]
+        BLoC -->|Invokes| UseCase["Use Cases<br/>(GetArticleUseCase, SaveArticleUseCase, etc.)"]
+        UseCase -->|Calls| RepoInterface["Repository Interface<br/>(ArticleRepository)"]
+        RepoInterface -->|Returns| DataState["DataState&lt;T&gt;"]
+        DataState -->|Holds Payload| Entity["Entities<br/>(ArticleEntity)"]
     end
 
     %% Data Layer
     subgraph Data ["Data Layer (Infrastructure & Data Sources)"]
-        RepoImpl["Repository Implementation\n(ArticleRepositoryImpl)"] -.->|Implements| RepoInterface
-        RepoImpl -->|Calls| RemoteDS["Remote DataSource\n(NewsApiService / Dio)"]
-        RepoImpl -->|Calls| LocalDS["Local DataSource\n(ArticleDao / Drift SQLite)"]
-        RemoteDS -->|Returns API Response| Model["Models / DTOs\n(ArticleModel, ArticleResponseModel)"]
+        RepoImpl["Repository Implementation<br/>(ArticleRepositoryImpl)"] -.->|Implements| RepoInterface
+        RepoImpl -->|Calls| RemoteDS["Remote DataSource<br/>(NewsApiService / Dio)"]
+        RepoImpl -->|Calls| LocalDS["Local DataSource<br/>(ArticleDao / Drift SQLite)"]
+        RemoteDS -->|Returns API Response| Model["Models / DTOs<br/>(ArticleModel, ArticleResponseModel)"]
         LocalDS -->|Returns DB Rows| Model
-        Model <==>|"toEntity() / fromEntity()"| Entity
+        Model <-->|"toEntity() / fromEntity()"| Entity
     end
 
     classDef presentation fill:#e1f5fe,stroke:#01579b,stroke-width:2px,color:#003057;
