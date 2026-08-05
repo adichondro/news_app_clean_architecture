@@ -11,6 +11,7 @@ class ArticleModel {
   final String? urlToImage;
   final String? publishedAt;
   final String? content;
+  final String? sourceName;
 
   const ArticleModel({
     this.id,
@@ -21,10 +22,12 @@ class ArticleModel {
     this.urlToImage,
     this.publishedAt,
     this.content,
+    this.sourceName,
   });
 
   factory ArticleModel.fromJson(Map<String, dynamic> data) {
     return ArticleModel(
+      sourceName: data['source'] != null ? data['source']['name'] as String? : null,
       author: data['author'] as String?,
       title: data['title'] as String?,
       description: data['description'] as String?,
@@ -45,6 +48,7 @@ class ArticleModel {
       urlToImage: data.urlToImage,
       publishedAt: data.publishedAt,
       content: data.content,
+      sourceName: data.author,
     );
   }
 
@@ -58,6 +62,7 @@ class ArticleModel {
       urlToImage: urlToImage,
       publishedAt: publishedAt,
       content: content,
+      sourceName: sourceName,
     );
   }
 
@@ -71,6 +76,7 @@ class ArticleModel {
       urlToImage: entity.urlToImage,
       publishedAt: entity.publishedAt,
       content: entity.content,
+      sourceName: entity.sourceName,
     );
   }
 }

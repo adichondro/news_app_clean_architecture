@@ -54,7 +54,7 @@ class HorizontalArticleCard extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'TECHNOLOGY',
+                        (article.sourceName ?? article.author).valueOr('NEWS').toUpperCase(),
                         style: AppTypography.labelMedium.copyWith(
                           color: AppColors.secondary,
                           fontWeight: FontWeight.w500,

@@ -5,12 +5,13 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
-class CategoryChip extends StatelessWidget {
+/// Atom component rendering a compact badge displaying the news media source or publisher.
+class SourceChip extends StatelessWidget {
   final String label;
   final Color? backgroundColor;
   final Color? textColor;
 
-  const CategoryChip({
+  const SourceChip({
     super.key,
     required this.label,
     this.backgroundColor,

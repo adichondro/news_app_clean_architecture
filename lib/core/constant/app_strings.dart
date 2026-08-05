@@ -4,7 +4,7 @@ class AppStrings {
 
   // App Bar & General
   static const String appTitle = 'Daily News';
-  static const String newsCategoryDefault = 'NEWS';
+  static const String newsSourceDefault = 'NEWS';
   static const String noTitle = 'No Title';
   static const String unknownAuthor = 'Unknown Author';
 

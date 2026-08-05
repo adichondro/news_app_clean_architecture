@@ -6,7 +6,7 @@ import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_shadow.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
-import 'package:news_app_clean_architecture/core/presentation/atoms/category_chip.dart';
+import 'package:news_app_clean_architecture/core/presentation/atoms/source_chip.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/save_button.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/atoms/article_thumbnail.dart';
@@ -55,10 +55,12 @@ class ArticleCard extends StatelessWidget {
                     aspectRatio: 16 / 9,
                     borderRadius: BorderRadius.zero,
                   ),
-                  const Positioned(
+                  Positioned(
                     left: 12,
                     top: 12,
-                    child: CategoryChip(label: 'TECHNOLOGY'),
+                    child: SourceChip(
+                      label: (article.sourceName ?? article.author).valueOr('NEWS').toUpperCase(),
+                    ),
                   ),
                 ],
               ),

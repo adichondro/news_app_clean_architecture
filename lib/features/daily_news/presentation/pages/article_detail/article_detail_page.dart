@@ -71,7 +71,7 @@ class ArticleDetailPage extends StatelessWidget {
           children: [
             ArticleHeroSection(
               imageUrl: article?.urlToImage,
-              category: AppStrings.newsCategoryDefault,
+              category: (article?.sourceName ?? article?.author).valueOr(AppStrings.newsSourceDefault).toUpperCase(),
               title: (article?.title).valueOr(AppStrings.noTitle),
               authorName: (article?.author).valueOr(AppStrings.unknownAuthor),
               dateAndReadTime: '${(article?.publishedAt).toTimeAgo()} • 8 min read',
