@@ -52,6 +52,7 @@ class ArticleDetailPage extends StatelessWidget {
   Widget _buildBody() {
     return BlocListener<LocalArticleBloc, LocalArticleState>(
       listener: (context, state) {
+        if (ModalRoute.of(context)?.isCurrent != true) return;
         if (state is LocalArticlesError) {
           CustomSnackbar.show(
             context,
