@@ -34,17 +34,17 @@ void main() {
   ];
 
   test(
-    'should fetch aericles from repositoiry anda return [DataSuccess]',
+    'should fetch articles from repository and return [DataSuccess]',
     () async {
-      //Arrange: Define mock behavior to return success payload
+      // Arrange: Define mock behavior to return success payload
       when(
         () => mockArticleRepository.getNewsArticles(),
       ).thenAnswer((_) async => const DataSuccess(tArticles));
 
-      // act: Triger the use case call
+      // Act: Trigger the use case call
       final result = await useCase();
 
-      //assert: cerify state payload and repository interactions
+      // Assert: Verify state payload and repository interactions
       expect(result, isA<DataSuccess<List<ArticleEntity>>>());
       expect(result.data, equals(tArticles));
 

@@ -12,12 +12,12 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 /// Mock implementation of [GetArticleUseCase] using [Mocktail].
 class MockGetArticleUseCase extends Mock implements GetArticleUseCase {}
 
-/// Unit test suite for [RemoteArticleBloc].
+/// Unit test suite for [RemoteArticlesBloc].
 void main() {
   late RemoteArticlesBloc bloc;
   late MockGetArticleUseCase mockGetArticleUseCase;
 
-  /// Sets up mock dependecies and instantiates bloc before each test.
+  /// Sets up mock dependencies and instantiates bloc before each test.
   setUp(() {
     mockGetArticleUseCase = MockGetArticleUseCase();
     bloc = RemoteArticlesBloc(mockGetArticleUseCase);
@@ -37,15 +37,15 @@ void main() {
     ),
   ];
 
-  test('initial state should be[RemoteArticlesLoading]', () {
-    // Assert: Verify that the BLOC starts with initial loading state
+  test('initial state should be [RemoteArticlesLoading]', () {
+    // Assert: Verify that the BLoC starts with initial loading state
     expect(bloc.state, isA<RemoteArticlesLoading>());
   });
 
   blocTest<RemoteArticlesBloc, RemoteArticleState>(
     'should emit [RemoteArticlesDone] when [GetArticles] event succeeds',
     build: () {
-      // Arrange: Stub use case call to return Data Success payload
+      // Arrange: Stub use case call to return DataSuccess payload
       when(
         () => mockGetArticleUseCase(),
       ).thenAnswer((_) async => const DataSuccess(tArticles));
@@ -53,7 +53,7 @@ void main() {
     },
     act: (bloc) => bloc.add(const GetArticles()),
     expect: () => [
-      // Assert: Expect state transtition to RemoteArticlesDone with data
+      // Assert: Expect state transition to RemoteArticlesDone with data
       const RemoteArticlesDone(tArticles),
     ],
     verify: (_) {
@@ -62,7 +62,7 @@ void main() {
   );
 
   blocTest<RemoteArticlesBloc, RemoteArticleState>(
-    'should emit [RemiteArticlesError] when [GetArticles] event fails',
+    'should emit [RemoteArticlesError] when [GetArticles] event fails',
     build: () {
       // Arrange: Stub the use case to return a DataFailed containing a ServerFailure
       final tFailure = ServerFailure('Connection timeout');
@@ -73,7 +73,7 @@ void main() {
     },
     act: (bloc) => bloc.add(const GetArticles()),
     expect: () => [
-      // Assert: Expect state transtition to RemoteArticlesError with failure
+      // Assert: Expect state transition to RemoteArticlesError with failure
       const RemoteArticlesError(ServerFailure('Connection timeout')),
     ],
     verify: (_) {
