@@ -30,6 +30,7 @@ void main() {
       urlToImage: 'https://example.com/image.jpg',
       publishedAt: '2022-01-01T00:00:00Z',
       content: 'Article Content',
+      sourceName: 'BBC News',
     ),
   ];
 
