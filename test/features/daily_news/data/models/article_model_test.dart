@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:news_app_clean_architecture/core/database/app_database.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/models/article_model.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
 
@@ -94,5 +95,35 @@ void main() {
         expect(result.author, equals(tArticleModel.author));
       },
     );
+  });
+
+  group('fromTableData', () {
+    test('should return a matching [ArticleModel] from [ArticleTableData]', () {
+      // Arrange: Prepare SQLite table record entity
+      final tableData = ArticleTableData(
+        id: 1,
+        author: 'John Doe',
+        title: 'Article Title',
+        description: 'Article Description',
+        url: 'https://example.com',
+        urlToImage: 'https://example.com/image.jpg',
+        publishedAt: '2022-01-01T00:00:00Z',
+        content: 'Article Content',
+      );
+
+      // Act: Convert table data to model
+      final result = ArticleModel.fromTableData(tableData);
+
+      // Assert: Verify mapped properties match entity
+      expect(result.id, equals(1));
+      expect(result.author, equals('John Doe'));
+      expect(result.title, equals('Article Title'));
+      expect(result.description, equals('Article Description'));
+      expect(result.url, equals('https://example.com'));
+      expect(result.urlToImage, equals('https://example.com/image.jpg'));
+      expect(result.publishedAt, equals('2022-01-01T00:00:00Z'));
+      expect(result.content, equals('Article Content'));
+      expect(result.sourceName, equals('John Doe'));
+    });
   });
 }
