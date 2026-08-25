@@ -1,4 +1,6 @@
+import 'package:dio/dio.dart';
 import 'package:news_app_clean_architecture/core/constant/query_constants.dart';
+import 'package:news_app_clean_architecture/core/error/failure.dart';
 import 'package:news_app_clean_architecture/core/resources/data_state.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:mocktail/mocktail.dart';
@@ -16,6 +18,9 @@ class MockNewsApiService extends Mock implements NewsApiService {}
 class MockArticleDao extends Mock implements ArticleDao {}
 
 /// Unit test suite for [ArticleRepositoryImpl].
+///
+/// Verifies remote API fetching, local SQLite persistence, error resilience,
+/// and proper mapping of exceptions into strongly-typed [DataState] outcomes.
 void main() {
   late ArticleRepositoryImpl repository;
   late MockNewsApiService mockNewsApiService;
@@ -87,6 +92,36 @@ void main() {
         verifyZeroInteractions(mockArticleDao);
       },
     );
+
+    test(
+      'should return [DataFailed] with mapped Failure when remote API call throws [DioException]',
+      () async {
+        // Arrange: Stub NewsApiService to throw a timeout DioException
+        final dioException = DioException(
+          requestOptions: RequestOptions(path: '/top-headline'),
+          type: DioExceptionType.connectionTimeout,
+        );
+        when(
+          () => mockNewsApiService.getNewsArticles(
+            country: QueryConstants.country,
+            category: QueryConstants.category,
+          ),
+        ).thenThrow(dioException);
+
+        // Act: Execute repository getNewsArticle
+        final result = await repository.getNewsArticles();
+
+        // Assert: Verify DataFailed with NetworkFailure from exceptionHandler
+        expect(result, isA<DataFailed<List<ArticleEntity>>>());
+        expect(result.error, isA<NetworkFailure>());
+        verify(
+          () => mockNewsApiService.getNewsArticles(
+            country: QueryConstants.country,
+            category: QueryConstants.category,
+          ),
+        ).called(1);
+      },
+    );
   });
 
   group('getSavedArticles', () {
@@ -107,6 +142,24 @@ void main() {
         verify(() => mockArticleDao.getSavedArticles()).called(1);
         verifyNoMoreInteractions(mockArticleDao);
         verifyZeroInteractions(mockNewsApiService);
+      },
+    );
+
+    test(
+      'should return [DataFailed] with [CacheFailure] when local DAO throws an exception',
+      () async {
+        // Arrange: Stub ArticleDao to throw a database exception
+        when(
+          () => mockArticleDao.getSavedArticles(),
+        ).thenThrow(Exception('Database disk corrupted'));
+
+        // Act: Execute repository getSavedArticles
+        final result = await repository.getSavedArticles();
+
+        // Assert: Verify DataFailed with CacheFailure from ExceptionHandler
+        expect(result, isA<DataFailed<List<ArticleEntity>>>());
+        expect(result.error, isA<CacheFailure>());
+        verify(() => mockArticleDao.getSavedArticles()).called(1);
       },
     );
   });
@@ -130,6 +183,24 @@ void main() {
         verifyZeroInteractions(mockNewsApiService);
       },
     );
+
+    test(
+      'should return [DataFailed] with [CacheFailure] when saving article throws an exception',
+      () async {
+        // Arrange: Stub ArticleDao insertArticle to throw exception
+        when(
+          () => mockArticleDao.insertArticle(any()),
+        ).thenThrow(Exception('SQLite disk write failed'));
+
+        // Act: Execute repository saveArticle
+        final result = await repository.saveArticle(tArticleEntity);
+
+        // Assert: Verify DataFailed with CacheFailure
+        expect(result, isA<DataFailed<void>>());
+        expect(result.error, isA<CacheFailure>());
+        verify(() => mockArticleDao.insertArticle(any())).called(1);
+      },
+    );
   });
 
   group('removeArticle', () {
@@ -151,6 +222,51 @@ void main() {
         verifyZeroInteractions(mockNewsApiService);
       },
     );
+
+    test(
+      'should call [ArticleDao.deleteArticleByUrl] when article id is null and url is present',
+      () async {
+        // Arrange: Create entity with null id but valid url
+        const articleWithoutId = ArticleEntity(
+          id: null,
+          title: 'Title Without ID',
+          url: 'https://example.com/no-id',
+        );
+        when(
+          () => mockArticleDao.deleteArticleByUrl(articleWithoutId.url!),
+        ).thenAnswer((_) async => 1);
+
+        // Act: Execute repository removeArticle
+        final result = await repository.removeArticle(articleWithoutId);
+
+        // Assert: Verify deleteArticleByUrl is invoked instead
+        expect(result, isA<DataSuccess<void>>());
+        verify(
+          () => mockArticleDao.deleteArticleByUrl(articleWithoutId.url!),
+        ).called(1);
+        verifyNoMoreInteractions(mockArticleDao);
+      },
+    );
+
+    test(
+      'should return [DataFailed] with [CacheFailure] when deletion throws an exception',
+      () async {
+        // Arrange: Stub ArticleDao deleteArticle to throw exception
+        when(
+          () => mockArticleDao.deleteArticle(any()),
+        ).thenThrow(Exception('Foreign key constraint error'));
+
+        // Act: Execute repository removeArticle
+        final result = await repository.removeArticle(tArticleEntity);
+
+        // Assert: Verify DataFailed with CacheFailure
+        expect(result, isA<DataFailed<void>>());
+        expect(result.error, isA<CacheFailure>());
+        verify(
+          () => mockArticleDao.deleteArticle(tArticleEntity.id!),
+        ).called(1);
+      },
+    );
   });
 
   group('clearSavedArticles', () {
@@ -168,6 +284,24 @@ void main() {
         verify(() => mockArticleDao.clearAllArticles()).called(1);
         verifyNoMoreInteractions(mockArticleDao);
         verifyZeroInteractions(mockNewsApiService);
+      },
+    );
+
+    test(
+      'should return [DataFailed] with [CacheFailure] when clearing database throws an exception',
+      () async {
+        // Arrange: Stub ArticleDao clearAllArticles to throw exception
+        when(
+          () => mockArticleDao.clearAllArticles(),
+        ).thenThrow(Exception('Database lock timeout'));
+
+        // Act: Execute repository clearSavedArticles
+        final result = await repository.clearSavedArticles();
+
+        // Assert: Verify DataFailed with CacheFailure
+        expect(result, isA<DataFailed<void>>());
+        expect(result.error, isA<CacheFailure>());
+        verify(() => mockArticleDao.clearAllArticles()).called(1);
       },
     );
   });

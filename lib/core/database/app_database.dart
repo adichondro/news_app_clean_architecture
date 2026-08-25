@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:drift/drift.dart';
 import 'package:drift/native.dart';
+import 'package:flutter/foundation.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/local/dao/article_dao.dart';
 import 'package:news_app_clean_architecture/features/daily_news/data/data_sources/local/tables/article_table.dart';
 import 'package:path/path.dart' as p;
@@ -16,6 +17,10 @@ part 'app_database.g.dart';
 class AppDatabase extends _$AppDatabase {
   /// Initializes the database instance using [_openConnection].
   AppDatabase() : super(_openConnection());
+
+  /// Initializes an in-memory or custom [QueryExecutor] database instance for testing.
+  @visibleForTesting
+  AppDatabase.forTesting(super.executor);
 
   /// Specifies the current schema version for SQLite database migrations.
   @override
