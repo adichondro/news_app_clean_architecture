@@ -34,6 +34,7 @@ class ArticleDao extends DatabaseAccessor<AppDatabase> with _$ArticleDaoMixin {
       urlToImage: Value(article.urlToImage),
       publishedAt: Value(article.publishedAt),
       content: Value(article.content),
+      sourceName: Value(article.sourceName),
     );
 
     await into(articleTable).insert(companion);

@@ -65,6 +65,7 @@ void main() {
       expect(result.first.title, equals(tArticle1.title));
       expect(result.first.url, equals(tArticle1.url));
       expect(result.first.id, isNotNull);
+      expect(result.first.sourceName, equals(tArticle1.sourceName));
     });
 
     test(

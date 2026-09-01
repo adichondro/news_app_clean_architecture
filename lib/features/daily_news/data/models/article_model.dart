@@ -48,7 +48,7 @@ class ArticleModel {
       urlToImage: data.urlToImage,
       publishedAt: data.publishedAt,
       content: data.content,
-      sourceName: data.author,
+      sourceName: data.sourceName,
     );
   }
 

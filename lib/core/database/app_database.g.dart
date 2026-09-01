@@ -93,6 +93,17 @@ class $ArticleTableTable extends ArticleTable
     type: DriftSqlType.string,
     requiredDuringInsert: false,
   );
+  static const VerificationMeta _sourceNameMeta = const VerificationMeta(
+    'sourceName',
+  );
+  @override
+  late final GeneratedColumn<String> sourceName = GeneratedColumn<String>(
+    'source_name',
+    aliasedName,
+    true,
+    type: DriftSqlType.string,
+    requiredDuringInsert: false,
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -103,6 +114,7 @@ class $ArticleTableTable extends ArticleTable
     urlToImage,
     publishedAt,
     content,
+    sourceName,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -170,6 +182,12 @@ class $ArticleTableTable extends ArticleTable
         content.isAcceptableOrUnknown(data['content']!, _contentMeta),
       );
     }
+    if (data.containsKey('source_name')) {
+      context.handle(
+        _sourceNameMeta,
+        sourceName.isAcceptableOrUnknown(data['source_name']!, _sourceNameMeta),
+      );
+    }
     return context;
   }
 
@@ -211,6 +229,10 @@ class $ArticleTableTable extends ArticleTable
         DriftSqlType.string,
         data['${effectivePrefix}content'],
       ),
+      sourceName: attachedDatabase.typeMapping.read(
+        DriftSqlType.string,
+        data['${effectivePrefix}source_name'],
+      ),
     );
   }
 
@@ -230,6 +252,7 @@ class ArticleTableData extends DataClass
   final String? urlToImage;
   final String? publishedAt;
   final String? content;
+  final String? sourceName;
   const ArticleTableData({
     required this.id,
     this.author,
@@ -239,6 +262,7 @@ class ArticleTableData extends DataClass
     this.urlToImage,
     this.publishedAt,
     this.content,
+    this.sourceName,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -265,6 +289,9 @@ class ArticleTableData extends DataClass
     if (!nullToAbsent || content != null) {
       map['content'] = Variable<String>(content);
     }
+    if (!nullToAbsent || sourceName != null) {
+      map['source_name'] = Variable<String>(sourceName);
+    }
     return map;
   }
 
@@ -290,6 +317,9 @@ class ArticleTableData extends DataClass
       content: content == null && nullToAbsent
           ? const Value.absent()
           : Value(content),
+      sourceName: sourceName == null && nullToAbsent
+          ? const Value.absent()
+          : Value(sourceName),
     );
   }
 
@@ -307,6 +337,7 @@ class ArticleTableData extends DataClass
       urlToImage: serializer.fromJson<String?>(json['urlToImage']),
       publishedAt: serializer.fromJson<String?>(json['publishedAt']),
       content: serializer.fromJson<String?>(json['content']),
+      sourceName: serializer.fromJson<String?>(json['sourceName']),
     );
   }
   @override
@@ -321,6 +352,7 @@ class ArticleTableData extends DataClass
       'urlToImage': serializer.toJson<String?>(urlToImage),
       'publishedAt': serializer.toJson<String?>(publishedAt),
       'content': serializer.toJson<String?>(content),
+      'sourceName': serializer.toJson<String?>(sourceName),
     };
   }
 
@@ -333,6 +365,7 @@ class ArticleTableData extends DataClass
     Value<String?> urlToImage = const Value.absent(),
     Value<String?> publishedAt = const Value.absent(),
     Value<String?> content = const Value.absent(),
+    Value<String?> sourceName = const Value.absent(),
   }) => ArticleTableData(
     id: id ?? this.id,
     author: author.present ? author.value : this.author,
@@ -342,6 +375,7 @@ class ArticleTableData extends DataClass
     urlToImage: urlToImage.present ? urlToImage.value : this.urlToImage,
     publishedAt: publishedAt.present ? publishedAt.value : this.publishedAt,
     content: content.present ? content.value : this.content,
+    sourceName: sourceName.present ? sourceName.value : this.sourceName,
   );
   ArticleTableData copyWithCompanion(ArticleTableCompanion data) {
     return ArticleTableData(
@@ -359,6 +393,9 @@ class ArticleTableData extends DataClass
           ? data.publishedAt.value
           : this.publishedAt,
       content: data.content.present ? data.content.value : this.content,
+      sourceName: data.sourceName.present
+          ? data.sourceName.value
+          : this.sourceName,
     );
   }
 
@@ -372,7 +409,8 @@ class ArticleTableData extends DataClass
           ..write('url: $url, ')
           ..write('urlToImage: $urlToImage, ')
           ..write('publishedAt: $publishedAt, ')
-          ..write('content: $content')
+          ..write('content: $content, ')
+          ..write('sourceName: $sourceName')
           ..write(')'))
         .toString();
   }
@@ -387,6 +425,7 @@ class ArticleTableData extends DataClass
     urlToImage,
     publishedAt,
     content,
+    sourceName,
   );
   @override
   bool operator ==(Object other) =>
@@ -399,7 +438,8 @@ class ArticleTableData extends DataClass
           other.url == this.url &&
           other.urlToImage == this.urlToImage &&
           other.publishedAt == this.publishedAt &&
-          other.content == this.content);
+          other.content == this.content &&
+          other.sourceName == this.sourceName);
 }
 
 class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
@@ -411,6 +451,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
   final Value<String?> urlToImage;
   final Value<String?> publishedAt;
   final Value<String?> content;
+  final Value<String?> sourceName;
   const ArticleTableCompanion({
     this.id = const Value.absent(),
     this.author = const Value.absent(),
@@ -420,6 +461,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
     this.urlToImage = const Value.absent(),
     this.publishedAt = const Value.absent(),
     this.content = const Value.absent(),
+    this.sourceName = const Value.absent(),
   });
   ArticleTableCompanion.insert({
     this.id = const Value.absent(),
@@ -430,6 +472,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
     this.urlToImage = const Value.absent(),
     this.publishedAt = const Value.absent(),
     this.content = const Value.absent(),
+    this.sourceName = const Value.absent(),
   });
   static Insertable<ArticleTableData> custom({
     Expression<int>? id,
@@ -440,6 +483,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
     Expression<String>? urlToImage,
     Expression<String>? publishedAt,
     Expression<String>? content,
+    Expression<String>? sourceName,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -450,6 +494,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
       if (urlToImage != null) 'url_to_image': urlToImage,
       if (publishedAt != null) 'published_at': publishedAt,
       if (content != null) 'content': content,
+      if (sourceName != null) 'source_name': sourceName,
     });
   }
 
@@ -462,6 +507,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
     Value<String?>? urlToImage,
     Value<String?>? publishedAt,
     Value<String?>? content,
+    Value<String?>? sourceName,
   }) {
     return ArticleTableCompanion(
       id: id ?? this.id,
@@ -472,6 +518,7 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
       urlToImage: urlToImage ?? this.urlToImage,
       publishedAt: publishedAt ?? this.publishedAt,
       content: content ?? this.content,
+      sourceName: sourceName ?? this.sourceName,
     );
   }
 
@@ -502,6 +549,9 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
     if (content.present) {
       map['content'] = Variable<String>(content.value);
     }
+    if (sourceName.present) {
+      map['source_name'] = Variable<String>(sourceName.value);
+    }
     return map;
   }
 
@@ -515,7 +565,8 @@ class ArticleTableCompanion extends UpdateCompanion<ArticleTableData> {
           ..write('url: $url, ')
           ..write('urlToImage: $urlToImage, ')
           ..write('publishedAt: $publishedAt, ')
-          ..write('content: $content')
+          ..write('content: $content, ')
+          ..write('sourceName: $sourceName')
           ..write(')'))
         .toString();
   }
@@ -543,6 +594,7 @@ typedef $$ArticleTableTableCreateCompanionBuilder =
       Value<String?> urlToImage,
       Value<String?> publishedAt,
       Value<String?> content,
+      Value<String?> sourceName,
     });
 typedef $$ArticleTableTableUpdateCompanionBuilder =
     ArticleTableCompanion Function({
@@ -554,6 +606,7 @@ typedef $$ArticleTableTableUpdateCompanionBuilder =
       Value<String?> urlToImage,
       Value<String?> publishedAt,
       Value<String?> content,
+      Value<String?> sourceName,
     });
 
 class $$ArticleTableTableFilterComposer
@@ -602,6 +655,11 @@ class $$ArticleTableTableFilterComposer
 
   ColumnFilters<String> get content => $composableBuilder(
     column: $table.content,
+    builder: (column) => ColumnFilters(column),
+  );
+
+  ColumnFilters<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
     builder: (column) => ColumnFilters(column),
   );
 }
@@ -654,6 +712,11 @@ class $$ArticleTableTableOrderingComposer
     column: $table.content,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$ArticleTableTableAnnotationComposer
@@ -694,6 +757,11 @@ class $$ArticleTableTableAnnotationComposer
 
   GeneratedColumn<String> get content =>
       $composableBuilder(column: $table.content, builder: (column) => column);
+
+  GeneratedColumn<String> get sourceName => $composableBuilder(
+    column: $table.sourceName,
+    builder: (column) => column,
+  );
 }
 
 class $$ArticleTableTableTableManager
@@ -735,6 +803,7 @@ class $$ArticleTableTableTableManager
                 Value<String?> urlToImage = const Value.absent(),
                 Value<String?> publishedAt = const Value.absent(),
                 Value<String?> content = const Value.absent(),
+                Value<String?> sourceName = const Value.absent(),
               }) => ArticleTableCompanion(
                 id: id,
                 author: author,
@@ -744,6 +813,7 @@ class $$ArticleTableTableTableManager
                 urlToImage: urlToImage,
                 publishedAt: publishedAt,
                 content: content,
+                sourceName: sourceName,
               ),
           createCompanionCallback:
               ({
@@ -755,6 +825,7 @@ class $$ArticleTableTableTableManager
                 Value<String?> urlToImage = const Value.absent(),
                 Value<String?> publishedAt = const Value.absent(),
                 Value<String?> content = const Value.absent(),
+                Value<String?> sourceName = const Value.absent(),
               }) => ArticleTableCompanion.insert(
                 id: id,
                 author: author,
@@ -764,6 +835,7 @@ class $$ArticleTableTableTableManager
                 urlToImage: urlToImage,
                 publishedAt: publishedAt,
                 content: content,
+                sourceName: sourceName,
               ),
           withReferenceMapper: (p0) => p0
               .map((e) => (e.readTable(table), BaseReferences(db, table, e)))
