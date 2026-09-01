@@ -24,7 +24,20 @@ class AppDatabase extends _$AppDatabase {
 
   /// Specifies the current schema version for SQLite database migrations.
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
+
+  /// Defines database migration strategies when upgrading schema versions.
+  @override
+  MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) {
+        await m.addColumn((articleTable), articleTable.sourceName);
+      }
+    },
+    beforeOpen: (details) async {
+      await customStatement('PRAGMA foreign_keys = ON');
+    },
+  );
 }
 
 /// Opens a lazy connection to the SQLite database file on disk.
@@ -39,4 +52,3 @@ LazyDatabase _openConnection() {
     return NativeDatabase.createInBackground(file);
   });
 }
-

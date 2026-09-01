@@ -109,6 +109,7 @@ void main() {
         urlToImage: 'https://example.com/image.jpg',
         publishedAt: '2022-01-01T00:00:00Z',
         content: 'Article Content',
+        sourceName: 'BBC News',
       );
 
       // Act: Convert table data to model
@@ -123,7 +124,7 @@ void main() {
       expect(result.urlToImage, equals('https://example.com/image.jpg'));
       expect(result.publishedAt, equals('2022-01-01T00:00:00Z'));
       expect(result.content, equals('Article Content'));
-      expect(result.sourceName, equals('John Doe'));
+      expect(result.sourceName, equals('BBC News'));
     });
   });
 }

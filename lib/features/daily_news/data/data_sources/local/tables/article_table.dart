@@ -10,5 +10,6 @@ class ArticleTable extends Table {
   TextColumn get urlToImage => text().nullable()();
   TextColumn get publishedAt => text().nullable()();
   TextColumn get content => text().nullable()();
+  TextColumn get sourceName => text().nullable()();
 }
 
