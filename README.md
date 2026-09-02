@@ -250,7 +250,7 @@ Before running the project locally, ensure you have:
 
 As an ongoing learning project, the following enhancements are planned to explore further advanced concepts:
 
-- [ ] **Comprehensive Automated Testing**: Add unit tests for Blocs and Use Cases (using `mocktail`), widget tests for UI elements, and mock network services to achieve robust coverage.
+- [x] **Comprehensive Automated Testing**: Add unit tests for Blocs and Use Cases (using `mocktail`), widget tests for UI elements, and mock network services to achieve robust coverage.
 - [ ] **Dual Theme Support (Light / Dark Mode)**: Implement dynamic theme swapping by connecting a local settings Bloc and persisting preference storage.
 - [ ] **Multi-language Localization**: Wire up the Flutter localization package to support multiple translation profiles.
 - [ ] **Advanced Search & Category Filters**: Provide a search bar in the Daily News feed with scrollable category tabs to dynamic fetch different headlines (e.g., technology, sports).
