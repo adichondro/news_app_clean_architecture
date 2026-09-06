@@ -6,5 +6,5 @@ abstract class ThemeRepository {
 
   /// Persists the theme mode preference.
   /// 'isDarkMode' must be 'true' for dark mode and 'false' for light mode.
-  Future<void> setDarkMode(bool isDarkMode);
+  Future<void> setDarkMode(bool isDark);
 }
