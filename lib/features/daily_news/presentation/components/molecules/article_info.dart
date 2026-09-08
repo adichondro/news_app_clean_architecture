@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 
@@ -38,10 +37,10 @@ class ArticleInfo extends StatelessWidget {
           Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.timeline_outlined,
                 size: 16,
-                color: AppColors.outline,
+                color: Theme.of(context).colorScheme.outline,
               ),
               const SizedBox(width: AppSpacing.xxs),
               Flexible(

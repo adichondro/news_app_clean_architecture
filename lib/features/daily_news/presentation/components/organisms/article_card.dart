@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/util/date_extension.dart';
 import 'package:news_app_clean_architecture/core/util/string_extension.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_shadow.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
@@ -29,17 +28,19 @@ class ArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       decoration: BoxDecoration(
         boxShadow: AppShadow.level1,
         borderRadius: AppRadius.mediumRadius,
         border: Border.all(
-          color: AppColors.outlineVariant.withValues(alpha: 0.3),
+          color: colorScheme.outlineVariant.withValues(alpha: 0.3),
           width: 1,
         ),
       ),
       child: Material(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: AppRadius.mediumRadius,
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -83,11 +84,11 @@ class ArticleCard extends StatelessWidget {
                               Skeleton.replace(
                                 child: CircleAvatar(
                                   radius: 12,
-                                  backgroundColor: AppColors.secondaryContainer,
-                                  child: const Icon(
+                                  backgroundColor: colorScheme.secondaryContainer,
+                                  child: Icon(
                                     Icons.person,
                                     size: 14,
-                                    color: AppColors.onSecondaryContainer,
+                                    color: colorScheme.onSecondaryContainer,
                                   ),
                                 ),
                               ),

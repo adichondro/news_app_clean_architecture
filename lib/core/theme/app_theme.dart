@@ -27,6 +27,7 @@ ThemeData lightTheme() {
       error: AppColors.error,
       onError: AppColors.onError,
       outline: AppColors.outline,
+      outlineVariant: AppColors.outlineVariant,
     ),
     appBarTheme: _lightAppBarTheme(),
   );
@@ -54,6 +55,7 @@ ThemeData darkTheme() {
       error: AppColors.darkError,
       onError: AppColors.darkOnError,
       outline: AppColors.darkOutline,
+      outlineVariant: AppColors.darkOutlineVariant,
     ),
     appBarTheme: _darkAppBarTheme(),
   );

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
@@ -20,6 +19,8 @@ class SourceChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Skeleton.replace(
       child: Container(
         padding: const EdgeInsets.symmetric(
@@ -27,13 +28,13 @@ class SourceChip extends StatelessWidget {
           vertical: AppSpacing.xxs,
         ),
         decoration: BoxDecoration(
-          color: backgroundColor ?? AppColors.primary.withValues(alpha: 0.9),
+          color: backgroundColor ?? colorScheme.primary.withValues(alpha: 0.9),
           borderRadius: AppRadius.pillRadius,
         ),
         child: Text(
           label.toUpperCase(),
           style: AppTypography.labelMedium.copyWith(
-            color: textColor ?? AppColors.onPrimary,
+            color: textColor ?? colorScheme.onPrimary,
             fontSize: 10,
             fontWeight: FontWeight.w700,
           ),
