@@ -14,6 +14,8 @@ class AppStrings {
   static const String exploreNews = 'Explore News';
   static const String tryAgain = 'Try Again';
   static const String clearAll = 'Clear All';
+  static const String lightThemeTooltip = 'Switch to Light Mode';
+  static const String darkThemeTooltip = 'Switch to Dark Mode';
 
   // BLoC Notifications
   static const String articleSaved = 'Article saved!';
