@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/util/date_extension.dart';
 import 'package:news_app_clean_architecture/core/util/string_extension.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
@@ -22,12 +21,14 @@ class HorizontalArticleCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
       clipBehavior: Clip.antiAlias,
       decoration: BoxDecoration(
-        color: AppColors.surface,
+        color: colorScheme.surface,
         borderRadius: AppRadius.mediumRadius,
-        border: Border.all(width: 1, color: AppColors.outlineVariant),
+        border: Border.all(width: 1, color: colorScheme.outlineVariant),
       ),
       child: Material(
         color: Colors.transparent,
@@ -56,7 +57,7 @@ class HorizontalArticleCard extends StatelessWidget {
                       Text(
                         (article.sourceName ?? article.author).valueOr('NEWS').toUpperCase(),
                         style: AppTypography.labelMedium.copyWith(
-                          color: AppColors.secondary,
+                          color: colorScheme.secondary,
                           fontWeight: FontWeight.w500,
                           letterSpacing: 0.60,
                         ),
@@ -67,7 +68,7 @@ class HorizontalArticleCard extends StatelessWidget {
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
                         style: AppTypography.headlinesSmall.copyWith(
-                          color: AppColors.onSurface,
+                          color: colorScheme.onSurface,
                           fontWeight: FontWeight.w600,
                           height: 1.25,
                         ),
@@ -75,17 +76,17 @@ class HorizontalArticleCard extends StatelessWidget {
                       const SizedBox(height: AppSpacing.sm),
                       Row(
                         children: [
-                          const Icon(
+                          Icon(
                             Icons.access_time_rounded,
                             size: 14,
-                            color: AppColors.onSurfaceVariant,
+                            color: colorScheme.onSurfaceVariant,
                           ),
                           const SizedBox(width: AppSpacing.xxs),
                           Expanded(
                             child: Text(
                               article.publishedAt.toTimeAgo(),
                               style: AppTypography.labelMedium.copyWith(
-                                color: AppColors.onSurfaceVariant,
+                                color: colorScheme.onSurfaceVariant,
                               ),
                               overflow: TextOverflow.ellipsis,
                             ),
@@ -101,7 +102,7 @@ class HorizontalArticleCard extends StatelessWidget {
                     onPressed: onDeletePressed,
                     icon: Icon(
                       Icons.bookmark_remove_outlined,
-                      color: AppColors.primary,
+                      color: colorScheme.primary,
                     ),
                     splashRadius: 24,
                     padding: EdgeInsets.zero,

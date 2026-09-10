@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
@@ -16,6 +15,8 @@ class AuthorMetaInfo extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
       mainAxisSize: MainAxisSize.min,
@@ -24,18 +25,18 @@ class AuthorMetaInfo extends StatelessWidget {
           width: 40,
           height: 40,
           decoration: ShapeDecoration(
-            color: AppColors.surfaceVariant,
+            color: colorScheme.surfaceContainerHighest,
             shape: RoundedRectangleBorder(
               side: BorderSide(
                 width: 1,
-                color: AppColors.onPrimary.withValues(alpha: 0.20),
+                color: Colors.white.withValues(alpha: 0.20),
               ),
               borderRadius: AppRadius.pillRadius,
             ),
           ),
-          child: const Icon(
+          child: Icon(
             Icons.person,
-            color: AppColors.onSurfaceVariant,
+            color: colorScheme.onSurfaceVariant,
             size: 20,
           ),
         ),
@@ -50,7 +51,7 @@ class AuthorMetaInfo extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.labelLarge.copyWith(
-                  color: AppColors.onPrimary.withValues(alpha: 0.90),
+                  color: Colors.white.withValues(alpha: 0.90),
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -59,7 +60,7 @@ class AuthorMetaInfo extends StatelessWidget {
                 maxLines: 1,
                 overflow: TextOverflow.ellipsis,
                 style: AppTypography.labelMedium.copyWith(
-                  color: AppColors.onPrimary.withValues(alpha: 0.80),
+                  color: Colors.white.withValues(alpha: 0.80),
                 ),
               ),
             ],

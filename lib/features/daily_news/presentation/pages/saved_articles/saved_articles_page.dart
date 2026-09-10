@@ -7,7 +7,6 @@ import 'package:news_app_clean_architecture/core/presentation/molecules/clear_al
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
@@ -35,7 +34,7 @@ class SavedArticlesPage extends StatelessWidget {
           onPressed: () => _onBackButtonTapped(context),
           icon: Icon(
             Icons.chevron_left_rounded,
-            color: AppColors.primary,
+            color: Theme.of(context).colorScheme.primary,
             size: 32,
           ),
         ),

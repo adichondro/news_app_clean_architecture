@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
@@ -32,7 +31,7 @@ class SavedArticlesEmptyState extends StatelessWidget {
             Text(
               AppStrings.popularTopicsTitle.toUpperCase(),
               style: AppTypography.labelMedium.copyWith(
-                color: AppColors.outline,
+                color: Theme.of(context).colorScheme.outline,
                 letterSpacing: 1.2,
               ),
             ),
