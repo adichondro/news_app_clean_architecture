@@ -4,7 +4,7 @@ import 'package:news_app_clean_architecture/features/settings/domain/usecases/se
 import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_event.dart';
 import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_state.dart';
 
-/// Bloc resposible for orchestrating aplication theme state and persistence.
+/// Bloc responsible for orchestrating application theme state and persistence.
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   final GetThemeModeUseCase _getThemeModeUseCase;
   final SetThemeModeUseCase _setThemeModeUseCase;
@@ -20,8 +20,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     GetSavedTheme event,
     Emitter<ThemeState> emit,
   ) async {
-    final isDark = await _getThemeModeUseCase();
-    emit(ThemeState(isDark: isDark));
+    try {
+      final isDark = await _getThemeModeUseCase();
+      emit(ThemeState(isDark: isDark));
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+    }
   }
 
   /// Handles toggling theme mode and persisting the new preference.
@@ -29,8 +33,12 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
     ToggleTheme event,
     Emitter<ThemeState> emit,
   ) async {
-    final nextIsDark = !state.isDark;
-    await _setThemeModeUseCase(params: nextIsDark);
-    emit(ThemeState(isDark: nextIsDark));
+    try {
+      final nextIsDark = !state.isDark;
+      await _setThemeModeUseCase(params: nextIsDark);
+      emit(ThemeState(isDark: nextIsDark));
+    } catch (error, stackTrace) {
+      addError(error, stackTrace);
+    }
   }
 }
