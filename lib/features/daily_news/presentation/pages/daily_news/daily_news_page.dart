@@ -6,7 +6,6 @@ import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/empty_state_view.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/util/failure_extension.dart';
 import 'package:news_app_clean_architecture/features/daily_news/domain/entities/article_entity.dart';
@@ -17,6 +16,9 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_event.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/bloc/article/remote/remote_article_state.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_card.dart';
+import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_bloc.dart';
+import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_event.dart';
+import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_state.dart';
 import 'package:skeletonizer/skeletonizer.dart';
 
 class DailyNewsPage extends StatelessWidget {
@@ -28,13 +30,31 @@ class DailyNewsPage extends StatelessWidget {
   }
 
   PreferredSizeWidget _buildAppbar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return CustomAppBar(
       title: AppStrings.appTitle,
       actions: [
+        BlocBuilder<ThemeBloc, ThemeState>(
+          builder: (context, themeState) {
+            return IconButton(
+              onPressed: () {
+                context.read<ThemeBloc>().add(const ToggleTheme());
+              },
+              icon: Icon(
+                themeState.isDark ? Icons.light_mode : Icons.dark_mode,
+                color: colorScheme.primary,
+              ),
+              tooltip: themeState.isDark
+                  ? AppStrings.lightThemeTooltip
+                  : AppStrings.darkThemeTooltip,
+            );
+          },
+        ),
         IconButton(
           onPressed: () => _onShowSavedArticleViewTapped(context),
           icon: const Icon(Icons.bookmark),
-          color: AppColors.primary,
+          color: colorScheme.primary,
         ),
         const SizedBox(width: AppSpacing.xs),
       ],
@@ -52,10 +72,7 @@ class DailyNewsPage extends StatelessWidget {
             isError: true,
           );
         } else if (state is LocalArticlesDone && state.messageType != null) {
-          CustomSnackbar.show(
-            context,
-            message: state.messageType!.toText(),
-          );
+          CustomSnackbar.show(context, message: state.messageType!.toText());
         }
       },
       child: BlocConsumer<RemoteArticlesBloc, RemoteArticleState>(
@@ -63,7 +80,8 @@ class DailyNewsPage extends StatelessWidget {
           if (state is RemoteArticlesError) {
             CustomSnackbar.show(
               context,
-              message: state.error?.toUserMessage() ?? AppStrings.unexpectedError,
+              message:
+                  state.error?.toUserMessage() ?? AppStrings.unexpectedError,
               isError: true,
             );
           }

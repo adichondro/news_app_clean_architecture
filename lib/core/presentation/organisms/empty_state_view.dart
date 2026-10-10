@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/app_primary_button.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 
@@ -44,7 +43,7 @@ class EmptyStateView extends StatelessWidget {
               message,
               textAlign: TextAlign.center,
               style: AppTypography.bodyMedium.copyWith(
-                color: AppColors.onSurfaceVariant,
+                color: Theme.of(context).colorScheme.onSurfaceVariant,
               ),
             ),
             if (onActionPressed != null && actionLabel != null && actionIcon != null) ...[

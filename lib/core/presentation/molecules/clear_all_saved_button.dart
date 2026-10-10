@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 
@@ -27,16 +26,16 @@ class ClearAllSavedButton extends StatelessWidget {
           child: Row(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Icon(
+              Icon(
                 Icons.delete_sweep_rounded,
                 size: 20,
-                color: AppColors.error,
+                color: Theme.of(context).colorScheme.error,
               ),
               const SizedBox(width: AppSpacing.xxs),
               Text(
                 AppStrings.clearAll,
                 style: AppTypography.bodySmall.copyWith(
-                  color: AppColors.error,
+                  color: Theme.of(context).colorScheme.error,
                   fontWeight: FontWeight.w600,
                 ),
               ),

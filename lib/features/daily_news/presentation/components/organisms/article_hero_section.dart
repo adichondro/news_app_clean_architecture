@@ -1,6 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:news_app_clean_architecture/core/presentation/atoms/source_chip.dart';
@@ -25,6 +24,8 @@ class ArticleHeroSection extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return SizedBox(
       width: double.infinity,
       height: 530,
@@ -38,13 +39,13 @@ class ArticleHeroSection extends StatelessWidget {
               placeholder: (context, url) => Skeletonizer(
                 enabled: true,
                 child: Container(
-                  color: AppColors.primaryContainer,
+                  color: colorScheme.surfaceContainerHighest,
                 ),
               ),
-              errorWidget: (context, url, error) => _buildFallbackImage(),
+              errorWidget: (context, url, error) => _buildFallbackImage(context),
             )
           else
-            _buildFallbackImage(),
+            _buildFallbackImage(context),
 
           Container(
             decoration: BoxDecoration(
@@ -52,8 +53,8 @@ class ArticleHeroSection extends StatelessWidget {
                 begin: Alignment.topCenter,
                 end: Alignment.bottomCenter,
                 colors: [
-                  AppColors.primary.withValues(alpha: 0.0),
-                  AppColors.primary.withValues(alpha: 0.7),
+                  Colors.black.withValues(alpha: 0.0),
+                  Colors.black.withValues(alpha: 0.75),
                 ],
               ),
             ),
@@ -72,7 +73,7 @@ class ArticleHeroSection extends StatelessWidget {
                 Text(
                   title,
                   style: AppTypography.headlinesLargeMobile.copyWith(
-                    color: AppColors.onPrimary,
+                    color: Colors.white,
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
@@ -88,22 +89,24 @@ class ArticleHeroSection extends StatelessWidget {
     );
   }
 
-  Widget _buildFallbackImage() {
+  Widget _buildFallbackImage(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Container(
-      color: AppColors.primaryContainer,
+      color: colorScheme.surfaceContainerHighest,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Icon(
+          Icon(
             Icons.image_not_supported,
             size: 50,
-            color: AppColors.onPrimaryContainer,
+            color: colorScheme.outline,
           ),
           const SizedBox(height: AppSpacing.xs),
           Text(
             'No Image Available',
             style: AppTypography.labelMedium.copyWith(
-              color: AppColors.onPrimaryContainer,
+              color: colorScheme.outline,
             ),
           ),
         ],

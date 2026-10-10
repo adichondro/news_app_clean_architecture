@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:news_app_clean_architecture/core/constant/app_strings.dart';
 import 'package:news_app_clean_architecture/core/presentation/molecules/custom_snackbar.dart';
 import 'package:news_app_clean_architecture/core/presentation/organisms/custom_app_bar.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 import 'package:news_app_clean_architecture/core/util/date_extension.dart';
@@ -23,27 +22,28 @@ class ArticleDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: AppColors.background,
       appBar: _buildAppBar(context),
       body: _buildBody(),
     );
   }
 
   PreferredSizeWidget _buildAppBar(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return CustomAppBar(
       title: AppStrings.appTitle,
       leading: IconButton(
-        icon: const Icon(Icons.chevron_left, color: AppColors.primary, size: 28),
+        icon: Icon(Icons.chevron_left, color: colorScheme.primary, size: 28),
         onPressed: () => _onBackButtonPressed(context),
       ),
       actions: [
         IconButton(
-          icon: const Icon(Icons.share_outlined, color: AppColors.primary),
+          icon: Icon(Icons.share_outlined, color: colorScheme.primary),
           onPressed: () {
             CustomSnackbar.show(context, message: AppStrings.shareComingSoon);
           },
         ),
-        _buildBookmarkAction(),
+        _buildBookmarkAction(context),
         const SizedBox(width: AppSpacing.xs),
       ],
     );
@@ -96,7 +96,9 @@ class ArticleDetailPage extends StatelessWidget {
     );
   }
 
-  Widget _buildBookmarkAction() {
+  Widget _buildBookmarkAction(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return BlocBuilder<LocalArticleBloc, LocalArticleState>(
       builder: (context, state) {
         final isSaved = article != null && state.isArticleSaved(article!);
@@ -104,7 +106,7 @@ class ArticleDetailPage extends StatelessWidget {
           onPressed: () => _onBookmarkPressed(context, isSaved),
           icon: Icon(
             isSaved ? Icons.bookmark : Icons.bookmark_border,
-            color: AppColors.primary,
+            color: colorScheme.primary,
           ),
         );
       },

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -16,8 +15,10 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return AppBar(
-      backgroundColor: AppColors.surface,
+      backgroundColor: colorScheme.surface,
       elevation: 0,
       scrolledUnderElevation: 0,
       centerTitle: false,
@@ -25,7 +26,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       title: Text(
         title,
         style: AppTypography.headlinesMedium.copyWith(
-          color: AppColors.primary,
+          color: colorScheme.primary,
           fontWeight: FontWeight.w700,
           height: 1.33,
         ),
@@ -33,7 +34,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
       actions: actions,
       bottom: PreferredSize(
         preferredSize: const Size.fromHeight(1.0),
-        child: Container(height: 1.0, color: AppColors.outlineVariant),
+        child: Container(height: 1.0, color: colorScheme.outlineVariant),
       ),
     );
   }

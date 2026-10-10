@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 
 class AppPrimaryButton extends StatelessWidget {
@@ -16,9 +15,11 @@ class AppPrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     final style = ElevatedButton.styleFrom(
-      backgroundColor: AppColors.secondary,
-      foregroundColor: AppColors.onSecondary,
+      backgroundColor: colorScheme.secondary,
+      foregroundColor: colorScheme.onSecondary,
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.xxl,
         vertical: AppSpacing.md,

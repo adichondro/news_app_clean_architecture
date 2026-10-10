@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:news_app_clean_architecture/core/theme/tokens/app_colors.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_radius.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_spacing.dart';
 import 'package:news_app_clean_architecture/core/theme/tokens/app_typography.dart';
@@ -16,6 +15,8 @@ class TopicChip extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final colorScheme = Theme.of(context).colorScheme;
+
     return Material(
       color: Colors.transparent,
       child: InkWell(
@@ -27,13 +28,13 @@ class TopicChip extends StatelessWidget {
             vertical: AppSpacing.xs,
           ),
           decoration: BoxDecoration(
-            color: AppColors.secondaryContainer.withValues(alpha: 0.3),
+            color: colorScheme.secondaryContainer.withValues(alpha: 0.3),
             borderRadius: AppRadius.pillRadius,
           ),
           child: Text(
             label,
             style: AppTypography.labelMedium.copyWith(
-              color: AppColors.onSecondaryContainer,
+              color: colorScheme.onSecondaryContainer,
             ),
           ),
         ),

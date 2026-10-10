@@ -16,6 +16,9 @@ import 'package:news_app_clean_architecture/features/daily_news/presentation/blo
 import 'package:news_app_clean_architecture/core/presentation/molecules/save_button.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/components/organisms/article_card.dart';
 import 'package:news_app_clean_architecture/features/daily_news/presentation/pages/daily_news/daily_news_page.dart';
+import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_bloc.dart';
+import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_event.dart';
+import 'package:news_app_clean_architecture/features/settings/presentation/bloc/theme_state.dart';
 
 /// Mock BloCs using bloc_test
 class MockRemoteArticlesBloc
@@ -26,6 +29,9 @@ class MockLocalArticleBloc
     extends MockBloc<LocalArticleEvent, LocalArticleState>
     implements LocalArticleBloc {}
 
+class MockThemeBloc extends MockBloc<ThemeEvent, ThemeState>
+    implements ThemeBloc {}
+
 /// Page widget test suite for [DailyNewsPage].
 ///
 /// Verifies state rendering (loading, error, empty, done) and user journey interactions
@@ -33,6 +39,7 @@ class MockLocalArticleBloc
 void main() {
   late MockRemoteArticlesBloc mockRemoteArticlesBloc;
   late MockLocalArticleBloc mockLocalArticleBloc;
+  late MockThemeBloc mockThemeBloc;
 
   const tArticle = ArticleEntity(
     id: 1,
@@ -55,9 +62,16 @@ void main() {
   setUp(() {
     mockRemoteArticlesBloc = MockRemoteArticlesBloc();
     mockLocalArticleBloc = MockLocalArticleBloc();
+    mockThemeBloc = MockThemeBloc();
 
-    when(() => mockRemoteArticlesBloc.stream).thenAnswer((_) => const Stream.empty());
-    when(() => mockLocalArticleBloc.stream).thenAnswer((_) => const Stream.empty());
+    when(
+      () => mockRemoteArticlesBloc.stream,
+    ).thenAnswer((_) => const Stream.empty());
+    when(
+      () => mockLocalArticleBloc.stream,
+    ).thenAnswer((_) => const Stream.empty());
+    when(() => mockThemeBloc.stream).thenAnswer((_) => const Stream.empty());
+    when(() => mockThemeBloc.state).thenReturn(const ThemeState(isDark: false));
   });
 
   /// Helper function to instantiate [DailyNewsPage] wrapped in necessary [BlocProvider] and [MaterialApp].
@@ -66,12 +80,15 @@ void main() {
       providers: [
         BlocProvider<RemoteArticlesBloc>.value(value: mockRemoteArticlesBloc),
         BlocProvider<LocalArticleBloc>.value(value: mockLocalArticleBloc),
+        BlocProvider<ThemeBloc>.value(value: mockThemeBloc),
       ],
       child: MaterialApp(
         home: const DailyNewsPage(),
         routes: {
-          AppRoutes.savedArticles: (_) => const Scaffold(body: Text('Saved Articles Page')),
-          AppRoutes.articleDetails: (_) => const Scaffold(body: Text('Article Detail Page')),
+          AppRoutes.savedArticles: (_) =>
+              const Scaffold(body: Text('Saved Articles Page')),
+          AppRoutes.articleDetails: (_) =>
+              const Scaffold(body: Text('Article Detail Page')),
           ...?routes,
         },
       ),
@@ -96,7 +113,12 @@ void main() {
 
         // Assert: Verify placeholder skeleton cards are active on screen
         expect(find.text(AppStrings.placeholderTitle), findsWidgets);
-        expect(find.byWidgetPredicate((w) => w.runtimeType.toString().contains('Skeletonizer')), findsWidgets);
+        expect(
+          find.byWidgetPredicate(
+            (w) => w.runtimeType.toString().contains('Skeletonizer'),
+          ),
+          findsWidgets,
+        );
       },
     );
 
