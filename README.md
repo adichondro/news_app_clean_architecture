@@ -47,6 +47,7 @@ Through the lifecycle of this project, several key software engineering concepts
 ## Features
 
 * **Atomic Design System**: A scalable UI architecture organizing components into Atoms, Molecules, and Organisms for maximum reusability and maintainability.
+* **Dual Theme Support (Light / Dark Mode)**: Dynamic theme switching with persistent user preference storage using `shared_preferences`, comprehensive dark mode color tokens, and theme-adaptive UI components.
 * **Top Headlines Feed**: Fetches real-time, curated daily news articles from the NewsAPI general category in the US.
 * **Empty States & UX Handling**: Features premium SVG illustrations and custom empty states for error handling, no-data scenarios, and connection issues.
 * **Premium Skeleton Shimmers**: Employs `skeletonizer` to display an organic, matching layout outline while the remote request resolves, avoiding jarring loading spinners.
@@ -99,21 +100,21 @@ graph TD
 ### 1. Domain Layer (The Core)
 The domain layer contains the core business rules of the application. It is completely independent of any external library, framework, or database.
 * **Entities**: Plain Dart objects containing business data (e.g., `ArticleEntity` extending `Equatable`).
-* **Repositories (Interfaces)**: Defines contracts for data operations. Returns type-safe `DataState<T>` wrappers (including `DataState<void>` for mutation methods) to ensure failure feedback is explicitly defined.
-* **Use Cases**: Individual, single-responsibility units of work (e.g., `GetArticleUseCase`, `GetSavedArticlesUseCase`, `SaveArticleUseCase`, `RemoveArticleUseCase`, `ClearArticleUseCase`) extending `UseCase<T, Params>`.
+* **Repositories (Interfaces)**: Defines contracts for data operations (e.g., `ArticleRepository`, `ThemeRepository`). Returns type-safe `DataState<T>` wrappers (including `DataState<void>` for mutation methods) to ensure failure feedback is explicitly defined.
+* **Use Cases**: Individual, single-responsibility units of work (e.g., `GetArticleUseCase`, `GetSavedArticlesUseCase`, `SaveArticleUseCase`, `RemoveArticleUseCase`, `ClearArticleUseCase`, `GetThemeModeUseCase`, `SetThemeModeUseCase`) extending `UseCase<T, Params>`.
 
 ### 2. Data Layer (The Infrastructure)
 The data layer implements the interfaces defined in the domain layer. It interacts directly with the API and database.
 * **Models**: Data Transfer Objects (DTOs) handling JSON parsing (`ArticleModel.fromJson`, `ArticleResponseModel.fromJson`), SQLite database rows (`ArticleModel.fromTableData`), and domain entity mappers (`toEntity()`, `fromEntity()`).
-* **Data Sources**: Handles low-level network and database calls:
+* **Data Sources**: Handles low-level network, database, and local storage calls:
   * *Remote*: `NewsApiService` (generated using `retrofit` and powered by `dio` with custom `ApiKeyInterceptor`).
-  * *Local*: `ArticleDao` (Data Access Object) and `ArticleTable` (Drift SQLite schema definition).
-* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, delegates exception catching to `ExceptionHandler`, and returns unified `DataSuccess` or `DataFailed(Failure)` responses.
+  * *Local*: `ArticleDao` (Data Access Object) and `ArticleTable` (Drift SQLite schema definition) for news articles, alongside `ThemeLocalDataSource` (backed by `shared_preferences`) for persisting user preferences.
+* **Repositories (Implementation)**: Coordinates data fetching from remote/local sources, delegates exception catching to `ExceptionHandler`, and returns unified `DataSuccess` or `DataFailed(Failure)` responses (`ArticleRepositoryImpl`, `ThemeRepositoryImpl`).
 
 ### 3. Presentation Layer (The UI)
 This layer is responsible for rendering views and handling user interactions. It implements the **Atomic Design Methodology** to ensure high reusability:
-* **BLoC**: Receives user actions (Events), processes logic via Use Cases, and emits corresponding UI states (e.g., `RemoteArticlesLoading`, `RemoteArticlesDone`, `LocalArticlesDone`).
-* **Atoms, Molecules, & Organisms**: Reusable UI building blocks (e.g., buttons and chips as Atoms, article info sections as Molecules, full article cards and custom app bars as Organisms).
+* **BLoC**: Receives user actions (Events), processes logic via Use Cases, and emits corresponding UI states (e.g., `RemoteArticlesLoading`, `RemoteArticlesDone`, `LocalArticlesDone`, and `ThemeBloc` for dynamic theme swapping).
+* **Atoms, Molecules, & Organisms**: Reusable UI building blocks (e.g., buttons and chips as Atoms, article info sections as Molecules, full article cards and custom app bars with theme toggling as Organisms).
 * **Pages**: High-level screens built as clean `StatelessWidget`s (`DailyNewsPage`, `ArticleDetailPage`, `SavedArticlesPage`).
 
 ### 4. Core Infrastructure & Functional Error Handling
@@ -143,6 +144,7 @@ Here is a breakdown of the core technologies, libraries, and tools utilized in t
 | **path_provider** / **path** | Storage Path | Provides cross-platform filesystem paths for SQLite database storage. |
 | **flutter_dotenv** | Configuration | Loads runtime environment configurations safely from `.env` files. |
 | **flutter_svg** | Vector Graphics | Renders scalable SVG illustrations for rich empty states and UX components. |
+| **shared_preferences** | Local Storage | Persists user settings (such as light/dark theme preference) across app sessions. |
 | **build_runner** | Code Generation | CLI tool orchestrating code generation for Retrofit API services and Drift database. |
 
 ---
@@ -172,34 +174,44 @@ lib/
 │   │   ├── dio/               # NewsDioClient
 │   │   └── interceptors/      # ApiKeyInterceptor
 │   ├── presentation/          # Shared UI Atoms, Molecules, Organisms
-│   │   ├── atoms/             # AppPrimaryButton, CategoryChip
+│   │   ├── atoms/             # AppPrimaryButton, SourceChip
 │   │   ├── molecules/         # ClearAllSavedButton, CustomSnackbar, SaveButton
 │   │   └── organisms/         # CustomAppBar, EmptyStateView
 │   ├── resources/             # Sealed states (DataState, DataSuccess, DataFailed)
 │   ├── theme/                 # Global app styling and tokens
-│   │   ├── app_theme.dart     # ThemeData configs
+│   │   ├── app_theme.dart     # Light & Dark ThemeData configs
 │   │   └── tokens/            # Design Tokens (app_colors, app_radius, app_shadow, app_spacing, app_typography)
 │   ├── usecases/              # Base UseCase<Type, Params> template
 │   └── util/                  # Helper extensions (date_extension, failure_extension, string_extension)
 ├── features/
-│   └── daily_news/            # Main feature domain
+│   ├── daily_news/            # Main news feature domain
+│   │   ├── data/
+│   │   │   ├── data_sources/
+│   │   │   │   ├── local/     # ArticleDao & ArticleTable (Drift SQLite DAO & Schema)
+│   │   │   │   └── remote/    # NewsApiService (Retrofit)
+│   │   │   ├── models/        # ArticleModel & ArticleResponseModel
+│   │   │   └── repositories/  # ArticleRepositoryImpl
+│   │   ├── domain/
+│   │   │   ├── entities/      # Pure business objects (ArticleEntity)
+│   │   │   ├── repositories/  # Abstract repository contracts (ArticleRepository)
+│   │   │   └── usecases/      # Use cases (GetArticleUseCase, SaveArticleUseCase, etc.)
+│   │   └── presentation/
+│   │       ├── bloc/          # Remote (API) and Local (DB) BLoCs & message types
+│   │       ├── components/    # Feature-specific UI components (Atoms, Molecules, Organisms)
+│   │       └── pages/         # Standardized Screen Pages
+│   │           ├── article_detail/   # ArticleDetailPage
+│   │           ├── daily_news/       # DailyNewsPage
+│   │           └── saved_articles/   # SavedArticlesPage
+│   └── settings/              # User settings & theme preferences domain
 │       ├── data/
 │       │   ├── data_sources/
-│       │   │   ├── local/     # ArticleDao & ArticleTable (Drift SQLite DAO & Schema)
-│       │   │   └── remote/    # NewsApiService (Retrofit)
-│       │   ├── models/        # ArticleModel & ArticleResponseModel
-│       │   └── repositories/  # ArticleRepositoryImpl
+│       │   │   └── local/     # ThemeLocalDataSource (SharedPreferences)
+│       │   └── repositories/  # ThemeRepositoryImpl
 │       ├── domain/
-│       │   ├── entities/      # Pure business objects (ArticleEntity)
-│       │   ├── repositories/  # Abstract repository contracts (ArticleRepository)
-│       │   └── usecases/      # Use cases (GetArticleUseCase, SaveArticleUseCase, etc.)
+│       │   ├── repositories/  # Abstract repository contracts (ThemeRepository)
+│       │   └── usecases/      # Use cases (GetThemeModeUseCase, SetThemeModeUseCase)
 │       └── presentation/
-│           ├── bloc/          # Remote (API) and Local (DB) BLoCs & message types
-│           ├── components/    # Feature-specific UI components (Atoms, Molecules, Organisms)
-│           └── pages/         # Standardized Screen Pages
-│               ├── article_detail/   # ArticleDetailPage
-│               ├── daily_news/       # DailyNewsPage
-│               └── saved_articles/   # SavedArticlesPage
+│           └── bloc/          # ThemeBloc, ThemeEvent, and ThemeState
 ├── injection_container.dart   # Service locator (GetIt) registrations
 └── main.dart                  # Application entry point & configuration setups
 ```
@@ -244,6 +256,12 @@ Before running the project locally, ensure you have:
    flutter run
    ```
 
+6. **Run Automated Tests**
+   Execute the comprehensive unit and widget test suites:
+   ```bash
+   flutter test
+   ```
+
 ---
 
 ## Future Improvements
@@ -251,7 +269,7 @@ Before running the project locally, ensure you have:
 As an ongoing learning project, the following enhancements are planned to explore further advanced concepts:
 
 - [x] **Comprehensive Automated Testing**: Add unit tests for Blocs and Use Cases (using `mocktail`), widget tests for UI elements, and mock network services to achieve robust coverage.
-- [ ] **Dual Theme Support (Light / Dark Mode)**: Implement dynamic theme swapping by connecting a local settings Bloc and persisting preference storage.
+- [x] **Dual Theme Support (Light / Dark Mode)**: Implement dynamic theme swapping by connecting a local settings Bloc and persisting preference storage.
 - [ ] **Multi-language Localization**: Wire up the Flutter localization package to support multiple translation profiles.
 - [ ] **Advanced Search & Category Filters**: Provide a search bar in the Daily News feed with scrollable category tabs to dynamic fetch different headlines (e.g., technology, sports).
 - [ ] **Network State Observer**: Integrate a network connectivity listener (`connectivity_plus`) to show banner notifications when the user loses internet connection and automatically switch to reading saved articles.
